@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-7 하네스 · 관측 · 복구 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L3 챕터</span>
+      <a href="01-agentic-ux.html">3-1 Agentic UX 6대 패턴</a>
+      <a href="02-progressive-autonomy.html">3-2 점진적 자율성</a>
+      <a href="03-context-preservation.html">3-3 컨텍스트 보존</a>
+      <a href="04-adaptive-ui.html">3-4 적응형 인터페이스</a>
+      <a href="05-feedback-loop.html">3-5 사용자 피드백 루프</a>
+      <a href="06-multi-agent.html">3-6 멀티 에이전트 오케스트레이션</a>
+      <a href="07-harness.html" class="active">3-7 하네스·관측·복구</a>
+      <a href="08-non-dev-cc.html">3-8 비개발자의 Claude Code</a>
+      <a href="09-patterns-eval.html">3-9 패턴 1·3·5 + Eval</a>
+      <a href="10-release-checklist.html">3-10 릴리즈 체크리스트</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 3-7 · 40분</span>
+  <h1 class="page-title">하네스 · 관측 · 복구</h1>
+  <p class="lede">
+    프로덕션 에이전트는 관측 가능해야 하고 복구 가능해야 합니다. 이 장은 운영 관점에서 필수 하네스(관측·강등·리빌드)의 최소 구성을 다룹니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#stack">3종 관측 스택</a></li>
+      <li><a href="#dashboard">대시보드 필수 8위젯</a></li>
+      <li><a href="#alerts">알림 규칙과 소음 최소화</a></li>
+      <li><a href="#scenarios">5가지 장애 시나리오</a></li>
+      <li><a href="#playbook">복구 플레이북 — 단계별</a></li>
+      <li><a href="#chaos">Chaos 훈련 — 분기 1회</a></li>
+    </ol>
+  </div>
+
+  <h2 id="stack">3종 관측 스택</h2>
+  <p>로그·메트릭·트레이스. 셋 중 하나라도 빠지면 장애 원인 추적이 2배 느려집니다. 사내 기본 스택은 다음과 같이 고정합니다.</p>
+
+  <table>
+    <thead><tr><th>레이어</th><th>도구</th><th>보존 / 샘플</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Log</strong></td><td>Loki + Grafana</td><td>30일 · 100%</td></tr>
+      <tr><td><strong>Metric</strong></td><td>Prometheus + Grafana</td><td>90일 · 1초</td></tr>
+      <tr><td><strong>Trace</strong></td><td>OpenTelemetry + Tempo</td><td>14일 · 10% 샘플</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">NOTE · LLM 호출 추적</div>
+    에이전트의 LLM 호출은 모두 <strong>Trace span</strong>을 생성합니다. 입력 토큰 수 · 출력 토큰 수 · 모델명 · 지연을 attributes에 남기세요.
+  </div>
+
+  <h2 id="dashboard">대시보드 필수 8위젯</h2>
+  <p>플랫폼팀이 아침 9시에 30초 안에 훑을 수 있는 대시보드 구성. 9번째 추가하지 마세요. 소음만 늘어납니다.</p>
+
+  <div class="levels">
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 1</span>
+      <h2>요청 QPS</h2>
+      <p>5분 이동평균, 파란선</p>
+    </div>
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 2</span>
+      <h2>에러율 %</h2>
+      <p>HTTP 5xx + 에이전트 실패</p>
+    </div>
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 3</span>
+      <h2>p50/p95 지연</h2>
+      <p>모델별 분리</p>
+    </div>
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 4</span>
+      <h2>토큰 사용량</h2>
+      <p>입력·출력 분리</p>
+    </div>
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 5</span>
+      <h2>시간당 비용</h2>
+      <p>예산 대비 게이지</p>
+    </div>
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 6</span>
+      <h2>자율성 레벨 분포</h2>
+      <p>Lv.1/2/3 스택 바</p>
+    </div>
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 7</span>
+      <h2>강등 이벤트</h2>
+      <p>last 24h 카운트</p>
+    </div>
+    <div class="level-card" style="cursor:default">
+      <span class="lv">위젯 8</span>
+      <h2>회귀 통과율</h2>
+      <p>최근 릴리즈 · Golden Set</p>
+    </div>
+  </div>
+
+  <h2 id="alerts">알림 규칙과 소음 최소화</h2>
+
+<pre><code># alerts.yaml
+- alert: AgentErrorRateHigh
+  expr: rate(agent_errors[5m]) / rate(agent_requests[5m]) &gt; 0.05
+  for: 10m
+  severity: page
+  message: "에이전트 에러율 5% 초과 · 10분 지속"
+
+- alert: TokenCostSpike
+  expr: hourly_token_cost_usd &gt; budget_hourly_usd * 2
+  for: 15m
+  severity: warn
+  message: "시간당 토큰 비용이 예산의 2배 초과"
+
+- alert: GoldenRegressionDrop
+  expr: regression_pass_rate &lt; 0.95
+  for: 0m
+  severity: block
+  message: "회귀 통과율 95% 미만 · 릴리즈 블록"</code></pre>
+
+  <div class="callout warn">
+    <div class="callout-label">알림 설계 원칙</div>
+    "언제나 켜두는 page 알림은 <strong>3개 이하</strong>." 이 규칙을 지키지 않으면 3주 안에 팀 전체가 알림 감각을 잃어 진짜 사고를 놓칩니다.
+  </div>
+
+  <h2 id="scenarios">5가지 장애 시나리오</h2>
+  <table>
+    <thead><tr><th>증상</th><th>지표 변동</th><th>복구</th></tr></thead>
+    <tbody>
+      <tr><td>모델 API 실패</td><td>5xx 급증, 지연 폭증</td><td>Haiku로 강등, 큐 lock</td></tr>
+      <tr><td>토큰 비용 폭주</td><td>hourly_cost &gt; 2×</td><td>Lv.3 일시 중지 · 슬랙 알림</td></tr>
+      <tr><td>MCP 커넥터 만료</td><td>401/403 반복</td><td>토큰 갱신 플로우 자동 트리거</td></tr>
+      <tr><td>컨텍스트 오염</td><td>factual_error &gt; 10%</td><td>메모리 롤백 + 재인덱싱</td></tr>
+      <tr><td>재귀 루프</td><td>step_count &gt; 50</td><td>세션 강제 종료, DLQ 기록</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="playbook">복구 플레이북 — 단계별</h2>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 3-7 · INCIDENT TIMELINE T+0~T+90</div>
+    <svg viewBox="0 0 720 170" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="aripn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f97316"/>
+        </marker>
+      </defs>
+      <style>
+        .iv { fill: #fff7ed; stroke: #f97316; stroke-width: 1.5; }
+        .iv-t { fill: #c2410c; font-family: Pretendard, sans-serif; font-size: 11px; font-weight: 700; }
+        .iv-d { fill: #1c1917; font-family: Pretendard, sans-serif; font-size: 13px; font-weight: 600; }
+        .iv-s { fill: #57534e; font-family: Pretendard, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="iv" x="20" y="30" width="130" height="110" rx="8"/>
+      <text class="iv-t" x="35" y="50">T+0</text>
+      <text class="iv-d" x="35" y="72">감지·공지</text>
+      <text class="iv-s" x="35" y="92">알림 즉시</text>
+      <text class="iv-s" x="35" y="108">#incident-ai</text>
+
+      <line x1="155" y1="85" x2="175" y2="85" stroke="#f97316" stroke-width="2" marker-end="url(#aripn)"/>
+
+      <rect class="iv" x="180" y="30" width="120" height="110" rx="8"/>
+      <text class="iv-t" x="195" y="50">T+5</text>
+      <text class="iv-d" x="195" y="72">격리</text>
+      <text class="iv-s" x="195" y="92">Lv.1 강등</text>
+      <text class="iv-s" x="195" y="108">트래픽 10%</text>
+
+      <line x1="305" y1="85" x2="325" y2="85" stroke="#f97316" stroke-width="2" marker-end="url(#aripn)"/>
+
+      <rect class="iv" x="330" y="30" width="130" height="110" rx="8"/>
+      <text class="iv-t" x="345" y="50">T+15</text>
+      <text class="iv-d" x="345" y="72">원인 추정</text>
+      <text class="iv-s" x="345" y="92">트레이스</text>
+      <text class="iv-s" x="345" y="108">diff 분석</text>
+
+      <line x1="465" y1="85" x2="485" y2="85" stroke="#f97316" stroke-width="2" marker-end="url(#aripn)"/>
+
+      <rect class="iv" x="490" y="30" width="100" height="110" rx="8"/>
+      <text class="iv-t" x="505" y="50">T+30</text>
+      <text class="iv-d" x="505" y="72">롤백</text>
+      <text class="iv-s" x="505" y="92">Golden Set</text>
+      <text class="iv-s" x="505" y="108">기준 회귀</text>
+
+      <line x1="595" y1="85" x2="615" y2="85" stroke="#f97316" stroke-width="2" marker-end="url(#aripn)"/>
+
+      <rect class="iv" x="620" y="30" width="80" height="110" rx="8"/>
+      <text class="iv-t" x="635" y="50">T+90</text>
+      <text class="iv-d" x="635" y="72">사후 분석</text>
+      <text class="iv-s" x="635" y="92">근본 원인</text>
+      <text class="iv-s" x="635" y="108">재발 방지</text>
+    </svg>
+    <p class="caption">48시간 내 포스트모템 완성 · 사후 검토 2주 내 예정.</p>
+  </div>
+
+  <h2 id="chaos">Chaos 훈련 — 분기 1회</h2>
+  <p>장애는 훈련하지 않으면 실전에서 5배 오래 걸립니다. 분기 1회 의도된 Chaos를 계획하세요. 처음엔 불편하지만, 3회 차부터는 자산이 됩니다.</p>
+
+  <div class="card">
+    <p><strong>① 시나리오 공지 ·</strong> 1개월 전 날짜·시나리오 공지 (어떤 장애인지는 숨김).</p>
+    <p><strong>② 실행 ·</strong> 플랫폼팀이 실제 에이전트 하나를 죽이거나 지연 삽입. 알림 자동 발동 여부 확인.</p>
+    <p><strong>③ 복구 측정 ·</strong> T+X분 목표 대비 실제 소요 시간 기록.</p>
+    <p><strong>④ 갱신·개선 ·</strong> 복구 절차의 3가지 마찰점 상위, 다음 분기까지 해소.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">한 줄 인용</div>
+    "에이전트 운영에서 신뢰는 훈련된 복구 시간과 동의어다." — 사내 SRE 플레이북 서문, 2026-Q1
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ 3종 관측 스택(Log·Metric·Trace)이 모두 작동한다.</p>
+    <p>✓ 8위젯 대시보드에 추가·삭제 없이 그대로 운용 중.</p>
+    <p>✓ page 알림이 3개 이하다.</p>
+    <p>✓ 복구 플레이북 T+0~T+90이 문서화되어 있다.</p>
+    <p>✓ Chaos 훈련이 분기 캘린더에 잡혀 있다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="08-non-dev-cc.html">3-8 비개발자의 Claude Code 활용</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="06-multi-agent.html">
+        <div class="label">← 이전</div>
+        <div class="title">3-6 멀티 에이전트</div>
+      </a>
+      <a href="08-non-dev-cc.html">
+        <div class="label">다음 →</div>
+        <div class="title">3-8 비개발자의 Claude Code</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

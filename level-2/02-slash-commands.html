@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2-2 슬래시 커맨드 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="index.html">L2 · 중급</a>
+      <a href="../level-3/index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L2 챕터</span>
+      <a href="01-claude-code-intro.html">2-1 Claude Code 입문</a>
+      <a href="02-slash-commands.html" class="active">2-2 슬래시 커맨드</a>
+      <a href="03-subagents-hooks.html">2-3 서브에이전트와 훅</a>
+      <a href="04-mcp-connectors.html">2-4 MCP 커넥터 7종</a>
+      <a href="05-session-claudemd.html">2-5 세션 관리·CLAUDE.md</a>
+      <a href="06-security.html">2-6 보안 실수 5선</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 2-2 · 55분</span>
+  <h1 class="page-title">슬래시 커맨드</h1>
+  <p class="lede">
+    슬래시 커맨드는 자주 쓰는 워크플로우를 한 단어로 줄이는 사용자 정의 명령입니다.
+    <code>/review</code> · <code>/security-review</code> 같은 기본 명령과 사내 전용 <code>/deploy-check</code>까지 직접 만들 수 있습니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#builtin">기본 슬래시 커맨드</a></li>
+      <li><a href="#review">/review 출력 해석법</a></li>
+      <li><a href="#custom">사내 슬래시 만들기</a></li>
+      <li><a href="#args">매개변수가 있는 슬래시</a></li>
+      <li><a href="#chain">슬래시 체이닝</a></li>
+      <li><a href="#catalog">사내 슬래시 카탈로그</a></li>
+    </ol>
+  </div>
+
+  <h2 id="builtin">기본 슬래시 커맨드</h2>
+  <p>Claude Code의 기본 패키지에 포함된 핵심 슬래시 3개입니다. 처음엔 이 셋만으로도 체감이 옵니다.</p>
+
+  <table>
+    <thead><tr><th>명령</th><th>용도</th><th>쓰는 순간</th></tr></thead>
+    <tbody>
+      <tr><td><code>/init</code></td><td><code>CLAUDE.md</code> 자동 작성</td><td>새 프로젝트 인식</td></tr>
+      <tr><td><code>/review</code></td><td>코드 / PR / diff 리뷰</td><td>리뷰 PR 다듬기 전</td></tr>
+      <tr><td><code>/security-review</code></td><td>보안 리뷰 · 시크릿 점검 · 입력 검증</td><td>배포 전</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">팁 · 리뷰는 두 번</div>
+    PR 다듬기엔 <code>/review</code>, 보안 리뷰엔 <code>/security-review</code>를 따로 돌리세요. 두 명령은 보는 관점이 완전히 다릅니다.
+  </div>
+
+  <h2 id="review">/review 출력 해석법</h2>
+  <p><code>/review</code>는 결과를 <strong>blocker / suggestion / nit</strong> 세 단계로 분류합니다. 보안 점검 severity 패턴이 동일하고, suggestion은 너그럽게 보되 처음엔 모든 nit을 다 보세요.</p>
+
+  <div class="card">
+    <p><strong>BLOCKER · 반드시 수정 ·</strong> 보안·기능 결함. 보고 의무.</p>
+    <p><strong>SUGGEST · 가능하면 수정 ·</strong> 가독성·성능·디자인 이슈.</p>
+    <p><strong>NIT · 취향 ·</strong> 시간 여유 시.</p>
+  </div>
+
+  <h2 id="custom">사내 슬래시 만들기</h2>
+  <p><code>.claude/commands/</code> 디렉터리에 Markdown 파일을 두면 그 슬래시가 프로젝트 전용 명령입니다. 파일 이름이 곧 슬래시 이름. 파일 본문이 프롬프트 템플릿입니다.</p>
+
+<pre><code># .claude/commands/deploy-check.md
+---
+description: 배포 직전 운영 PR을 점검·검증·요약
+---
+
+다음 체크리스트를 차근차근 수행하고 다음 단어로 답변.
+1. `pnpm typecheck` 0 에러
+2. `pnpm test` 전체 통과
+3. `pnpm build` 성공
+4. .env.example과 .env.production 키 일치
+5. 새로 추가된 API 라우트는 `auth-middleware` 통과
+   결과는 ✓/✗ 표 형식으로 답해.</code></pre>
+
+  <p>이제 세션에서 <code>/deploy-check</code>만 입력하면 이 템플릿이 실행됩니다. 보고된 점검 결과로 누락된 점검 사항이 한 페이지에 정리됩니다.</p>
+
+  <div class="callout bad">
+    <div class="callout-label">주의 · 비밀 키는 슬래시에 넣지 마세요</div>
+    슬래시 파일은 Git에 커밋됩니다. API 키·DB 비밀번호 같은 건 환경 변수만 쓰고, 템플릿엔 "환경 변수 SLACK_TOKEN을 읽음"만 적습니다.
+  </div>
+
+  <h3>슬래시 파일 구조</h3>
+<pre><code>.claude/
+├── commands/                  # 슬래시 커맨드
+│   ├── deploy-check.md
+│   ├── retro.md
+│   └── review.md
+├── settings.local.json        # 로컬 환경 변수 (gitignore)
+├── scripts/                   # 환경 스크립트
+│   └── pre-commit-claude.sh
+└── settings.shared.json       # 팀 공유 설정 (commit)</code></pre>
+
+  <h2 id="args">매개변수가 있는 슬래시</h2>
+  <p>Markdown 본문에 <code>$ARGUMENTS</code> 자리표시자를 두면 슬래시 뒤 인자가 자동 치환됩니다. 단순 인자, 다중 인자 둘 다 가능합니다.</p>
+
+<pre><code># .claude/commands/ticket.md
+---
+description: Linear 인자 요청 템플릿
+---
+
+Linear 인자 $ARGUMENTS 를 읽어 다음 형식으로 정리해.
+- 영향 범위:
+- 우선 순위:
+- 의존성 인자:
+- AC (수락 기준):
+- 액션 아이템:</code></pre>
+
+<pre><code>> /ticket AXZ-1243</code></pre>
+
+  <p>인자가 여러 개인 경우 <code>$1</code>, <code>$2</code>를 쓰거나 자연어 "첫 번째 인자" / "두 번째 인자"로 작성합니다.</p>
+
+<pre><code># .claude/commands/release-note.md
+---
+description: Changelog 자동 작성 (버전 $1과 $2)
+---
+
+# Changelog $1 ... $2
+
+버전 사이의 커밋을 다음 형식으로 정리.
+## ✨ New
+## 🐛 Fixes
+## ⚡ Changes
+## ⚠ Breaking</code></pre>
+
+  <h2 id="chain">슬래시 체이닝</h2>
+  <p>하나의 슬래시 안에서 여러 슬래시를 순차로 호출하면 한 단어로 여러 작업을 묶을 수 있습니다.</p>
+
+<pre><code># .claude/commands/ship.md
+---
+description: 배포 직전 리뷰·보안·체크 라이프사이클 자동화
+---
+
+다음 작업을 순서로 해줘.
+1. /review를 먼저 → blocker가 0이면 다음
+2. /security-review를 먼저 → high가 0이면 다음
+3. /deploy-check를 먼저 → 9개 미통과 없음
+4. 통과되면 "SHIP READY · 9개" 출력
+   하나라도 미통과면 미통과 인자만 표시</code></pre>
+
+  <div class="callout">
+    <div class="callout-label">한 줄</div>
+    <code>/ship</code> 한 글자가 리뷰·보안·배포 체크를 한 번에 돌립니다. 반복 작업은 모두 이렇게 줄이세요.
+  </div>
+
+  <h2>슬래시 디버깅</h2>
+  <div class="card">
+    <p>✓ 파일이 <code>.claude/commands/</code>에 있는가</p>
+    <p>✓ Frontmatter에 <code>---</code>로 닫힌 <code>description</code>이 있는가</p>
+    <p>✓ 슬래시 이름에 공백·한글이 없는가</p>
+    <p>✓ 인자 자리표시자 정확히 <code>$ARGUMENTS</code> 또는 <code>$1</code>로 표기됐는가</p>
+    <p>✓ <code>/</code>를 치면 미리보기 목차에 떴는가</p>
+  </div>
+
+  <h2 id="catalog">사내 슬래시 카탈로그 소개</h2>
+  <p>커뮤니티팀이 관리하는 사내 표준 25개의 슬래시 번들입니다. 처음엔 이 4개만 익히세요.</p>
+
+  <div class="card">
+    <p><strong><code>/deploy-check</code></strong> · 배포 직전 9개 체크. 플랫폼팀.</p>
+    <p><strong><code>/ticket</code></strong> · Linear 인자 자동 요약 + 정리. PMO.</p>
+    <p><strong><code>/a11y</code></strong> · 접근성 체크. 디자인시스템팀.</p>
+    <p><strong><code>/sql-review</code></strong> · SQL 쿼리 리뷰·튜닝. DBA.</p>
+  </div>
+
+  <h3>새 슬래시 제안하기</h3>
+  <p>커뮤니티 팀이 관리하는 슬래시 <code>axz-corp/claude-commands</code> 리포지터리에 PR을 던지세요. 커뮤니티 팀 리뷰 후 사내 표준으로 등록됩니다. PR엔 반드시 <strong>사용 시나리오 1건</strong>과 <strong>예상 호출 빈도</strong>를 명시합니다.</p>
+
+  <div class="case">
+    <div class="case-label">CASE · 디자인시스템팀</div>
+    <h3>/tokens 슬래시</h3>
+    <dl>
+      <dt>배경</dt><dd>Figma 토큰 변경 후 코드 동기화 일감이 1주에 며칠씩 차지.</dd>
+      <dt>슬래시</dt><dd>Figma MCP로 토큰 새로 받기 + <code>tailwind.config.ts</code> 자동 변경 + diff 리뷰.</dd>
+      <dt>결과</dt><dd>토큰 동기화 시간 1주 → 1h. 사내 표준 등록.</dd>
+    </dl>
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ <code>/review</code>·<code>/security-review</code> 둘 다 돌려 봤다.</p>
+    <p>✓ 사내 슬래시를 1개 직접 만들어 봤다.</p>
+    <p>✓ 인자 자리표시자(<code>$ARGUMENTS</code>)와 다중 인자(<code>$1</code>·<code>$2</code>)를 구분한다.</p>
+    <p>✓ 슬래시 체이닝으로 여러 작업을 한 단어로 묶었다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="03-subagents-hooks.html">2-3 서브에이전트와 훅</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="01-claude-code-intro.html">
+        <div class="label">← 이전</div>
+        <div class="title">2-1 Claude Code 입문</div>
+      </a>
+      <a href="03-subagents-hooks.html">
+        <div class="label">다음 →</div>
+        <div class="title">2-3 서브에이전트와 훅</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>편찬자 노트 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="index.html">홈 · 학습 경로</a>
+      <a href="level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="level-1/index.html">L1 · 초급</a>
+      <a href="level-2/index.html">L2 · 중급</a>
+      <a href="level-3/index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">실습 트랙</span>
+      <a href="level-1/practice.html">L1 실습 · 와이어프레임</a>
+      <a href="level-2/practice.html">L2 실습 · CMS 프로토타입</a>
+      <a href="level-3/practice.html">L3 실습 · 사내 사례 3종</a>
+    </div>
+    <div class="group">
+      <span class="group-label">전체</span>
+      <a href="tools.html">도구 카탈로그</a>
+      <a href="editorial-note.html" class="active">편찬자 노트</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">EDITORIAL NOTE · 헤일로</span>
+  <h1 class="page-title">편찬자 노트</h1>
+  <p class="lede">
+    이 위키 시리즈를 편찬한 커뮤니티 팀 헤일로의 운영·자산 관점 노트입니다. 세 가지 본책과 세 가지 별책을 만들면서 부딪힌 벽,
+    그 벽을 넘어 가는 방법, 그리고 매일의 작업 습관 — 이 페이지는 본책의 "정리된 결론"과는 다른, <em>날 것 그대로의</em> 운영 노트입니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 페이지의 흐름</div>
+    <ol>
+      <li><a href="#editor">1. Claude는 "결과 생성기"가 아니라 "공동 편집자"</a></li>
+      <li><a href="#incremental">2. 한 번에 완성 말고 "이것도 부탁해"로 점진 확장</a></li>
+      <li><a href="#pipeline">3. 기초 공정 → 심화 공정 · 파이프라인으로 쪼개기</a></li>
+      <li><a href="#fossilize">4. 자기 방법론을 Skill로 "화석화"하기</a></li>
+      <li><a href="#tuning">5. 감각적 튜닝 · 여러 버전 돌리기</a></li>
+      <li><a href="#parallel">6. 병렬 이터레이션 · 갭 감사 루프</a></li>
+      <li><a href="#timeless">7. 타임리스/이벤트 분리 · 트렌드 큐레이션</a></li>
+      <li><a href="#close">끝 · 72시간 원칙</a></li>
+    </ol>
+  </div>
+
+  <h2 id="editor">1. Claude는 "결과 생성기"가 아니라 "공동 편집자"</h2>
+  <p>헤일로는 Claude에게 "써줘"라고 부탁하지 않습니다. "같이 정리해줘"라고 부탁합니다. 결과 품질은 사람과 Claude의 협업에서 나온다는 전제 위에 서 있습니다.</p>
+
+  <div class="compare">
+    <div class="bad">
+      <h4>BAD · 결과 의뢰형</h4>
+      <p>"PRD 써줘" "와이어프레임 만들어줘"<br>→ 첫 결과를 받고 통째로 폐기하거나 사람이 다시 씀.</p>
+    </div>
+    <div class="good">
+      <h4>GOOD · 공동 편집형</h4>
+      <p>"A/B/C 안을 같이 뽑아보자" + "B안의 컴포넌트와 C안의 톤을 합쳐줘"<br>→ 사람은 결정·근거·취향만, Claude는 안 생성·정리·반복 수정 담당.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">실전 적용</div>
+    매 프롬프트 시작 시 "내가 결정자, Claude는 편집자"라는 역할을 정해 두면 의존도 폭주가 없어집니다. 결정은 사람이, 반복은 Claude가.
+  </div>
+
+  <h2 id="incremental">2. 한 번에 완성 말고 "이것도 부탁해"로 점진 확장</h2>
+  <p>이 위키도 처음부터 23챕터를 한 번에 만들지 않았습니다. v1.0(샘플 챕터 3개) → v1.1(L1 완성) → v1.2(L2 완성) → v1.3(L3 완성) → v1.4(실습 트랙 + 카탈로그) 순서로 점진 확장했습니다.</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">점진 확장의 사이클</h3>
+    <p><strong>① 한 번 만든다 (v1.0) ·</strong> 완벽하지 않아도 끝까지 간다. "완성 후 평가"가 "평가 후 완성"보다 항상 빠르다.</p>
+    <p><strong>② Claude에게 갭 감사를 시킨다 (v1.1) ·</strong> "이게 90점 이상일까?" "무엇이 빠졌을까?" — 인간 리뷰어보다 빠르고 편견 없다.</p>
+    <p><strong>③ 갭을 채우고 밀도를 조절한다 (v1.2~) ·</strong> 타이포·밀도·톤 같은 감각 영역을 여러 번 미세 조정. "읽는 감각"이 산출물 품질을 결정한다.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">결정타</div>
+    한 번에 다 만들려는 사람이 제일 늦게 끝낸다. 빨리 만들고 자주 다듬는 사람이 결국 가장 많이 쌓는다.
+  </div>
+
+  <h2 id="pipeline">3. 기초 공정 → 심화 공정 · 파이프라인으로 쪼개기</h2>
+  <p>헤일로의 사내 기획 작업은 Skill 한 개로 끝나지 않습니다. 두 개의 Skill을 파이프라인으로 잇는 방식입니다.</p>
+
+  <table>
+    <thead><tr><th>단계</th><th>Skill 이름 · 하는 일</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>기초 공정</strong><br>(문제·배경 정리)</td>
+        <td><code>halo-basic-service-plan</code> · AS-IS 분석 · 경쟁사 벤치마크 · 유저 플로우 · 앱+웹 화면 스펙 · 로드맵. 산출물은 Markdown + PDF.</td>
+      </tr>
+      <tr>
+        <td><strong>심화 공정</strong><br>(스펙·와이어프레임)</td>
+        <td><code>halo-wireframe-webapp</code> · 기초 공정 산출물을 입력받아 인터랙티브 와이어프레임 + 6관점 엘리먼트 + SlotSpec · OperationalSpec으로 확장.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">왜 두 개로 쪼갰는가</div>
+    하나의 거대한 Skill은 유지 보수가 어렵고, 기능 추가 시 다른 부분을 깨뜨리기 쉽습니다. "입력·출력이 명확한 작은 Skill을 파이프로 연결"하면 각각을 독립적으로 개선할 수 있습니다.
+    초급 별책의 "점진 확장" 원칙을 Skill 설계에 적용한 버전입니다.
+  </div>
+
+  <h2 id="fossilize">4. 자기 방법론을 Skill로 "화석화"하기</h2>
+  <p>헤일로는 본인의 기획 프로세스 — 문제 기반 프레이밍 → 정책 판단 → 운영 스펙(데이터 파이프라인 · 캐싱 · refresh 정책) → 엣지 케이스 매트릭스 → AS-IS→TO-BE 변경 추적 — 를 <code>SKILL.md</code>에 박제했습니다.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="num good">반복 작업 소멸</div><div class="label">같은 포맷 10번째 쓸 때 Claude가 이미 포맷을 안다</div></div>
+    <div class="stat"><div class="num good">팀 전수 가능</div><div class="label">신입이 첫 주에 선임 수준 결과물</div></div>
+    <div class="stat"><div class="num good">자기 성장 가시화</div><div class="label">분기별 개정을 git log로 확인</div></div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">전환의 의미</div>
+    개인 역량을 Skill로 박제하는 순간, "대체 불가능한 장인"에서 "팀 전체를 레벨업시키는 설계자"로 역할이 바뀝니다. 이게 시니어가 Skill을 만드는 진짜 이유입니다.
+  </div>
+
+  <h2 id="tuning">5. 감각적 튜닝 · 여러 버전 돌리기</h2>
+  <p>이 위키 시리즈도 v1.0 → v1.4까지 여러 버전을 돌리며 만들어졌습니다. 프로토타입 품질의 결정타는 "얼마나 많은 버전을 돌리느냐"입니다.</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">매 버전 점검하는 감각 체크리스트</h3>
+    <p>✓ <strong>본문 밀도</strong> — 문단이 답답하지 않은가. 줄간격·자간은 오래 읽어도 피로하지 않은가.</p>
+    <p>✓ <strong>톤 일관성</strong> — 1장과 5장의 문체가 이질적이지 않은가.</p>
+    <p>✓ <strong>도표·표·콜아웃의 비율</strong> — 글만으로 지루한 구간이 3페이지 이상 이어지지 않는가.</p>
+    <p>✓ <strong>공지·약속의 일치</strong> — 앞에서 "다룬다"고 한 것이 실제로 뒷장에 있는가.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">중급이 바로 쓰는 법</div>
+    자기 Skill에도 같은 원칙을 적용하세요. v1.0을 먼저 만들고, Claude에게 "이 Skill이 놓치고 있는 케이스 3가지를 말해줘"를 시키세요. Skill이 진화하는 속도가 팀 내 영향력의 성장 속도입니다.
+  </div>
+
+  <h2 id="parallel">6. 병렬 이터레이션 · 갭 감사 루프</h2>
+  <p>한 번의 프롬프트로 답을 얻으려 하지 말고, <strong>병렬로 3안을 뽑고 갭을 감사</strong>하는 습관을 들이세요. 시간은 약간 더 들지만 결과 품질이 비교 불가능합니다.</p>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE EN-1 · 병렬 이터레이션 · 갭 감사 루프</div>
+    <svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="aren" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/>
+        </marker>
+      </defs>
+      <style>
+        .en { fill: #fafafa; stroke: #e4e4e7; stroke-width: 1.5; }
+        .en-n { fill: #4f46e5; font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; }
+        .en-t { fill: #18181b; font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; }
+        .en-d { fill: #52525b; font-family: -apple-system, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="en" x="20" y="20" width="160" height="120" rx="8"/>
+      <text class="en-n" x="36" y="40">STEP 1 · 병렬</text>
+      <text class="en-t" x="36" y="64">3안 동시 생성</text>
+      <text class="en-d" x="36" y="84">A · B · C 안</text>
+      <text class="en-d" x="36" y="100">한 번에 3개</text>
+      <text class="en-d" x="36" y="116">5요소 그대로 적용</text>
+
+      <line x1="185" y1="80" x2="205" y2="80" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#aren)"/>
+
+      <rect class="en" x="210" y="20" width="160" height="120" rx="8"/>
+      <text class="en-n" x="226" y="40">STEP 2 · 갭 감사</text>
+      <text class="en-t" x="226" y="64">Claude 자가 감사</text>
+      <text class="en-d" x="226" y="84">"빠진 것 3가지?"</text>
+      <text class="en-d" x="226" y="100">"90점일까?"</text>
+      <text class="en-d" x="226" y="116">"리스크 5개?"</text>
+
+      <line x1="375" y1="80" x2="395" y2="80" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#aren)"/>
+
+      <rect class="en" x="400" y="20" width="160" height="120" rx="8"/>
+      <text class="en-n" x="416" y="40">STEP 3 · 조합</text>
+      <text class="en-t" x="416" y="64">사람이 선택</text>
+      <text class="en-d" x="416" y="84">"A 구조 + B 톤</text>
+      <text class="en-d" x="416" y="100">+ C 디테일"</text>
+      <text class="en-d" x="416" y="116">조합 요청</text>
+
+      <line x1="565" y1="80" x2="585" y2="80" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#aren)"/>
+
+      <rect class="en" x="590" y="20" width="110" height="120" rx="8"/>
+      <text class="en-n" x="606" y="40">STEP 4 · 마감</text>
+      <text class="en-t" x="606" y="64">사람이 검수</text>
+      <text class="en-d" x="606" y="84">이름·숫자</text>
+      <text class="en-d" x="606" y="100">날짜 3종</text>
+      <text class="en-d" x="606" y="116">눈 검토</text>
+    </svg>
+  </div>
+
+  <h2 id="timeless">7. 타임리스/이벤트 분리 · 트렌드 큐레이션</h2>
+  <p>위키 콘텐츠를 두 종류로 분리해 관리합니다. <strong>타임리스</strong>는 본질 콘텐츠 — 5요소·결정 트리·5섹션 HANDOFF.md처럼 기술이 바뀌어도 유효한 원칙. <strong>이벤트</strong>는 시점 콘텐츠 — Opus 4.7 출시, 특정 라이브러리 동향, 분기별 사례.</p>
+
+  <table>
+    <thead><tr><th>구분</th><th>예시</th><th>갱신 주기</th></tr></thead>
+    <tbody>
+      <tr><td><strong>타임리스</strong></td><td>5요소 · 결정 트리 · HANDOFF.md 포맷 · 4계층 Eval · 30항 체크리스트</td><td>분기 1회 검토</td></tr>
+      <tr><td><strong>이벤트</strong></td><td>모델 라인업·도구 카탈로그·사내 사례 수치</td><td>월 1회 갱신</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">트렌드 큐레이션 루틴</div>
+    매주 금요일 30분 — Awesome Claude Code · MAGI//ARCHIVE · Anthropic Engineering Blog를 훑고 새 도구 1개를 도구 카탈로그에 추가. 1년이면 50개 도구가 자연스레 쌓입니다.
+  </div>
+
+  <h2 id="close">끝 · 72시간 원칙</h2>
+  <p>위키를 만들었으면 사용되어야 합니다. 헤일로가 매번 적용하는 72시간 원칙입니다.</p>
+
+  <div class="card">
+    <p>✓ <strong>출시 72시간 안에</strong> 동료 3명이 위키의 한 챕터를 실제 업무에 적용했다.</p>
+    <p>✓ <strong>1주 안에</strong> Notion <em>Prompt Kit</em>에 본인 직무 템플릿 1개를 저장했다.</p>
+    <p>✓ <strong>2주 안에</strong> 같은 패턴으로 두 번째 적용을 만들었다. 두 번째가 더 빠르면 체화 완료.</p>
+    <p>✓ <strong>분기 안에</strong> 본인이 만든 Skill 1개를 사내 레포에 커밋했다.</p>
+  </div>
+
+  <h2>이 위키 시리즈와의 연결</h2>
+  <div class="card">
+    <p>지금까지 만든 본책 3권(초급·중급·고급)과 별책 3권(세미나 실습)은 모두 한 가지 목표를 향합니다 — <strong>AI를 도구에서 동료로 바꾸기</strong>.</p>
+    <p>이 위키는 그 여정의 표준화된 입구입니다. 동료들이 같은 출발선에 서고, 같은 어휘로 일하며, 같은 안전망 위에서 실험하기 위한 공동 기준점.</p>
+    <p style="margin-top: 16px; color: var(--accent); font-weight: 500;">초급의 반복은 중급에서 자동화로, 중급의 자동화는 고급에서 제안으로 진화합니다. 각 단계의 주인공은 언제나 여러분입니다.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">편찬자 후기</div>
+    "프로덕션 에이전트는 기술이 아니라 운영 성숙도의 문제다. 체크리스트를 고통스럽게 여기지 말고, 동료 엔지니어를 위한 선물로 여기자." — 헤일로
+  </div>
+
+  <p style="font-size: 13px; color: var(--text-soft); margin-top: 48px;">
+    편찬 · 커뮤니티 팀 · 헤일로 (halo.wave@axzcorp.com) · 위키 시리즈 v1.4 · 기준 모델 Claude Opus 4.7 / Sonnet 4.6 / Haiku 4.5
+  </p>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="tools.html">
+        <div class="label">← 이전</div>
+        <div class="title">도구 카탈로그</div>
+      </a>
+      <a href="index.html">
+        <div class="label">홈으로</div>
+        <div class="title">위키 처음 페이지</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

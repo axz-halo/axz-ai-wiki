@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-4 적응형 인터페이스 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L3 챕터</span>
+      <a href="01-agentic-ux.html">3-1 Agentic UX 6대 패턴</a>
+      <a href="02-progressive-autonomy.html">3-2 점진적 자율성</a>
+      <a href="03-context-preservation.html">3-3 컨텍스트 보존</a>
+      <a href="04-adaptive-ui.html" class="active">3-4 적응형 인터페이스</a>
+      <a href="05-feedback-loop.html">3-5 사용자 피드백 루프</a>
+      <a href="06-multi-agent.html">3-6 멀티 에이전트 오케스트레이션</a>
+      <a href="07-harness.html">3-7 하네스·관측·복구</a>
+      <a href="08-non-dev-cc.html">3-8 비개발자의 Claude Code</a>
+      <a href="09-patterns-eval.html">3-9 패턴 1·3·5 + Eval</a>
+      <a href="10-release-checklist.html">3-10 릴리즈 체크리스트</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 3-4 · 40분 · 패턴 6</span>
+  <h1 class="page-title">적응형 인터페이스</h1>
+  <p class="lede">
+    한 화면이 입문자에겐 친절하고 숙련자에겐 빠릅니다. 숙련도를 3단(beginner · intermediate · expert)으로 추정하고,
+    UI 밀도·툴팁·단축키 노출을 조정합니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#detect">숙련도 추정 지표</a></li>
+      <li><a href="#hook">숙련도 훅</a></li>
+      <li><a href="#css">3단 밀도 CSS</a></li>
+      <li><a href="#levels">레벨별 UI 차이</a></li>
+      <li><a href="#onboarding">적응형 온보딩 플로우</a></li>
+      <li><a href="#cases">실제 운영 사례 2종</a></li>
+      <li><a href="#anti">적응형 안티패턴</a></li>
+    </ol>
+  </div>
+
+  <h2 id="detect">숙련도 추정 지표</h2>
+  <p>모든 지표는 로컬 저장만 사용합니다. 조직 간 공유되지 않습니다.</p>
+
+  <table>
+    <thead><tr><th>레벨</th><th>세션 수</th><th>단축키 사용</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Beginner</strong></td><td>5회 미만</td><td>0~1회</td></tr>
+      <tr><td><strong>Intermediate</strong></td><td>5~30회</td><td>주 3회 이상</td></tr>
+      <tr><td><strong>Expert</strong></td><td>30회 초과</td><td>주 10회 이상</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-label">팁 · 휴면 보정</div>
+    휴면 기간이 14일 이상이면 한 단계 하향합니다. "Expert였는데 한 달 쉬었다"는 상태는 대부분 다시 Intermediate급 힌트가 필요합니다.
+  </div>
+
+  <h2 id="hook">숙련도 훅</h2>
+<pre><code>// useUserSkill.ts
+import { useMemo } from "react";
+
+export function useUserSkill() {
+  const sessions  = useLocalValue("sessions.count", 0);
+  const shortcuts = useLocalValue("shortcuts.weekly", 0);
+  const lastSeenDays = useLocalValue("lastSeenDays", 0);
+
+  return useMemo(() =&gt; {
+    // 14일 휴면 시 한 단계 하향
+    const dormancyShift = lastSeenDays &gt; 14 ? 1 : 0;
+    if (sessions &lt; 5)  return "beginner";
+    if (sessions &gt; 30 && shortcuts &gt;= 10 && !dormancyShift) return "expert";
+    return "intermediate";
+  }, [sessions, shortcuts, lastSeenDays]);
+}</code></pre>
+
+  <h2 id="css">3단 밀도 CSS</h2>
+<pre><code>/* skill-density.css */
+:root[data-skill="beginner"] {
+  --spacing: 14px;
+  --font-size: 15px;
+  --hint-opacity: 1;
+}
+:root[data-skill="intermediate"] {
+  --spacing: 10px;
+  --font-size: 14px;
+  --hint-opacity: 0.6;
+}
+:root[data-skill="expert"] {
+  --spacing: 6px;
+  --font-size: 13px;
+  --hint-opacity: 0;
+}
+
+.pane { padding: var(--spacing); font-size: var(--font-size); }
+.hint { opacity: var(--hint-opacity); transition: opacity .2s; }</code></pre>
+
+  <h2 id="levels">레벨별 UI 차이</h2>
+  <table>
+    <thead><tr><th>UI 요소</th><th>Beginner</th><th>Intermediate</th><th>Expert</th></tr></thead>
+    <tbody>
+      <tr><td>툴팁</td><td>항상 표시</td><td>호버 시</td><td>숨김</td></tr>
+      <tr><td>확인 다이얼로그</td><td>모든 실행</td><td>파괴적 작업만</td><td>거의 없음</td></tr>
+      <tr><td>단축키</td><td>라벨 옆 전체</td><td>호버 시</td><td>⌘K만</td></tr>
+      <tr><td>기본 입력</td><td>단계별 샘플</td><td>템플릿 선택</td><td>빈 화면</td></tr>
+      <tr><td>기본 모델</td><td>Sonnet 4.6</td><td>모델 선택 가능</td><td>Opus·Sonnet·Haiku 자유</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-label">주의 · 자동 승급 금지</div>
+    사용량 지표만으로 Expert로 자동 격상하면 숙련자의 실수 비용이 급증합니다. 사용자가 명시적 <em>"Start Hints"</em>를 클릭할 때만 최종 승급하세요.
+  </div>
+
+  <h2 id="onboarding">적응형 온보딩 플로우</h2>
+  <p>첫 5회 세션을 Beginner 전용 트랙으로 설계하세요. 첫 경험이 "너무 많은 옵션"이면 이후 평생 Intermediate조차 도달하지 못합니다.</p>
+
+  <div class="card">
+    <p><strong>S1 ·</strong> 가이드 투어 — 3분 인터랙티브 가이드. 좌측 헤더 2개 기능만 노출.</p>
+    <p><strong>S2-3 ·</strong> 템플릿 선택 — 6개 카드(이메일·번역·데이터·코드 등) 중 1개 고르면 빈 프롬프트 대신 예시가 채워짐.</p>
+    <p><strong>S4 ·</strong> 첫 단축키 노출 — 한 번 성공한 액션에 "⌘↵로 빠르게 실행할 수 있어요" 코치마크.</p>
+    <p><strong>S5+ ·</strong> 자동 승급 제안 — "이제 템플릿 없이 바로 써보시겠어요?" 명시적 opt-in.</p>
+  </div>
+
+  <h2 id="cases">실제 운영 사례 2종</h2>
+
+  <div class="case">
+    <div class="case-label">CASE 1 · 사내 제품 A</div>
+    <h3>Beginner 트랙 도입 효과</h3>
+    <p><strong>3월(도입 전):</strong> 첫 세션 완료율 47%. 평균 첫 출력 시간 8분. "어디 클릭해야 할지 모름"이 피드백 상위 1위.</p>
+    <p><strong>4월(Beginner 트랙 도입 후):</strong> 첫 세션 완료율 78%. 평균 첫 출력 시간 2분 40초. "도움말이 자꾸 뜨는데 괜찮음"으로 1위 교체.</p>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 2 · 커뮤니티 제품 B</div>
+    <h3>Expert 옵트인 사용 패턴</h3>
+    <p>사용 21회 넘긴 사용자에게 첫 승급 제안. "⌘K 외 단축키를 모두 숨기고, 파일 쓰기 확인 다이얼로그도 대부분 생략합니다" 문구 명시.</p>
+    <p>누른 사용자 68%, 그 중 14일 사용 후 회귀 3%. Expert UI가 실제로 원하는 사람에게만 적용된 숫자.</p>
+  </div>
+
+  <h2 id="anti">적응형 안티패턴</h2>
+  <table>
+    <thead><tr><th>안티패턴</th><th>문제</th></tr></thead>
+    <tbody>
+      <tr><td>자동으로만 적용</td><td>사용자 모르는 새 UI가 축소. 혼란 상위.</td></tr>
+      <tr><td>되돌리기 없음</td><td>Expert가 됐다가 길을 잃어도 Beginner로 못 돌아감.</td></tr>
+      <tr><td>두 단계 점프</td><td>Beginner → Expert 바로. 중간 단계 스킵 금지.</td></tr>
+      <tr><td>지표를 외부 공유</td><td>사용량 데이터가 조직 간 공유되면 프라이버시 문제.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">한 줄 인용</div>
+    "적응형 UI의 목표는 모두를 같은 속도로 끌어올리는 게 아니다. 각자의 속도로 통제감을 유지하게 하는 것이다." — UX 리서치 노트, 2026-03
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ <code>useUserSkill</code> 훅을 본인 제품에 추가했다.</p>
+    <p>✓ <code>data-skill</code> 속성 기반 3단 밀도 CSS가 작동한다.</p>
+    <p>✓ Expert 승급은 사용자 명시적 클릭에만 일어난다.</p>
+    <p>✓ Beginner → Expert 직접 점프가 차단됐다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="05-feedback-loop.html">3-5 사용자 피드백 루프</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="03-context-preservation.html">
+        <div class="label">← 이전</div>
+        <div class="title">3-3 컨텍스트 보존</div>
+      </a>
+      <a href="05-feedback-loop.html">
+        <div class="label">다음 →</div>
+        <div class="title">3-5 사용자 피드백 루프</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

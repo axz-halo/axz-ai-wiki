@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1-4 오늘 업무에 적용 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="../level-3/index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L1 챕터</span>
+      <a href="01-first-meeting.html">1-1 Claude 첫 만남</a>
+      <a href="02-prompt-5elements.html">1-2 프롬프트 5요소</a>
+      <a href="03-model-selection.html">1-3 모델 선택 결정 트리</a>
+      <a href="04-daily-work.html" class="active">1-4 오늘 업무에 적용</a>
+      <a href="05-role-packs.html">1-5 직무별 프롬프트 팩</a>
+      <a href="06-claude-design.html">1-6 Claude Design 첫 걸음</a>
+      <a href="07-cheatsheet.html">1-7 90초 워크플로우</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 1-4 · 45분</span>
+  <h1 class="page-title">오늘 업무에 적용</h1>
+  <p class="lede">
+    사내에서 가장 빈도 높은 다섯 업무 — 이메일, 회의 정리, 문서 교정, 번역 감수, 데이터 정리 — 에
+    Claude를 붙여 보는 단계입니다. 각 항목은 복사해서 바로 쓸 수 있는 프롬프트와 함께 제공됩니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#email">이메일 초안 — 3가지 상황별 템플릿</a></li>
+      <li><a href="#meeting">회의 요약 + 액션 아이템 추출</a></li>
+      <li><a href="#proofread">문서 교정 — 3단계 레벨</a></li>
+      <li><a href="#translation">번역 감수</a></li>
+      <li><a href="#data">데이터 정리 — 엑셀 보조</a></li>
+      <li><a href="#workflow">오늘 바로 쓰는 90초 워크플로우</a></li>
+    </ol>
+  </div>
+
+  <h2 id="email">이메일 초안 — 3가지 상황별 템플릿</h2>
+  <p>메일은 "누구에게 · 무엇을 · 어떤 톤으로" 세 가지만 알려주면 깔끔한 초안이 나옵니다. 사내에서 가장 자주 일어나는 메일 유형 셋을 준비했습니다.</p>
+
+  <h3>4.1.1 납기 지연 사과</h3>
+<pre><code>[역할] 너는 고객사 커뮤니케이션 담당 시니어야.
+[맥락] 받는 사람: 파트너사 담당자(상급). 우리는 납기 1주 지연을 알려야 해.
+[지시] 사과 + 원인 + 새 일정 + 재발 방지 순으로 3문단 메일을 써줘.
+[제약] 과도한 사과 금지. 원인은 "제품 QA 일정 이슈" 정도로 간결.
+[형식] 제목 한 줄 + 본문 3문단 + 끝인사.</code></pre>
+
+  <h3>4.1.2 상급자 보고</h3>
+<pre><code>[역할] 너는 팀장 보고를 작성하는 시니어 실무자야.
+[맥락] 팀장은 시간이 없음. 스크롤 없이 한 화면에서 결정을 내려야 함.
+[지시] 이번 주 진행 현황을 한 화면 분량의 보고서로 만들어.
+[제약] 기술 용어 금지. 수치는 반드시 근거 줄로 뒷받침.
+[형식]
+  ## TL;DR (3줄)
+  ## 이번 주 완료 (- 불릿 3개)
+  ## 다음 주 계획 (- 불릿 3개)
+  ## 의사결정 필요 사항 (1건)</code></pre>
+
+  <h3>4.1.3 고객 첫 컨택 (콜드 메일)</h3>
+<pre><code>[역할] 너는 B2B 세일즈 라이터야.
+[맥락] 이 고객은 내부 링크드인으로 접촉해 본 적 없는 잠재 고객.
+[지시] 3문단 콜드 메일 초안을 써. 1문단=관찰, 2문단=가치 제안, 3문단=CTA.
+[제약] 자기 소개는 1문장만. 회사 제품 이름은 과장 없이 한 번만.
+[형식] 제목(35자 이내) + 본문 + 서명 자리 표시.</code></pre>
+
+  <div class="callout warn">
+    <div class="callout-label">보내기 전 5초</div>
+    Claude가 준 초안을 그대로 보내지 마세요. <strong>이름·일정·금액</strong> 세 항목만 눈으로 점검하면 95% 이상 사고를 막을 수 있습니다.
+  </div>
+
+  <h2 id="meeting">회의 요약 + 액션 아이템 추출</h2>
+  <p>회의 녹취나 노트를 그대로 붙여 넣고, 요약 형식만 지정합니다. 결정 사항과 액션 아이템은 반드시 분리하세요.</p>
+
+<pre><code>[역할] 회의록 편집자.
+[지시] 아래 녹취를 다음 형식으로 요약.
+[형식]
+  ## 한 줄 요약
+  ## 결정 사항 (- 불릿)
+  ## 액션 아이템 (담당자 · 마감일)
+  ## 후속 논의 필요 사항
+[제약] 녹취에 없는 정보는 추측하지 말고 "(확인 필요)"로 표기.
+[녹취]
+"""
+...붙여넣기...
+"""</code></pre>
+
+  <h3>액션 아이템만 추출하기</h3>
+  <p>전체 요약이 아닌 "해야 할 일만" 뽑아 Slack으로 던져야 할 때는 아래가 더 빠릅니다.</p>
+
+<pre><code>[역할] 액션 아이템 추출기.
+[지시] 아래 녹취에서 액션 아이템만 뽑아 체크리스트로 정리.
+[형식]
+  - [ ] (담당자) 할 일 — 마감: YYYY-MM-DD
+[제약] 담당자가 명시되지 않은 건은 "(미정)"로, 마감이 없으면 "(확인 필요)".</code></pre>
+
+  <div class="callout">
+    <div class="callout-label">자동화 포인트</div>
+    중급편에서는 이 프롬프트를 Claude Code의 슬래시 커맨드 <code>/retro</code>로 등록해, 회의 노트 파일만 붙이면 바로 체크리스트가 나오게 만듭니다.
+  </div>
+
+  <h2 id="proofread">문서 교정 — 3단계 레벨</h2>
+  <p>"잘못된 맞춤법만" vs "문장 전체 다듬기"를 구분해 지시하세요. 전자는 최소 수정, 후자는 어투까지 바꿀 수 있습니다.</p>
+
+  <table>
+    <thead><tr><th>레벨</th><th>지시 예시</th><th>적용 범위</th></tr></thead>
+    <tbody>
+      <tr><td>Lv.1 맞춤법·띄어쓰기만</td><td>"맞춤법·띄어쓰기 오류만 고쳐. 단어 선택·어순은 건드리지 마."</td><td>오타 교정</td></tr>
+      <tr><td>Lv.2 문장 가독성 개선</td><td>"긴 문장을 나누고, 중복 표현을 제거해. 본래 의미는 유지."</td><td>가독성 향상</td></tr>
+      <tr><td>Lv.3 톤·구조까지 재작성</td><td>"임원 보고용으로 한 문단씩 축약하고, 데이터는 불릿으로 분리."</td><td>전면 재작성</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">팁 · diff 요청</div>
+    교정 결과를 받으면 꼭 변경 사항 diff를 요청하세요. "원문과 수정본의 차이를 리스트로 알려줘" 한 마디면 빠진 문장이나 오역을 금방 잡습니다.
+  </div>
+
+  <h2 id="translation">번역 감수</h2>
+  <p>영한/한영 번역은 DeepL 등 번역기의 초벌 결과를 Claude가 감수하는 방식이 가장 정확합니다. 번역+감수를 한 대화에서 수행하려면 아래를 쓰세요.</p>
+
+<pre><code>[역할] 너는 한국어-영어 이중언어 기술 번역가야.
+[맥락] 독자는 미국 법인 임원. 원문은 사내 리서치 요약.
+[지시] 한 문단씩 번역 + 번역 품질 코멘트를 같이 달아.
+[제약] 고유명사·제품명은 원문 그대로. "대충" 번역 금지.
+[형식]
+  ### 문단 1
+  KR: 원문
+  EN: 번역
+  NOTE: 뉘앙스 코멘트(1~2줄)</code></pre>
+
+  <h2 id="data">데이터 정리 — 엑셀 소프트 보조</h2>
+  <p>엑셀 한 컬럼을 복사해 Claude에 주면, 정규화·표준화·카테고리화를 대신 해 줍니다. 소규모(행 500개 이하) 데이터에 특히 강력합니다.</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">세 가지 데이터 정리 패턴</h3>
+    <p><strong>표준화 ·</strong> "서울 / 서울시 / 서울특별시"를 하나로 통일.</p>
+    <p><strong>카테고리화 ·</strong> 자유 기술 답변을 5개 범주 + 기타로 분류.</p>
+    <p><strong>결측 보완 ·</strong> 문맥으로 유추 가능한 칸만 "(추정)" 표기로 채움.</p>
+  </div>
+
+  <h3>실습 — CS 티켓 표준화</h3>
+<pre><code>[역할] 데이터 정제 어시스턴트.
+[지시] 아래 CS 티켓 유형 필드를 표준 5개 카테고리로 매핑해.
+[제약] 표준 밖은 "기타"로. 근거 코멘트 한 줄.
+[형식]
+  원본 → 표준 | 근거
+  ----
+  결제오류 → 결제 | "결제" 키워드 포함
+  환불요청 → 환불 | 명시적 요청</code></pre>
+
+  <div class="callout warn">
+    <div class="callout-label">1,000행 이상이면</div>
+    채팅창은 수천 행도 처리하지만 응답이 느려집니다. 500행 이상이면 중급편의 Claude Code + 파이썬 스크립트 패턴이 훨씬 효율적입니다.
+  </div>
+
+  <h2 id="workflow">오늘 바로 쓰는 90초 워크플로우</h2>
+  <p>이 챕터에서 배운 프롬프트를 묶어 하루 업무 시작 90초 루틴으로 만들었습니다. 매일 아침 한 번씩만 실행하면 팀 공유 업무의 70%가 자동 준비됩니다.</p>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 1-4 · 90초 워크플로우</div>
+    <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        .step { fill: #fff7ed; stroke: #f97316; stroke-width: 1.5; }
+        .step-time { fill: #c2410c; font-family: Pretendard, sans-serif; font-size: 11px; font-weight: 700; }
+        .step-do { fill: #1c1917; font-family: Pretendard, sans-serif; font-size: 13px; font-weight: 600; }
+        .step-desc { fill: #57534e; font-family: Pretendard, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="step" x="20" y="20" width="320" height="80" rx="8"/>
+      <text class="step-time" x="38" y="42">00:00 · 09:00</text>
+      <text class="step-do" x="38" y="62">어제 회의록 붙여넣기</text>
+      <text class="step-desc" x="38" y="80">→ 회의 요약 프롬프트로 팀 공유 요약본 생성</text>
+
+      <rect class="step" x="360" y="20" width="320" height="80" rx="8"/>
+      <text class="step-time" x="378" y="42">00:30 · 09:01</text>
+      <text class="step-do" x="378" y="62">오늘 답장 이메일 초안</text>
+      <text class="step-desc" x="378" y="80">→ 상급자 보고 템플릿으로 보고 초안</text>
+
+      <rect class="step" x="20" y="120" width="320" height="80" rx="8"/>
+      <text class="step-time" x="38" y="142">01:00 · 09:02</text>
+      <text class="step-do" x="38" y="162">CS 티켓 표준화</text>
+      <text class="step-desc" x="38" y="180">→ 데이터 정리 프롬프트로 어제 수집분 정제</text>
+
+      <rect class="step" x="360" y="120" width="320" height="80" rx="8"/>
+      <text class="step-time" x="378" y="142">01:30 · 09:03</text>
+      <text class="step-do" x="378" y="162">공유</text>
+      <text class="step-desc" x="378" y="180">→ 세 결과를 Slack #팀-데일리에 블록 세 개로</text>
+    </svg>
+    <p class="caption">90초는 컴퓨터가 일하는 시간입니다. 여러분은 그동안 커피를 내리세요.</p>
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ 다섯 가지 업무(이메일·회의·교정·번역·데이터) 각각에 쓸 프롬프트 골격이 있다.</p>
+    <p>✓ 90초 워크플로우를 한 번 실행해 봤다.</p>
+    <p>✓ 1,000행 이상 데이터는 중급편 도구로 넘긴다는 한계를 인지한다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="05-role-packs.html">1-5 직무별 프롬프트 팩</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="03-model-selection.html">
+        <div class="label">← 이전</div>
+        <div class="title">1-3 모델 선택</div>
+      </a>
+      <a href="05-role-packs.html">
+        <div class="label">다음 →</div>
+        <div class="title">1-5 직무별 프롬프트 팩</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

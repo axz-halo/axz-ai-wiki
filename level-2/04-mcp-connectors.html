@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2-4 MCP 커넥터 7종 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="index.html">L2 · 중급</a>
+      <a href="../level-3/index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L2 챕터</span>
+      <a href="01-claude-code-intro.html">2-1 Claude Code 입문</a>
+      <a href="02-slash-commands.html">2-2 슬래시 커맨드</a>
+      <a href="03-subagents-hooks.html">2-3 서브에이전트와 훅</a>
+      <a href="04-mcp-connectors.html" class="active">2-4 MCP 커넥터 7종</a>
+      <a href="05-session-claudemd.html">2-5 세션 관리·CLAUDE.md</a>
+      <a href="06-security.html">2-6 보안 실수 5선</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 2-4 · 75분</span>
+  <h1 class="page-title">MCP 커넥터 7종</h1>
+  <p class="lede">
+    MCP(Model Context Protocol)는 Claude와 외부 도구를 연결하는 표준 인터페이스입니다.
+    허용 7종의 커넥터를 연결하면 Claude Code가 Slack 메시지를 보내고 Notion 문서를 갱신하고 Figma 파일을 동기화할 수 있습니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#overview">7종 커넥터 한눈에</a></li>
+      <li><a href="#arch">MCP 아키텍처</a></li>
+      <li><a href="#slack-notion">Slack · Notion 연결</a></li>
+      <li><a href="#sheets-figma">Google Sheets · Figma 연결</a></li>
+      <li><a href="#github-vercel">GitHub · Vercel 연결</a></li>
+      <li><a href="#supabase">Supabase — Dev 샌드박스만</a></li>
+      <li><a href="#security">MCP 보안 원칙</a></li>
+      <li><a href="#recovery">커넥터 장애 복구 플레이북</a></li>
+    </ol>
+  </div>
+
+  <h2 id="overview">7종 커넥터 한눈에</h2>
+  <p>2026-04 기준 사내 허용 커넥터 7종입니다. 각 커넥터는 IT 보안팀 정책에 따라 권한 범위·승인 절차가 다릅니다.</p>
+
+  <table>
+    <thead><tr><th>커넥터</th><th>쓰임</th><th>권한 범위</th><th>승인</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Slack</strong></td><td>채널 조회·DM 발신·검색</td><td>봇 자격</td><td>매니저 승인</td></tr>
+      <tr><td><strong>Notion</strong></td><td>문서 조회·갱신·검색</td><td>워크스페이스</td><td>리더 · 사이트 자율</td></tr>
+      <tr><td><strong>Google Sheets</strong></td><td>시트 조회·기록·기록</td><td>시트별 ACL</td><td>IT 승인</td></tr>
+      <tr><td><strong>Figma</strong></td><td>변경 감지·갱신</td><td>워크스페이스</td><td>자율</td></tr>
+      <tr><td><strong>GitHub</strong></td><td>Issues·PR·체크 운영</td><td>레포 단위</td><td>실 자율</td></tr>
+      <tr><td><strong>Supabase</strong></td><td>DB 쿼리·마이그레이션</td><td>Dev 샌드박스</td><td>DBA 승인</td></tr>
+      <tr><td><strong>Vercel</strong></td><td>배포 모니터·로그</td><td>프로젝트 단위</td><td>리더 자율</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-label">주의 · Supabase는 Dev 샌드박스만</div>
+    프로덕션 DB 쓰기는 Claude Code에서 <strong>허용되지 않습니다</strong>. 프로덕션 쿼리 운영이 필요하면 DBA에게 요청해 별도 절차로 진행하세요.
+  </div>
+
+  <h2 id="arch">MCP 아키텍처</h2>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 2-4 · Claude ↔ MCP ↔ 외부 도구</div>
+    <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="armcp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f97316"/>
+        </marker>
+      </defs>
+      <style>
+        .blk { fill: #fff7ed; stroke: #f97316; stroke-width: 2; }
+        .blk-cap { fill: #c2410c; font-family: Pretendard, sans-serif; font-size: 11px; font-weight: 700; }
+        .blk-ttl { fill: #1c1917; font-family: Pretendard, sans-serif; font-size: 15px; font-weight: 700; }
+        .blk-sub { fill: #57534e; font-family: Pretendard, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="blk" x="20" y="50" width="200" height="100" rx="10"/>
+      <text class="blk-cap" x="38" y="74">CLIENT</text>
+      <text class="blk-ttl" x="38" y="98">Claude Code</text>
+      <text class="blk-sub" x="38" y="118">사용자의 CLI 세션</text>
+
+      <line x1="225" y1="100" x2="265" y2="100" stroke="#f97316" stroke-width="2" marker-end="url(#armcp)"/>
+      <line x1="455" y1="100" x2="495" y2="100" stroke="#f97316" stroke-width="2" marker-end="url(#armcp)"/>
+
+      <rect class="blk" x="270" y="50" width="180" height="100" rx="10"/>
+      <text class="blk-cap" x="288" y="74">PROTOCOL</text>
+      <text class="blk-ttl" x="288" y="98">MCP Server</text>
+      <text class="blk-sub" x="288" y="118">표준 JSON-RPC 파이프</text>
+
+      <rect class="blk" x="500" y="50" width="200" height="100" rx="10"/>
+      <text class="blk-cap" x="518" y="74">PROVIDER</text>
+      <text class="blk-ttl" x="518" y="98">Slack/Notion/...</text>
+      <text class="blk-sub" x="518" y="118">실제 SaaS API</text>
+    </svg>
+  </div>
+
+  <h2 id="slack-notion">Slack · Notion 연결</h2>
+  <p>가장 자주 쓰는 두 커넥터입니다. <code>claude mcp add</code> 명령으로 5단계 설치하고, Okta SSO로 안전 인증합니다.</p>
+
+<pre><code># Slack 커넥터
+claude mcp add slack
+# → 브라우저 자동 → Okta SSO → Slack 워크스페이스 권한 부여 → 자동 인증
+
+# Notion 커넥터
+claude mcp add notion
+# → 브라우저 자동 → Notion 워크스페이스 권한 → 페이지 별 자동 인증
+
+# 운영 확인
+claude mcp list</code></pre>
+
+<pre><code>> #release-ko 채널의 어제 활동 메시지를 함께 읽고 Notion
+  "2026-04 Insider's URL" 페이지를 만들어줘.
+[Claude]
+1. Slack MCP로 채널 메시지 조회
+2. Claude가 어제 정리해 다듬어 3장 만들기
+3. Notion MCP로 페이지 자동 attach</code></pre>
+
+  <h2 id="sheets-figma">Google Sheets · Figma 연결</h2>
+  <p>지표 시트와 디자인 파일 동기화에 매번 쓰입니다. Sheets와 Figma 모두 워크스페이스 단위 인증이 필요합니다.</p>
+
+<pre><code>> "KPI-2026 Q2"의 4월 운영 지표 시트 매주 시트 데이터와 이전 데이터를 비교해 2번 만들어
+  자리표시 Slack #weekly-ops 에 던져.
+- Sheets MCP : 이번 시트 · 이전 시트 자동 로드
+- Computer : 운영 지표 12.4% · 14.1% (+1.7p)
+- Slack MCP : 채널 자동</code></pre>
+
+<pre><code>> Figma 프로젝트 "Design System v3"의 Properties 부 변경 자동 부여 인자 이용하고
+  변경되면 components/index.ts의 자동 토큰을 키만 갱신해줘.
+- Figma MCP : 변경 디프 · DesignToken `pad-08` 6 `border-650`
+- Edit Tool : components/index.ts 운영
+- Claude : 자동 자동 됨</code></pre>
+
+  <div class="callout">
+    <div class="callout-label">팁 · 토큰 싱크 케이스</div>
+    디자이너가 한 번에 많은 토큰을 갱신하면, 이 슬래시 자동 실행 시 자동 동기화로 자동 처리됩니다. 사내 25개 자동 운영 Figma 인자를 모니터링하면서 2주에 50개로 빠르게 차세요.
+  </div>
+
+  <h2 id="github-vercel">GitHub · Vercel 연결</h2>
+  <p>코드 리뷰와 배포 모니터링을 자동화합니다. PR 보호 라인 자동, 배포 보호으로 모이듣 자동 보호 운영 가능합니다.</p>
+
+<pre><code>> myapp/serverless 레포의 PR #542 를 봐 review 비교
+  통과되면 Vercel preview URL 도 한 줄 카드로 보고.
+- GitHub MCP : PR #542 디프 자동
+- /review : 작은 blocker 2개 · suggestion 4개
+- Vercel MCP : preview URL · https://serverless-pr-542-myapp.vercel.app
+- Synthesizing : 한 줄 카드 자동 생성</code></pre>
+
+  <div class="callout">
+    <div class="callout-label">팁 · MCP 캐시</div>
+    같은 세션 안에서 반복 쿼리를 하면 Claude MCP 명령을 캐시합니다. 결과가 오래된 듯하면 "최신으로 다시 조회해줘"라고 말하세요.
+  </div>
+
+  <h3>PR 품질 대시보드 자동화</h3>
+  <p>리뷰 결과를 Notion 데이터베이스에 자동 누적하면, 매주 품질 리포트를 손쉽게 만들 수 있습니다. 다음 슬래시가 실제 사례입니다.</p>
+
+<pre><code># .claude/commands/pr-digest.md
+---
+description: 이번 주 PR의 /review 결과를 Notion 대시보드에 누적
+---
+
+1. GitHub MCP로 이번 주 PR 리스트 조회
+2. 각 PR에 /review 를 먼저 → blocker·suggestion·nit 분리
+3. Notion "PR Quality Digest" 데이터베이스에 행으로 append
+4. Slack #dev-quality 에 "이번 주의 리뷰 위클리" 1줄 던지기</code></pre>
+
+  <h2 id="supabase">Supabase 연결 — Dev 샌드박스만</h2>
+  <p>Supabase는 가장 위험한 커넥터입니다. 쿼리 실행 시 데이터 손상 위험이 있기 때문입니다. 사내 정책은 <strong>Dev 샌드박스만 허용</strong>이며, 다음 3종 안전장치를 거칩니다.</p>
+
+  <div class="card">
+    <p><strong>GUARD 1 · URL 검증 ·</strong> <code>supabase-dev-*.internal</code> 외 차단된 도메인은 거부.</p>
+    <p><strong>GUARD 2 · 쿼리 사전 확인 ·</strong> <code>DELETE</code>·<code>DROP</code>·<code>TRUNCATE</code> 명령은 차단 + 승인 필요.</p>
+    <p><strong>GUARD 3 · 감사 로그 ·</strong> 모든 쿼리를 <code>post-tool-use</code> 훅으로 사내 로그 파이프에 기록.</p>
+  </div>
+
+<pre><code>> Supabase 데이터베이스 "Quotes" 라이브 인자의 데이터
+  3일치 운영 시 데이터를 일자별로 끌어와줘.
+- Supabase MCP : SELECT DATE(created_at), COUNT(*) ... GROUP BY DATE
+- Claude : 일자별 산정 표 + 막대 차트
+- audit-log : 모든 쿼리 로그에 기록</code></pre>
+
+  <div class="callout bad">
+    <div class="callout-label">금지 사항</div>
+    프로덕션 URL을 <code>.env</code>에 몰래 넣고 connection string을 설치하지 말 것. <strong>징계 대상</strong>입니다. 프로덕션 쿼리는 반드시 DBA 자격으로.
+  </div>
+
+  <h2 id="security">MCP 보안 원칙</h2>
+  <div class="card">
+    <h3 style="margin-top:0">3대 원칙</h3>
+    <p><strong>01 최소 권한 ·</strong> 단순 "채널 조회 봇"과 "워크스페이스 어드민" 권한은 별개. 필요한 권한만. Organization-wide 권한은 IT 보안팀 사전 승인 필수.</p>
+    <p><strong>02 토큰 로테이션 60일 ·</strong> OAuth 토큰은 60일 주기로 자동 갱신. <code>claude mcp refresh</code>를 분기에 한 번씩 합니다.</p>
+    <p><strong>03 퇴직·이동 시 즉시 해제 ·</strong> 즉시 <code>claude mcp remove &lt;name&gt;</code>으로 즉시 폐기하고, 퇴직 인사 자료에 ID를 자동 폐기.</p>
+  </div>
+
+  <h2 id="recovery">커넥터 장애 복구 플레이북</h2>
+  <p>MCP 실행이 실패할 때 가장 흔한 4가지 패턴과 복구 절차입니다. 처음 발생 시 즉시 이 표를 따르세요.</p>
+
+  <table>
+    <thead><tr><th>증상</th><th>원인</th><th>복구 절차</th></tr></thead>
+    <tbody>
+      <tr><td><code>handshake_failed</code></td><td>만료 토큰</td><td><code>claude mcp refresh &lt;name&gt;</code></td></tr>
+      <tr><td><code>permission_denied</code></td><td>실 권한 변경</td><td><code>claude mcp remove</code> 후 재설치 + 자동 재인증</td></tr>
+      <tr><td><code>rate_limited</code></td><td>실행 폭주</td><td>잠시 5분 대기 + 서브에이전트로 분할</td></tr>
+      <tr><td><code>tool not found</code></td><td>버전 미일치</td><td><code>npm i -g @anthropic-ai/claude-code</code> 재설치</td></tr>
+    </tbody>
+  </table>
+
+  <div class="case">
+    <div class="case-label">CASE · 실전</div>
+    <h3>Slack 커넥터 handshake 3회 연속 실패</h3>
+    <dl>
+      <dt>상황</dt><dd>한 커뮤니티 팀의 Slack MCP 호출 시 3회 연속 <code>handshake_failed</code>.</dd>
+      <dt>원인</dt><dd>Slack 신규 워크스페이스 OAuth 정책이 변경되어 scope 자동 부여 차단.</dd>
+      <dt>해결</dt><dd><code>claude mcp remove slack</code> + add로 재설치하면서 신규 scope 부여. 즉시 복구.</dd>
+    </dl>
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ 사내 허용 커넥터 7종을 머리에 외운다.</p>
+    <p>✓ Slack · Notion 커넥터 2개는 본인 환경에 연결했다.</p>
+    <p>✓ MCP 보안 3원칙(최소 권한·토큰 로테이션·즉시 해제)을 안다.</p>
+    <p>✓ Supabase는 Dev 샌드박스만 가능하다는 사실을 명확히 안다.</p>
+    <p>✓ 4가지 장애 패턴과 복구 명령을 안다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="05-session-claudemd.html">2-5 세션 관리 · CLAUDE.md</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="03-subagents-hooks.html">
+        <div class="label">← 이전</div>
+        <div class="title">2-3 서브에이전트와 훅</div>
+      </a>
+      <a href="05-session-claudemd.html">
+        <div class="label">다음 →</div>
+        <div class="title">2-5 세션 관리·CLAUDE.md</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

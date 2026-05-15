@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs / temp
+*.log
+*.tmp
+.cache/
+
+# Node (혹시 향후 검색·빌드 도구 추가 시)
+node_modules/
+dist/
+build/
+
+# Misc
+Thumbs.db

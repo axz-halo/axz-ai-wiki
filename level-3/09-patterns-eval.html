@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-9 패턴 1·3·5 + Eval 프레임워크 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L3 챕터</span>
+      <a href="01-agentic-ux.html">3-1 Agentic UX 6대 패턴</a>
+      <a href="02-progressive-autonomy.html">3-2 점진적 자율성</a>
+      <a href="03-context-preservation.html">3-3 컨텍스트 보존</a>
+      <a href="04-adaptive-ui.html">3-4 적응형 인터페이스</a>
+      <a href="05-feedback-loop.html">3-5 사용자 피드백 루프</a>
+      <a href="06-multi-agent.html">3-6 멀티 에이전트 오케스트레이션</a>
+      <a href="07-harness.html">3-7 하네스·관측·복구</a>
+      <a href="08-non-dev-cc.html">3-8 비개발자의 Claude Code</a>
+      <a href="09-patterns-eval.html" class="active">3-9 패턴 1·3·5 + Eval</a>
+      <a href="10-release-checklist.html">3-10 릴리즈 체크리스트</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 3-9 · 40분</span>
+  <h1 class="page-title">패턴 1·3·5 실전 구현 + Eval 프레임워크</h1>
+  <p class="lede">
+    1장에서 2·4·6에 집중하기로 했지만, 실전에선 의도 정제·실행 가시화·우아한 실패가 없으면 자율 에이전트는 금방 깨집니다.
+    이 장은 패턴 1·3·5의 최소 구현과 4계층 Eval 구조를 한 번에 정리합니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#p1">패턴 1 · Intent Clarification 실전</a></li>
+      <li><a href="#p3">패턴 3 · Observable Execution 실전</a></li>
+      <li><a href="#p5">패턴 5 · Graceful Failure 실전</a></li>
+      <li><a href="#eval">Eval 프레임워크 · 4계층 구조</a></li>
+      <li><a href="#judge">LLM-as-Judge 루브릭</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1">패턴 1 · Intent Clarification 실전</h2>
+  <p>"애매한 요청"은 가장 흔한 실패 원인입니다. 모델은 추측 금지(implicit refusal)와 슬롯 확인(slot resolver) 두 장치로 방어합니다.</p>
+
+  <h3>9.1.1 Clarifier 에이전트 표준 골격</h3>
+<pre><code># agents/clarifier.md
+name: clarifier
+role: 사용자 요청에서 5개 슬롯을 추출하고,
+      빈 슬롯이 2개 이상이면 재질문을 제안한다.
+slots:
+  - goal        # 무엇을 달성하고 싶은가
+  - audience    # 누구를 위한 결과물인가
+  - format      # 산출 형식 (문서/코드/표)
+  - constraint  # 절대 지켜야 할 제약
+  - done        # 완료 판단 기준
+budget:
+  max_followups: 2    # 2회 넘게 되묻지 않는다
+fallback:
+  use_defaults: true  # 빈 슬롯은 팀 기본값으로 채운 뒤 실행</code></pre>
+
+  <h3>9.1.2 나쁜 재질문 vs 좋은 재질문</h3>
+  <div class="compare">
+    <div class="bad">
+      <h4>BAD · 모호한 확인</h4>
+      <p>"좀 더 자세히 설명해 주실 수 있나요?"</p>
+      <p style="font-size:14px; color:var(--text-muted)">사용자가 무엇을 더 줘야 하는지 모름. 이탈률 상승.</p>
+    </div>
+    <div class="good">
+      <h4>GOOD · 선택지 제공</h4>
+      <p>"대상 독자(임원·실무자)와 분량(1·3·10쪽) 두 가지만 알려주세요. 나머지는 팀 기본값으로 시작합니다."</p>
+      <p style="font-size:14px; color:var(--text-muted)">선택지가 구체적. 0 또는 1회로 끝남.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">건강한 운영 지표</div>
+    Clarify 평균 횟수 · 이탈률(재질문 후 포기) · 기본값 채택률을 주간으로 봅니다.
+    <strong>평균 0.6회 / 이탈률 4% / 기본값 채택 60% 이내</strong>가 건강한 상태입니다.
+  </div>
+
+  <h2 id="p3">패턴 3 · Observable Execution 실전</h2>
+  <p>에이전트가 5초 이상 침묵하면 사용자는 "멈췄다"고 판단합니다. 모든 실행에는 <strong>진행 표시 이벤트</strong>와 <strong>취소 버튼</strong>이 있어야 합니다.</p>
+
+  <h3>9.2.1 Telemetry 이벤트 6종</h3>
+  <table>
+    <thead><tr><th>이벤트</th><th>발생 시점</th><th>표시</th></tr></thead>
+    <tbody>
+      <tr><td><code>plan.start</code></td><td>계획 수립 시작</td><td>"계획을 세우는 중…"</td></tr>
+      <tr><td><code>tool.call</code></td><td>MCP/함수 호출 직전</td><td>"Slack #release 채널 조회 중"</td></tr>
+      <tr><td><code>tool.result</code></td><td>결과 도착</td><td>"32개 메시지 요약 완료"</td></tr>
+      <tr><td><code>thinking</code></td><td>긴 추론 시작</td><td>회전 스피너 + ETA</td></tr>
+      <tr><td><code>handoff</code></td><td>서브에이전트 전환</td><td>"Checker에게 검수 요청"</td></tr>
+      <tr><td><code>done</code></td><td>최종 완료</td><td>"작업 완료 · 요약 보기"</td></tr>
+    </tbody>
+  </table>
+
+  <h3>9.2.2 취소(Abort) 설계 원칙 3가지</h3>
+  <div class="card">
+    <p><strong>① 항상 보일 것 ·</strong> 모달이 아닌 상단 고정 바. 단축키 Esc로도 취소 가능.</p>
+    <p><strong>② 중간 결과 보존 ·</strong> 취소 시 지금까지 나온 중간 산출물을 버리지 않고 "초안 저장"으로 보관.</p>
+    <p><strong>③ 실행 보고 ·</strong> 이미 발생한 파일 쓰기·메시지 전송은 취소 불가임을 UI로 정직하게 알린다.</p>
+  </div>
+
+  <h2 id="p5">패턴 5 · Graceful Failure 실전</h2>
+  <p>실패는 숨기는 것이 아니라 <strong>운영 가능한 메시지로 변환</strong>입니다. "왜 실패했나 / 내가 지금 할 수 있는 것 / 안전한 다음 행동" 세 줄을 항상 보여줍니다.</p>
+
+  <h3>9.3.1 실패 메시지 3섹션 템플릿</h3>
+<pre><code>{
+  "status": "fail",
+  "cause": "GitHub MCP 인증 토큰 만료 (401 Unauthorized)",
+  "user_action": "설정 &gt; MCP &gt; GitHub 에서 재인증",
+  "next_safe": "코드 수정은 로컬에만 저장됨. PR 생성은 보류."
+}</code></pre>
+
+  <h3>9.3.2 5가지 실패 패턴과 복구 자동화</h3>
+  <table>
+    <thead><tr><th>패턴</th><th>자동 복구</th><th>사용자 측 액션</th></tr></thead>
+    <tbody>
+      <tr><td>Rate Limit (429)</td><td>지수 백오프 3회</td><td>3회 실패 시 "1분 뒤 재시도" 안내</td></tr>
+      <tr><td>MCP 인증 만료</td><td>없음</td><td>재인증 링크 원클릭 제공</td></tr>
+      <tr><td>도구 타임아웃</td><td>1회 재시도</td><td>"이 단계 건너뛰기" 버튼</td></tr>
+      <tr><td>정책 차단(hook deny)</td><td>없음</td><td>차단 사유 + 대체 경로 제안</td></tr>
+      <tr><td>모델 응답 파싱 실패</td><td>구조화 재요청</td><td>2회 실패 시 원문 그대로 노출</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout bad">
+    <div class="callout-label">절대 하지 말 것</div>
+    실패를 <strong>"성공으로 위장"</strong>하는 것. 빈 객체를 정상으로 표시하는 것. 신뢰는 한 번 무너지면 복구가 불가능합니다. "실패도 UX"라는 전제로 설계하세요.
+  </div>
+
+  <h2 id="eval">Eval 프레임워크 · 4계층 구조</h2>
+  <p>피드백 루프(3-5)가 "사용 중 데이터"라면, Eval은 "릴리즈 전 품질 게이트"입니다. 4계층을 점진 구축해야 과도 설계 없이 돌아갑니다.</p>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 3-9 · 4-LAYER EVAL</div>
+    <svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        .lev { stroke-width: 2; fill-opacity: 0.5; }
+        .l1 { fill: #fef2f2; stroke: #fca5a5; }
+        .l2 { fill: #fffbeb; stroke: #fcd34d; }
+        .l3 { fill: #ecfdf5; stroke: #86efac; }
+        .l4 { fill: #eff6ff; stroke: #93c5fd; }
+        .lev-no { font-family: Pretendard, sans-serif; font-size: 11px; font-weight: 700; }
+        .lev-t { fill: #1c1917; font-family: Pretendard, sans-serif; font-size: 14px; font-weight: 700; }
+        .lev-d { fill: #57534e; font-family: Pretendard, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="lev l1" x="20" y="30" width="160" height="190" rx="10"/>
+      <text class="lev-no" x="35" y="50" fill="#dc2626">L1 · PR</text>
+      <text class="lev-t" x="35" y="72">Unit</text>
+      <text class="lev-d" x="35" y="92">단일 프롬프트</text>
+      <text class="lev-d" x="35" y="108">고정 입력</text>
+      <text class="lev-d" x="35" y="124">정규식·스키마</text>
+      <text class="lev-d" x="35" y="140">10초 안에 돌고</text>
+      <text class="lev-d" x="35" y="156">PR마다 실행</text>
+      <text class="lev-d" x="35" y="190" style="font-weight:700; fill:#dc2626">green 필수</text>
+
+      <rect class="lev l2" x="200" y="30" width="160" height="190" rx="10"/>
+      <text class="lev-no" x="215" y="50" fill="#d97706">L2 · Nightly</text>
+      <text class="lev-t" x="215" y="72">Golden Set</text>
+      <text class="lev-d" x="215" y="92">시나리오 50~200</text>
+      <text class="lev-d" x="215" y="108">실 요청 추출</text>
+      <text class="lev-d" x="215" y="124">사람+LLM Judge</text>
+      <text class="lev-d" x="215" y="140">이중 검증</text>
+      <text class="lev-d" x="215" y="156">야간 배치</text>
+      <text class="lev-d" x="215" y="190" style="font-weight:700; fill:#d97706">−2%↓ → red</text>
+
+      <rect class="lev l3" x="380" y="30" width="160" height="190" rx="10"/>
+      <text class="lev-no" x="395" y="50" fill="#16a34a">L3 · Weekly</text>
+      <text class="lev-t" x="395" y="72">Agent</text>
+      <text class="lev-d" x="395" y="92">멀티 턴 궤적</text>
+      <text class="lev-d" x="395" y="108">툴 호출 시퀀스</text>
+      <text class="lev-d" x="395" y="124">비용·latency</text>
+      <text class="lev-d" x="395" y="140">까지 측정</text>
+      <text class="lev-d" x="395" y="156">주간 회귀</text>
+      <text class="lev-d" x="395" y="190" style="font-weight:700; fill:#16a34a">p95 감시</text>
+
+      <rect class="lev l4" x="560" y="30" width="140" height="190" rx="10"/>
+      <text class="lev-no" x="575" y="50" fill="#2563eb">L4 · Monthly</text>
+      <text class="lev-t" x="575" y="72">Production</text>
+      <text class="lev-d" x="575" y="92">라이브 트래픽</text>
+      <text class="lev-d" x="575" y="108">피드백 루프</text>
+      <text class="lev-d" x="575" y="124">A/B·섀도우</text>
+      <text class="lev-d" x="575" y="140">트래픽 비교</text>
+      <text class="lev-d" x="575" y="156">월간</text>
+      <text class="lev-d" x="575" y="190" style="font-weight:700; fill:#2563eb">피드백 반영</text>
+    </svg>
+    <p class="caption">처음부터 L4까지 짓지 마세요. L1·L2만으로 2주 운영하면 L3·L4에서 무엇이 필요한지 자연스럽게 드러납니다.</p>
+  </div>
+
+  <h2 id="judge">LLM-as-Judge · 루브릭 표준</h2>
+<pre><code>rubric:
+  correctness:  0 / 1 / 2   # 사실 정확성
+  completeness: 0 / 1 / 2   # 요청 항목 충족률
+  safety:       pass / fail # 금지 항목 포함 여부
+  style:        0 / 1 / 2   # 톤·형식 일치
+aggregate: correctness × 0.4
+         + completeness × 0.3
+         + style × 0.2
+         + safety(pass=1,fail=0) × 0.1
+ship_threshold: 1.5 / 2.0</code></pre>
+
+  <div class="callout">
+    <div class="callout-label">시작은 L1+L2만</div>
+    Eval은 "빨리 감지"가 목표이지 완벽한 측정이 아닙니다. Unit 20 + Golden Set 50으로 시작해서 점진 확장하세요.
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ Clarifier 에이전트 슬롯·예산을 정의했다.</p>
+    <p>✓ 6종 Telemetry 이벤트가 본인 UI에 노출된다.</p>
+    <p>✓ 실패 메시지 3섹션(cause·user_action·next_safe)이 표준화됐다.</p>
+    <p>✓ Eval L1·L2가 가동되고 L3·L4 로드맵이 잡혔다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">마지막 챕터는 <a href="10-release-checklist.html">3-10 릴리즈 체크리스트 30항</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="08-non-dev-cc.html">
+        <div class="label">← 이전</div>
+        <div class="title">3-8 비개발자의 Claude Code</div>
+      </a>
+      <a href="10-release-checklist.html">
+        <div class="label">다음 →</div>
+        <div class="title">3-10 릴리즈 체크리스트</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1-3 모델 선택 결정 트리 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="../level-3/index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L1 챕터</span>
+      <a href="01-first-meeting.html">1-1 Claude 첫 만남</a>
+      <a href="02-prompt-5elements.html">1-2 프롬프트 5요소</a>
+      <a href="03-model-selection.html" class="active">1-3 모델 선택 결정 트리</a>
+      <a href="04-daily-work.html">1-4 오늘 업무에 적용</a>
+      <a href="05-role-packs.html">1-5 직무별 프롬프트 팩</a>
+      <a href="06-claude-design.html">1-6 Claude Design 첫 걸음</a>
+      <a href="07-cheatsheet.html">1-7 90초 워크플로우</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 1-3 · 25분</span>
+  <h1 class="page-title">모델 선택 결정 트리</h1>
+  <p class="lede">
+    세 모델은 같은 API를 쓰지만 속도·가격·추론 깊이가 다릅니다. 업무 성격에 따라 골라 쓰면 시간과 비용이 동시에 줄어듭니다.
+    이 챕터는 라인업·결정 트리·혼용 전략·실전 케이스 3선을 한꺼번에 다룹니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#lineup">2026-04 라인업</a></li>
+      <li><a href="#opus47">Opus 4.7 — 무엇이 달라졌나</a></li>
+      <li><a href="#tree">결정 트리 — 3분 안에 고르기</a></li>
+      <li><a href="#mix">혼용 전략 "Sonnet 먼저, Opus 마지막"</a></li>
+      <li><a href="#cases">실전 케이스 3선</a></li>
+    </ol>
+  </div>
+
+  <h2 id="lineup">2026-04 라인업</h2>
+  <p>Opus 4.7은 복잡한 추론·긴 문서 분석, Sonnet 4.6은 일상 업무와 코드 리뷰, Haiku 4.5는 빠른 답변과 반복 작업에 적합합니다. 세 모델 모두 200K 토큰의 컨텍스트 창을 공유합니다 (한글 기준 약 120,000자 = 단행본 1권).</p>
+
+  <table>
+    <thead><tr><th>모델</th><th>강점</th><th>권장 사용처</th><th>응답 속도</th><th>상대 비용</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Opus 4.7</strong></td><td>깊이 · 추론</td><td>기획서 · 장문 분석 · 중요 의사결정</td><td>보통</td><td>5×</td></tr>
+      <tr><td><strong>Sonnet 4.6</strong></td><td>균형 · 범용</td><td>이메일 · 회의록 · 코드 · 일반 업무</td><td>빠름</td><td>1×</td></tr>
+      <tr><td><strong>Haiku 4.5</strong></td><td>속도 · 비용</td><td>분류 · 요약 · 반복 변환</td><td>매우 빠름</td><td>0.2×</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="opus47">Opus 4.7 — 무엇이 달라졌나</h2>
+  <p>2026년 3월 출시. 기존 Opus 4.6 대비 "생각하는 시간이 더 길고, 도구를 더 안정적으로 쓰는" 모델. 특히 다단계 의사결정과 긴 문서 분석에서 체감 차이가 큽니다.</p>
+
+  <table>
+    <thead><tr><th>항목</th><th>Opus 4.6</th><th>Opus 4.7 (신규)</th></tr></thead>
+    <tbody>
+      <tr><td>코드 에이전트 벤치마크</td><td>기준선</td><td>+28%</td></tr>
+      <tr><td>장문 추론 (200K 컨텍스트)</td><td>양호</td><td>체감 우수</td></tr>
+      <tr><td>Tool use 정확도</td><td>91%</td><td>96%</td></tr>
+      <tr><td>응답 시작 지연</td><td>1.6초</td><td>1.8초</td></tr>
+      <tr><td>상대 비용</td><td>5×</td><td>동일 (5×)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <h3 style="margin-top:0">언제 Opus 4.7을 고르는가 — 3가지 장면</h3>
+    <p><strong>① 장문 기획서 분석·요약 ·</strong> 한글 4,000자 이상 문서에서 일관성·누락 감소가 체감됩니다.</p>
+    <p><strong>② 여러 결정이 연결된 업무 ·</strong> "가설 → 평가 → 대안 도출" 같은 다단계 추론에서 4.6 대비 논리 비약이 적습니다.</p>
+    <p><strong>③ Tool use가 섞인 대화 ·</strong> 파일·검색·계산 등 여러 도구를 조합하는 분석 작업에서 엉뚱한 도구 호출이 눈에 띄게 줄었습니다.</p>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">언제 4.7이 과투자인가</div>
+    이메일 한 통, 짧은 번역, 회의록 요약 같은 일상 작업에는 Sonnet 4.6이 여전히 가성비가 좋습니다. 전환 체크 한 줄 — <em>"이 답이 틀리면 회의를 다시 해야 하는가?"</em> YES면 4.7.
+  </div>
+
+  <h2 id="tree">결정 트리 — 3분 안에 고르기</h2>
+  <p>매번 망설이지 않도록, 다섯 줄 질문으로 정리했습니다. 결정 트리를 거쳐도 결론이 애매하면 Sonnet 4.6이 정답입니다 (사내 사용량의 72%가 Sonnet).</p>
+
+  <div class="card">
+    <p><strong>Q1.</strong> 응답이 실패하면 업무가 크게 지연되는가? <em>NO → Haiku 4.5 (속도 우선)</em></p>
+    <p><strong>Q2.</strong> 문서/코드가 2,000단어(한글 4,000자)를 넘는가? <em>NO → Sonnet 4.6</em></p>
+    <p><strong>Q3.</strong> 다단계 추론(요약 → 평가 → 대안)이 필요한가? <em>YES → Opus 4.7 / NO → Sonnet 4.6</em></p>
+    <p><strong>Q4.</strong> 같은 작업을 50회 이상 반복하는가? <em>YES → Haiku 4.5 (비용)</em></p>
+    <p><strong>Q5.</strong> 첫 응답이 완전해야 하는가(재작성 금지)? <em>YES → Opus 4.7</em></p>
+  </div>
+
+  <h2 id="mix">혼용 전략 "Sonnet 먼저, Opus 마지막"</h2>
+  <p>가장 실속 있는 사용 패턴은 두 모델 혼용입니다. 탐색 단계엔 Sonnet으로 여러 번 아이디어를 뽑고, 최종본만 Opus로 한 번 다듬는 방식. 같은 대화 안에서 모델을 바꿔도 맥락은 유지됩니다.</p>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 1-3 · 혼용 3단계</div>
+    <svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="armix" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f97316"/>
+        </marker>
+      </defs>
+      <style>
+        .stage-box { fill: #fff7ed; stroke: #f97316; stroke-width: 2; }
+        .stage-title { font-family: Pretendard, sans-serif; font-size: 14px; font-weight: 700; fill: #1c1917; }
+        .stage-model { font-family: Pretendard, sans-serif; font-size: 12px; fill: #c2410c; font-weight: 600; }
+        .stage-desc { font-family: Pretendard, sans-serif; font-size: 11px; fill: #57534e; }
+      </style>
+      <rect class="stage-box" x="20" y="30" width="200" height="90" rx="10"/>
+      <text class="stage-title" x="40" y="56">STEP 1 · 탐색</text>
+      <text class="stage-model" x="40" y="78">Sonnet 4.6</text>
+      <text class="stage-desc" x="40" y="98">아이디어 3안·초안 뽑기</text>
+      <text class="stage-desc" x="40" y="113">5~10분</text>
+
+      <line x1="225" y1="75" x2="255" y2="75" stroke="#f97316" stroke-width="2" marker-end="url(#armix)"/>
+
+      <rect class="stage-box" x="260" y="30" width="200" height="90" rx="10"/>
+      <text class="stage-title" x="280" y="56">STEP 2 · 선택</text>
+      <text class="stage-model" x="280" y="78">Sonnet 4.6</text>
+      <text class="stage-desc" x="280" y="98">사람이 1안 선택+피드백</text>
+      <text class="stage-desc" x="280" y="113">2분</text>
+
+      <line x1="465" y1="75" x2="495" y2="75" stroke="#f97316" stroke-width="2" marker-end="url(#armix)"/>
+
+      <rect class="stage-box" x="500" y="30" width="200" height="90" rx="10"/>
+      <text class="stage-title" x="520" y="56">STEP 3 · 마감</text>
+      <text class="stage-model" x="520" y="78">Opus 4.7</text>
+      <text class="stage-desc" x="520" y="98">최종 교정·논리 점검</text>
+      <text class="stage-desc" x="520" y="113">1회 호출</text>
+    </svg>
+    <p class="caption">Sonnet은 "같이 고민하는 동료", Opus는 "마지막 리뷰하는 선배".</p>
+  </div>
+
+  <div class="card">
+    <p>✓ 같은 대화창에서 모델만 바꿉니다 — 맥락 자동 유지.</p>
+    <p>✓ Opus로 전환할 때 "지금까지의 결정을 요약해 줘"를 먼저 호출.</p>
+    <p>✓ Opus 응답은 원본과 비교해 diff를 요청 — 누락 방지.</p>
+    <p>✓ 혼용 1회 대화의 평균 토큰 비용은 단일 Opus 대비 <strong>43% 절감</strong>.</p>
+  </div>
+
+  <h2 id="cases">실전 케이스 3선</h2>
+
+  <div class="case">
+    <div class="case-label">CASE 1 · 재무팀</div>
+    <h3>분기 실적 리포트 초안 작성</h3>
+    <dl>
+      <dt>상황</dt><dd>30쪽 원본 데이터를 임원용 4쪽 요약으로 가공.</dd>
+      <dt>전략</dt><dd>Sonnet으로 섹션별 요약 → Opus로 최종 논리 점검. Haiku는 표 재포맷팅에만 사용.</dd>
+      <dt>결과</dt><dd>총 소요 시간 6h → 1h 40m. 재작성 0회.</dd>
+    </dl>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 2 · 마케팅</div>
+    <h3>SNS 카피 20종 A/B 테스트</h3>
+    <dl>
+      <dt>상황</dt><dd>같은 프로모션 문구를 20가지 톤으로 변주.</dd>
+      <dt>전략</dt><dd>Haiku 4.5로 전량 일괄 생성, Sonnet으로 상위 5개 다듬기, Opus는 사용하지 않음.</dd>
+      <dt>결과</dt><dd>API 비용 4,200원 → 450원. 문안 품질은 동등.</dd>
+    </dl>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 3 · 법무</div>
+    <h3>계약서 리뷰 — 독소 조항 탐지</h3>
+    <dl>
+      <dt>상황</dt><dd>해외 파트너 30쪽 NDA. 한국 법무팀 리뷰 전 1차 필터링.</dd>
+      <dt>전략</dt><dd>Opus 4.7 단일 호출. 다단계 추론이 필수.</dd>
+      <dt>결과</dt><dd>독소 조항 12건 중 11건 사전 탐지. 법무팀 리뷰 시간 3일 → 1일.</dd>
+    </dl>
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ 5문항 결정 트리를 외워 30초 안에 모델을 정할 수 있다.</p>
+    <p>✓ "Sonnet 먼저, Opus 마지막" 혼용을 한 번 실행해 봤다.</p>
+    <p>✓ Opus 4.7로 가야 할 3가지 장면(장문·다단계·tool use)을 구분한다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="04-daily-work.html">1-4 오늘 업무에 적용</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="02-prompt-5elements.html">
+        <div class="label">← 이전</div>
+        <div class="title">1-2 프롬프트 5요소</div>
+      </a>
+      <a href="04-daily-work.html">
+        <div class="label">다음 →</div>
+        <div class="title">1-4 오늘 업무에 적용</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

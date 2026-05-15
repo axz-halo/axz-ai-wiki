@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-2 점진적 자율성 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L3 챕터</span>
+      <a href="index.html#ch1">3-1 Agentic UX 6대 패턴</a>
+      <a href="02-progressive-autonomy.html" class="active">3-2 점진적 자율성</a>
+      <a href="index.html#ch3">3-3 컨텍스트 보존</a>
+      <a href="index.html#ch4">3-4 적응형 인터페이스</a>
+      <a href="index.html#ch5">3-5 사용자 피드백 루프</a>
+      <a href="index.html#ch6">3-6 멀티 에이전트 오케스트레이션</a>
+      <a href="index.html#ch7">3-7 하네스·관측·복구</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 3-2 · 50분 · 패턴 2</span>
+  <h1 class="page-title">점진적 자율성</h1>
+  <p class="lede">
+    에이전트가 신뢰를 얻는 속도만큼 권한을 키웁니다. <strong>Lv.1 제안형 → Lv.2 검토 후 실행 → Lv.3 백그라운드 자동 실행</strong>의 3단계를
+    승인률·쿨다운 데이터 기반으로 승·강등합니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#gate">자율성 게이트 로직</a></li>
+      <li><a href="#machine">3단계 상태 머신 도식</a></li>
+      <li><a href="#toggle">3레벨 토글 UI</a></li>
+      <li><a href="#promotion-ux">승급 UX — 좋은 예 / 나쁜 예</a></li>
+      <li><a href="#demotion">강등 규칙</a></li>
+      <li><a href="#cases">실전 강등 케이스 3종</a></li>
+      <li><a href="#ab">사내 A/B 결과</a></li>
+      <li><a href="#anti">자율성 안티패턴 5선</a></li>
+    </ol>
+  </div>
+
+  <h2 id="gate">자율성 게이트 로직</h2>
+  <p>승급은 자동이 아닙니다. 데이터 기반 추천 + 사용자 확인의 2단계를 거칩니다. 세 가지 규칙을 함께 두세요.</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">01 · 승급 기준 — 20회 중 17회 이상 승인</h3>
+    <p style="font-size:14px; color:var(--text-muted)">동일 액션 유형 기준 롤링 윈도우 20회 중 17회 이상 승인이면 다음 레벨을 <em>추천</em>합니다. 추천일 뿐, 확정은 사용자 다이얼로그를 거쳐야 합니다.</p>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">02 · 쿨다운 — 마지막 강등 이후 7일</h3>
+    <p style="font-size:14px; color:var(--text-muted)">Critical Incident로 강등되면 7일간 재승급 제안을 차단합니다. 신뢰 리빌드는 점진적이어야 합니다.</p>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">03 · 액션 영역별 독립 추적</h3>
+    <p style="font-size:14px; color:var(--text-muted)">"파일 수정"과 "외부 API 호출"은 별개 윈도우로. 한 영역의 신뢰가 다른 영역으로 자동 이월되지 않습니다.</p>
+  </div>
+
+<pre><code># autonomy_gate.py
+def recommend_next_level(action_type: str, user_id: str) -> int | None:
+    hist = fetch_recent_actions(user_id, action_type, limit=20)
+    if len(hist) &lt; 20: return None
+    approval_rate = sum(h.approved for h in hist) / len(hist)
+    if approval_rate &lt; 0.85: return None
+    if days_since_last_demotion(user_id) &lt; 7: return None
+    return min(current_level(user_id) + 1, 3)</code></pre>
+
+  <h2 id="machine">3단계 상태 머신</h2>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 3-2 · AUTONOMY STATE MACHINE</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arpro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/>
+        </marker>
+        <marker id="ardown" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+        </marker>
+      </defs>
+      <style>
+        .lv-box { stroke-width: 2; }
+        .lv1 { fill: #fef2f2; stroke: #fca5a5; }
+        .lv2 { fill: #fffbeb; stroke: #fcd34d; }
+        .lv3 { fill: #f0fdf4; stroke: #86efac; }
+        .lv-name { font-family: Pretendard, sans-serif; font-size: 16px; font-weight: 700; fill: #1c1917; text-anchor: middle; }
+        .lv-desc { font-family: Pretendard, sans-serif; font-size: 11px; fill: #57534e; text-anchor: middle; }
+        .promote { stroke: #16a34a; stroke-width: 2; fill: none; }
+        .demote { stroke: #dc2626; stroke-width: 2; fill: none; }
+        .arrow-label { font-family: Pretendard, sans-serif; font-size: 11px; font-weight: 600; }
+        .promote-label { fill: #16a34a; }
+        .demote-label { fill: #dc2626; }
+      </style>
+
+      <!-- Lv.1 -->
+      <rect class="lv-box lv1" x="40" y="100" width="180" height="110" rx="12"/>
+      <text class="lv-name" x="130" y="135">Lv.1 제안만</text>
+      <text class="lv-desc" x="130" y="158">Claude가 제안만,</text>
+      <text class="lv-desc" x="130" y="175">실행은 사람이 누름</text>
+      <text class="lv-desc" x="130" y="195" style="font-style:italic; fill:#dc2626">신뢰 0 — 시작점</text>
+
+      <!-- Lv.2 -->
+      <rect class="lv-box lv2" x="270" y="100" width="180" height="110" rx="12"/>
+      <text class="lv-name" x="360" y="135">Lv.2 검토 후</text>
+      <text class="lv-desc" x="360" y="158">Claude가 초안 실행,</text>
+      <text class="lv-desc" x="360" y="175">사람이 5초 내 취소 가능</text>
+      <text class="lv-desc" x="360" y="195" style="font-style:italic; fill:#d97706">신뢰 형성 구간</text>
+
+      <!-- Lv.3 -->
+      <rect class="lv-box lv3" x="500" y="100" width="180" height="110" rx="12"/>
+      <text class="lv-name" x="590" y="135">Lv.3 자동</text>
+      <text class="lv-desc" x="590" y="158">백그라운드 실행,</text>
+      <text class="lv-desc" x="590" y="175">로그만 사후 확인</text>
+      <text class="lv-desc" x="590" y="195" style="font-style:italic; fill:#16a34a">신뢰 확립</text>
+
+      <!-- Promote arrows -->
+      <path class="promote" d="M 220 130 Q 245 100 270 130" marker-end="url(#arpro)"/>
+      <path class="promote" d="M 450 130 Q 475 100 500 130" marker-end="url(#arpro)"/>
+      <text class="arrow-label promote-label" x="245" y="92" text-anchor="middle">승급</text>
+      <text class="arrow-label promote-label" x="475" y="92" text-anchor="middle">승급</text>
+
+      <!-- Demote arrows (curve below) -->
+      <path class="demote" d="M 500 180 Q 360 280 220 180" marker-end="url(#ardown)"/>
+      <text class="arrow-label demote-label" x="360" y="280" text-anchor="middle">강등 (연속 거부 / 사고 / 비용 폭주)</text>
+
+      <text x="360" y="60" font-family="Pretendard" font-size="13" fill="#78716c" text-anchor="middle" style="font-style: italic">
+        승급은 한 단계씩만 가능. 강등은 사고 발생 시 어디서든 Lv.1로 즉시 리셋.
+      </text>
+    </svg>
+  </div>
+
+  <h2 id="toggle">3레벨 토글 UI</h2>
+  <p>사용자는 언제든 레벨을 수동 조정할 수 있어야 합니다. 버튼 자체가 현재 에이전트 상태(실행 중/대기/중단)를 컬러로 드러냅니다.</p>
+
+<pre><code>// AutonomyToggle.tsx
+export function AutonomyToggle({ level, onChange }: Props) {
+  const labels = ["제안만", "검토 후 실행", "자동 실행"];
+  return (
+    &lt;div className="flex gap-1 rounded-lg bg-stone-100 p-1"&gt;
+      {labels.map((label, i) =&gt; (
+        &lt;button
+          key={i}
+          onClick={() =&gt; onChange(i + 1)}
+          className={level === i + 1
+            ? "bg-orange-500 text-white px-3 py-1.5 rounded"
+            : "text-stone-600 px-3 py-1.5"}
+        &gt;
+          Lv.{i + 1} · {label}
+        &lt;/button&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+  <div class="callout">
+    <div class="callout-label">레벨 버튼은 헤더에 둘 것</div>
+    설정 메뉴 안에 깊이 숨기면 사용자는 자율성을 통제한다는 감각을 잃습니다. 헤더 우측 같은 잘 보이는 자리에 둬야 안심하고 권한을 올립니다.
+  </div>
+
+  <h2 id="promotion-ux">승급 UX — 좋은 예 / 나쁜 예</h2>
+
+  <div class="compare">
+    <div class="bad">
+      <h4>BAD</h4>
+      <p>"새로운 기능 사용 가능!" 같은 팝업을 배너로 띄움.</p>
+      <p style="font-size:14px; color:var(--text-muted)">권한 상승이라는 인식 없이 버튼을 누르게 함. 사용자가 왜 레벨이 올랐는지 모름.</p>
+    </div>
+    <div class="good">
+      <h4>GOOD</h4>
+      <p>"지난 20번 중 18번을 승인하셨어요. 이제 자동 실행으로 올릴까요? 언제든 Lv.1로 되돌릴 수 있습니다."</p>
+      <p style="font-size:14px; color:var(--text-muted)">수치와 되돌리기 옵션을 함께 제시. 사용자가 통제하고 있다는 감각이 유지됨.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">팁 · 14일 침묵 옵션</div>
+    다이얼로그 하단에 "이 결정은 14일간 다시 묻지 않음" 체크박스를 두면 숙련 사용자의 클릭 피로가 줄어듭니다. 단 14일 뒤에는 반드시 리프레시.
+  </div>
+
+  <h2 id="demotion">강등 규칙</h2>
+  <p>자동 강등은 사람 검토 전 단계에서 에이전트 피해를 멈추는 안전핀입니다. 3가지 트리거를 YAML로 선언합니다.</p>
+
+<pre><code># downgrade_rules.yaml
+triggers:
+  - name: critical_incident
+    when: action.outcome == "data_loss" OR action.outcome == "prod_break"
+    action: demote_to(1)
+    notify: ["#alert-agent", "owner"]
+
+  - name: consecutive_rejections
+    when: rolling_window(5).reject_count &gt;= 3
+    action: demote_to(level - 1)
+    cooldown_days: 7
+
+  - name: cost_spike
+    when: hourly_cost_usd &gt; budget.hourly * 3
+    action: demote_to(1)
+    pause_minutes: 30</code></pre>
+
+  <div class="callout bad">
+    <div class="callout-label">절대 하지 말 것</div>
+    강등을 사용자에게 알리지 않는 것. 레벨이 바뀌었으면 즉시 토스트 + 슬랙 알림 + 대시보드 배지를 띄워 "왜 에이전트가 갑자기 소극적이 됐지?" 의문을 30초 안에 해소해야 합니다.
+  </div>
+
+  <h2 id="cases">실전 강등 케이스 3종</h2>
+
+  <div class="case">
+    <div class="case-label">CASE 1 · 데이터 사고</div>
+    <h3>Prod DB UPDATE — data_loss 트리거</h3>
+    <dl>
+      <dt>발생</dt><dd>한 Lv.3 에이전트가 스키마 변경 PR을 자동 적용하며 <code>UPDATE ... WITHOUT WHERE</code>를 실행. 5만 행 덮어씀.</dd>
+      <dt>대응</dt><dd>규칙이 즉시 Lv.1 강제 + 14일 쿨다운 + 포스트모템 의무화. 같은 사용자의 자동 승급 제안은 14일 후에도 2주간 승인률 90%+로 제한.</dd>
+      <dt>학습</dt><dd>"WHERE 없는 UPDATE 금지" 가드레일을 pre-tool-use 훅에 추가.</dd>
+    </dl>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 2 · 비용 사고</div>
+    <h3>Cost Spike — 시간당 $420 도달</h3>
+    <dl>
+      <dt>발생</dt><dd>AWS 분석 스크립트가 재귀 호출로 무한 루프.</dd>
+      <dt>대응</dt><dd>규칙이 30분 일시 중지 + Lv.1 강제 + 플랫폼팀 알림. 비용은 $420에서 멈춤.</dd>
+      <dt>학습</dt><dd>사후 분석 결과 Claude가 pagination 파라미터를 잘못 이해해 반복 호출. 프롬프트 템플릿에 "pagination 명시 필수" 가드레일 추가.</dd>
+    </dl>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 3 · 사용자 피드백 사고</div>
+    <h3>Consecutive Rejections — 5번 중 3번 거부</h3>
+    <dl>
+      <dt>발생</dt><dd>신규 사용자가 동료의 권한을 옮겨받아 Lv.3 상태로 시작. 5번 중 3번 "이건 아니에요" 취소.</dd>
+      <dt>대응</dt><dd>규칙이 한 단계 강등(Lv.3 → Lv.2)하고 7일 쿨다운.</dd>
+      <dt>학습</dt><dd>사용자 인터뷰에서 "통제감 회복됐다"는 피드백. 권한은 양도 불가 항목으로 변경.</dd>
+    </dl>
+  </div>
+
+  <h2 id="ab">사내 A/B 결과 — 코드리뷰 봇</h2>
+  <p>2026-Q1, 사내 코드리뷰 봇에 Lv.2 자동 적용 A/B를 2주간 운영했습니다.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="num good">−38%</div><div class="label">PR 머지 시간 단축</div></div>
+    <div class="stat"><div class="num good">+22%</div><div class="label">리뷰 요청 취소 감소</div></div>
+    <div class="stat"><div class="num good">0건</div><div class="label">심각 사고 (2주)</div></div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">인터뷰 인용</div>
+    "Lv.1은 너무 묻고, Lv.3은 불안했다. Lv.2 5초 취소가 심리적으로 가장 편했다." — 인터뷰 대상 n=12명 중 9명 공통 언급
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">해석 주의</div>
+    2주는 짧습니다. Lv.3 검증은 최소 6주, 심각 사고 지표는 90일 누적을 권장합니다.
+  </div>
+
+  <h2 id="anti">자율성 안티패턴 5선</h2>
+  <table>
+    <thead><tr><th>안티패턴</th><th>왜 위험한가</th></tr></thead>
+    <tbody>
+      <tr><td>"전사 Lv.3" 강제</td><td>전사 공지로 강제 승급. 신뢰 축적 없이 실패 폭주.</td></tr>
+      <tr><td>조용한 강등</td><td>알림 없이 강등하면 "에이전트 망가짐"으로 오해 유발.</td></tr>
+      <tr><td>액션 영역 통합 추적</td><td>한 영역 신뢰가 타 영역으로 이월되어 사고 확산.</td></tr>
+      <tr><td>강등 직후 재승급 제안</td><td>강등 다음 날 재승급 제안. 신뢰 리빌드 기회 놓침.</td></tr>
+      <tr><td>되돌리기 버튼 숨기기</td><td>사용자가 Lv.1로 내릴 버튼을 숨김. 통제감 상실.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ 사내 에이전트 한 개에 Lv.1/2/3 토글이 헤더에 노출되어 있다.</p>
+    <p>✓ <code>downgrade_rules.yaml</code> 3종 트리거(critical_incident · consecutive_rejections · cost_spike)가 운영되고 있다.</p>
+    <p>✓ 강등 발생 시 토스트 + 슬랙 알림이 30초 안에 사용자에게 도달한다.</p>
+    <p>✓ 액션 영역별로 별도 윈도우로 추적되어 있다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">자율성을 단단히 잡았다면, 이어 <a href="index.html#ch3">3-3 컨텍스트 보존</a>으로 세션 단절을 메우러 갑니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="index.html">
+        <div class="label">← 이전</div>
+        <div class="title">L3 · 챕터 목록</div>
+      </a>
+      <a href="../index.html">
+        <div class="label">다음 →</div>
+        <div class="title">위키 홈으로</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

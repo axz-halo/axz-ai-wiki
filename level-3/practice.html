@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L3 실습 · 에이전트 하네스와 사내 구축 사례 3종 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L3 챕터</span>
+      <a href="01-agentic-ux.html">3-1 Agentic UX 6대 패턴</a>
+      <a href="02-progressive-autonomy.html">3-2 점진적 자율성</a>
+      <a href="03-context-preservation.html">3-3 컨텍스트 보존</a>
+      <a href="04-adaptive-ui.html">3-4 적응형 인터페이스</a>
+      <a href="05-feedback-loop.html">3-5 사용자 피드백 루프</a>
+      <a href="06-multi-agent.html">3-6 멀티 에이전트 오케스트레이션</a>
+      <a href="07-harness.html">3-7 하네스·관측·복구</a>
+      <a href="08-non-dev-cc.html">3-8 비개발자의 Claude Code</a>
+      <a href="09-patterns-eval.html">3-9 패턴 1·3·5 + Eval</a>
+      <a href="10-release-checklist.html">3-10 릴리즈 체크리스트</a>
+      <a href="practice.html" class="active">L3 실습 트랙</a>
+    </div>
+    <div class="group">
+      <span class="group-label">전체</span>
+      <a href="../tools.html">도구 카탈로그</a>
+      <a href="../editorial-note.html">편찬자 노트</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">L3 SEMINAR · 60분 실습</span>
+  <h1 class="page-title">에이전트 하네스와 사내 구축 사례 3종</h1>
+  <p class="lede">
+    고급 본책이 Agentic UX와 멀티 에이전트의 체계를 다뤘다면, 이 세션은 현장에서 자주 회자되는 Ralph 같은 에이전트 자가 루프,
+    하네스 엔지니어링 최신 도구의 개념과, 커뮤니티 팀이 실제로 구축한 세 가지 프로덕트의 설계를 공유합니다.
+  </p>
+
+  <div class="callout">
+    <div class="callout-label">대상 · 진행 방식</div>
+    시니어 · 리드 · 플랫폼 운영자. L3 본책 Ch1~10을 1차 완독한 분에게 적합합니다. Part 1(20분) + Part 2(35분) + Q&A(5분) = 총 60분.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 세션의 흐름</div>
+    <ol>
+      <li><a href="#ralph">PART 1 · Ralph 자가 루프와 하네스 3세대</a></li>
+      <li><a href="#harness">하네스 엔지니어링 · 3세대 지형도</a></li>
+      <li><a href="#case1">사례 ① 페르소나 UT 피드백 에이전트</a></li>
+      <li><a href="#case2">사례 ② Claude Skills 와이어프레임 생성기</a></li>
+      <li><a href="#case3">사례 ③ 차량 추천 AI 에이전트</a></li>
+      <li><a href="#common">세 사례의 공통 교훈</a></li>
+    </ol>
+  </div>
+
+  <h2 id="ralph">PART 1 · Ralph 자가 루프 개념 (20분)</h2>
+
+  <h3>1.1 "Ralph"란 무엇인가</h3>
+  <p>"Ralph"는 2025년 개발자 커뮤니티에서 유행한 극단적으로 단순한 자가 반복 에이전트 루프의 별명입니다. 복잡한 오케스트레이션 없이 "한 파일을 한 프롬프트로 계속 개선하게 두는" 접근입니다.</p>
+
+<pre><code># Ralph 루프 · 최소 의사 코드
+while True:
+    claude.run(
+      "AGENTS.md를 읽고, 다음 한 가지 할 일을 선택해 구현하라. "
+      "완료되면 상태를 AGENTS.md에 기록하고 커밋하라.",
+      tools=[Read, Edit, Bash, Glob]
+    )
+    if is_done(AGENTS.md):
+        break</code></pre>
+
+  <h3>1.2 Ralph가 주는 교훈 3가지</h3>
+  <div class="card">
+    <p><strong>01 단순함이 가장 강한 프로토콜이다 ·</strong> 수십 개 에이전트를 서로 엮는 복잡한 설계보다, "한 파일을 끝까지 물고 늘어지는 루프"가 더 멀리 간다. 복잡도는 실패 지점을 늘릴 뿐.</p>
+    <p><strong>02 상태는 파일에 산다 ·</strong> 메모리·세션이 아니라 <code>AGENTS.md</code> 같은 텍스트 파일에 상태를 누적하면 중단·재개가 손쉽다. 고급 본책 3-3 HANDOFF.md와 같은 철학.</p>
+    <p><strong>03 도구는 적게, 경계는 명확히 ·</strong> Read·Edit·Bash 같은 저수준 도구 몇 개면 충분. 위험한 쓰기는 훅으로 차단. 이 조합이 실제 산출물 품질을 가장 안정적으로 올린다.</p>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">Ralph는 "프로토타입 철학"이다</div>
+    Ralph 스타일은 해커톤·1인 개발에 최적화돼 있습니다. 다인 팀·프로덕션 운영에는 L3 본책 Ch6~7의 Supervisor·Pipeline + 하네스가 더 안전합니다. 개념은 흡수하되, 그대로 프로덕션에 꽂지 마세요.
+  </div>
+
+  <h2 id="harness">1.3 하네스 엔지니어링 · 3세대 지형도</h2>
+  <p>"하네스(Harness)"는 에이전트의 입출력·실행·관측·복구를 감싸는 실행 환경입니다. 2024~2026년 사이 지형은 세 세대를 거쳤습니다.</p>
+
+  <table>
+    <thead><tr><th>세대</th><th>특징</th><th>대표 개념</th></tr></thead>
+    <tbody>
+      <tr><td>1세대 · 프롬프트 체인</td><td>단일 프롬프트 → LLM 호출 → 결과 파싱. 실패 시 전체 재시작.</td><td>LangChain 초기 · 함수 호출 수작업</td></tr>
+      <tr><td>2세대 · 툴 콜 + 메모리</td><td>Tool use · 서브에이전트 · 벡터 메모리. 재시도·상태 보존 일부.</td><td>Agent Executor · ReAct 패턴</td></tr>
+      <tr><td>3세대 · 관측 가능 하네스</td><td>Trace · OTel 호환 · 정책 훅 · Golden Eval · 비용 관측. 프로덕션 안전성 기본.</td><td>Claude Code · MCP · Observability stack</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3세대 하네스의 필수 6요소</h3>
+  <div class="card">
+    <p>✓ <strong>Trace 스트림</strong> — <code>tool.call</code> · <code>tool.result</code> 이벤트가 타임라인으로 보임</p>
+    <p>✓ <strong>정책 훅</strong> — <code>pre-tool-use</code>로 위험 호출을 사전에 막음</p>
+    <p>✓ <strong>비용 게이지</strong> — 세션·일간 토큰·호출 비용 실시간</p>
+    <p>✓ <strong>상태 파일</strong> — <code>HANDOFF.md</code> · <code>CLAUDE.md</code>로 재개 가능</p>
+    <p>✓ <strong>Eval 게이트</strong> — PR · Nightly · Weekly 단계별 품질 판정</p>
+    <p>✓ <strong>격리 복구</strong> — 한 에이전트 실패가 전체를 무너뜨리지 않음</p>
+  </div>
+
+  <h3>"open" 에이전트 생태계 · 무엇을 선택할까</h3>
+  <div class="compare">
+    <div class="bad">
+      <h4>독립 OSS 하네스 · 리스크</h4>
+      <p>버전 업데이트·호환성 관리를 팀이 짊어짐 · 관측·보안 훅을 처음부터 설계 · 모델·도구가 분리돼 Eval 신호 약함.</p>
+    </div>
+    <div class="good">
+      <h4>Claude Code + MCP · 장점</h4>
+      <p>3세대 하네스 기본 요소가 내장 · 플러그인·Skills로 조직 자산 축적 · 모델·도구·하네스가 한 공급자에서 나와 디버그가 빠름.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">현실적 권고</div>
+    사내 프로덕션은 Claude Code + MCP를 기본선으로 두고, 오픈 하네스는 실험·리서치 트랙에서만. 두 트랙의 Golden Set과 Eval 결과를 비교해 분기마다 선택을 재검토하는 구조 권장.
+  </div>
+
+  <hr>
+
+  <h2 id="case1">PART 2 · 사내 구축 사례 3종 (35분)</h2>
+  <p>커뮤니티 팀이 실제로 설계·운영한 세 가지 AI 제품의 구조를 공유합니다. 각 사례는 <strong>문제 정의 · 아키텍처 · 핵심 선택 · 실측 효과 · 러닝 포인트</strong> 다섯 단락으로 정리합니다.</p>
+
+  <h3>2.1 사례 ① 페르소나 기반 UT 피드백 에이전트</h3>
+  <p>UT(사용성 테스트)에 3~5명 정도의 실제 사용자를 매번 섭외하기 어려울 때, 페르소나를 에이전트로 구현해 1차 스크리닝을 자동화한 사례. 정성 인터뷰의 부하를 크게 줄였습니다.</p>
+
+  <table>
+    <thead><tr><th>항목</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>기존 문제</td><td>UT 한 회차 섭외·진행·정리에 평균 9일</td></tr>
+      <tr><td>목표</td><td>와이어프레임 단계에서 1차 피드백을 24시간 내</td></tr>
+      <tr><td>제약</td><td>실사용자 UT를 완전 대체하지 않음 · 보조만</td></tr>
+    </tbody>
+  </table>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE L3-P1 · PERSONA UT AGENT</div>
+    <svg viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arc1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/>
+        </marker>
+      </defs>
+      <style>
+        .pc { fill: #fafafa; stroke: #e4e4e7; stroke-width: 1.5; }
+        .pc-t { fill: #18181b; font-family: -apple-system, sans-serif; font-size: 12px; font-weight: 600; }
+        .pc-d { fill: #52525b; font-family: -apple-system, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="pc" x="20" y="25" width="155" height="85" rx="8"/>
+      <text class="pc-t" x="34" y="50">입력</text>
+      <text class="pc-d" x="34" y="70">와이어프레임</text>
+      <text class="pc-d" x="34" y="86">이미지 + 시나리오</text>
+
+      <line x1="180" y1="65" x2="200" y2="65" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arc1)"/>
+
+      <rect class="pc" x="205" y="25" width="155" height="85" rx="8"/>
+      <text class="pc-t" x="219" y="50">페르소나 팩</text>
+      <text class="pc-d" x="219" y="70">5개 페르소나</text>
+      <text class="pc-d" x="219" y="86">JSON (연령·직무)</text>
+
+      <line x1="365" y1="65" x2="385" y2="65" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arc1)"/>
+
+      <rect class="pc" x="390" y="25" width="155" height="85" rx="8"/>
+      <text class="pc-t" x="404" y="50">에이전트</text>
+      <text class="pc-d" x="404" y="70">각 페르소나가</text>
+      <text class="pc-d" x="404" y="86">3단계 시뮬레이션</text>
+
+      <line x1="550" y1="65" x2="570" y2="65" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arc1)"/>
+
+      <rect class="pc" x="575" y="25" width="125" height="85" rx="8"/>
+      <text class="pc-t" x="589" y="50">출력</text>
+      <text class="pc-d" x="589" y="70">페르소나별 피드백</text>
+      <text class="pc-d" x="589" y="86">+ 공통 이슈 Top 5</text>
+    </svg>
+  </div>
+
+  <h4>핵심 선택</h4>
+  <div class="card">
+    <p><strong>① 페르소나는 파일로 · 모델이 아니라 프롬프트로 ·</strong> 페르소나별 파인튜닝 대신 <code>persona.json</code> + 시스템 프롬프트 구성. 변경·확장이 저렴.</p>
+    <p><strong>② 출력은 "질문의 재료"로만 ·</strong> AI 피드백을 결론으로 쓰지 않고, 실 UT 때 물어볼 질문 8개로 전환해 사용.</p>
+    <p><strong>③ Golden Set · 실 UT 30건과 상관 분석 ·</strong> 에이전트가 지적한 이슈가 실 UT에서 얼마나 재등장하는지 월간 비교. 상관이 낮아지면 페르소나 팩 개편.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num good">9일 → 1일</div><div class="label">1차 피드백 리드타임</div></div>
+    <div class="stat"><div class="num good">×2.4</div><div class="label">분기당 UT 회차 수</div></div>
+    <div class="stat"><div class="num good">68%</div><div class="label">에이전트 지적 ↔ 실 UT 재등장률</div></div>
+  </div>
+
+  <div class="compare">
+    <div class="good">
+      <h4>잘 된 것</h4>
+      <p>팀이 UT 기획 단계에 더 많은 시간을 씀 · 와이어프레임 단계에서 큰 설계 결함 조기 발견 · 에이전트 출력이 "논쟁의 출발점"으로 기능.</p>
+    </div>
+    <div class="bad">
+      <h4>한계와 주의</h4>
+      <p>감정·맥락·문화적 뉘앙스는 여전히 실사용자만 포착 · "페르소나가 실사용자"라는 착각 방지 · 분기마다 페르소나 팩 재검수 필수.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">복제하고 싶은 팀에게</div>
+    페르소나 5개 중 2개는 실존 사용자 인터뷰에서 추출한 "원본"으로 시작하세요. 순수 상상 페르소나로만 구성하면 팀의 편견이 증폭됩니다. 원본 비율 40% 이상 유지가 경험칙.
+  </div>
+
+  <hr>
+
+  <h3 id="case2">2.2 사례 ② Claude Skills 기반 와이어프레임 생성기</h3>
+  <p>사내 곳곳에서 "간단한 화면 와이어프레임"을 빠르게 필요로 하는 순간이 많은데, AXZ 디자인 톤과 자주 쓰는 패턴을 Skill로 묶어 "한 줄 요청 → 3안 출력"을 가능하게 만든 사례.</p>
+
+  <table>
+    <thead><tr><th>항목</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>기존 문제</td><td>화면 1장 그리는 데 주니어 디자이너 2~3시간</td></tr>
+      <tr><td>목표</td><td>15분 이내 3안 생성 · AXZ 톤 자동 준수</td></tr>
+      <tr><td>제약</td><td>디자인 시스템 위반 금지 · 결과는 Figma 브랜치로만</td></tr>
+    </tbody>
+  </table>
+
+<pre><code>---
+name: axz-wireframe
+description: AXZ 브랜드 톤과 자주 쓰는 IA 패턴에 맞춰
+  웹·모바일 와이어프레임 3안을 생성한다.
+  Figma 브랜치 파일로 내보내는 단계까지 포함.
+---
+## IA 프리셋
+목록·상세 / 랜딩·CTA / 대시보드 / 온보딩 4종
+
+## 브랜드 토큰
+- 컬러 · 서체 · 간격 시스템 (AXZ Design System v3.2 참조)
+- 금지 요소: 3D 아이콘·그라데이션·이모지 UI
+
+## 출력 규격
+- 3안 (A: 카드 / B: 리스트 / C: 하이브리드)
+- Figma handoff spec + 주석 레이어</code></pre>
+
+  <h4>핵심 선택</h4>
+  <div class="card">
+    <p><strong>① 디자인 시스템을 Skill에 "주입" ·</strong> 컬러·서체·간격을 Skill 본문에 명시. 모델이 매번 "AXZ 톤"을 다시 해석하지 않아도 되게.</p>
+    <p><strong>② Figma 직접 머지 금지 가드 ·</strong> Skill은 항상 브랜치 파일 URL로 출력. 본문에 "never merge to main"을 명시.</p>
+    <p><strong>③ 사용자 오너십 · 최종 결정은 사람 ·</strong> 3안 중 택1은 반드시 사람. 자동 선택 금지.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num good">−78%</div><div class="label">와이어프레임 1건 소요 시간</div></div>
+    <div class="stat"><div class="num good">×3.5</div><div class="label">주당 팀 논의 시안 수</div></div>
+    <div class="stat"><div class="num good">92%</div><div class="label">디자인 시스템 준수율</div></div>
+  </div>
+
+  <div class="card">
+    <p>✓ 디자인 시스템 문서가 없으면 Skill이 헛돈다 — Skill 작성 전 DS 간이판부터 정비.</p>
+    <p>✓ Skill 1개는 5~7 문장 + 프리셋. 더 길어지면 모델이 뒷부분을 건너뜀.</p>
+    <p>✓ "한 줄 요청" 뒤에 항상 "한 줄 맥락"을 붙이는 팀 규칙 — "무엇을·누구에게·어떤 톤".</p>
+    <p>✓ 분기마다 Skill 출력 20건 샘플링 → 디자이너 감수 → Skill 본문 업데이트.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">스케일 포인트</div>
+    이 Skill은 처음엔 커뮤니티 팀 내부용이었는데, 3개월 뒤 다른 팀(마케팅·CS)이 자발적으로 가져다 쓰면서 사내 공용 Skill이 됐습니다. "잘 만든 Skill 하나가 조직 운영 속도를 바꾸는" 전형적 사례.
+  </div>
+
+  <hr>
+
+  <h3 id="case3">2.3 사례 ③ 차량 추천 AI 에이전트</h3>
+  <p>신규 서비스 기획 과정에서 직접 구축한 내 상황에 맞춘 차량 추천 에이전트. 단순 카탈로그 검색이 아니라, 사용자 라이프스타일·예산·유지비·상징성까지 고려해 2~3대를 추천하는 구조.</p>
+
+  <table>
+    <thead><tr><th>항목</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>기존 검색</td><td>"가격·연식·세그먼트" 필터만 제공. 의사결정 부담은 사용자 몫</td></tr>
+      <tr><td>목표</td><td>대화형 Q&A로 상황 파악 → 2~3대 맞춤 추천 + 이유 설명</td></tr>
+      <tr><td>제약</td><td>잘못된 추천이 실제 구매로 이어지지 않도록 "최종 선택은 사람" 명시</td></tr>
+    </tbody>
+  </table>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE L3-P3 · CAR RECOMMEND AGENT</div>
+    <svg viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arc3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/>
+        </marker>
+      </defs>
+      <style>
+        .cr { fill: #fafafa; stroke: #e4e4e7; stroke-width: 1.5; }
+        .cr-t { fill: #18181b; font-family: -apple-system, sans-serif; font-size: 12px; font-weight: 600; }
+        .cr-d { fill: #52525b; font-family: -apple-system, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="cr" x="20" y="25" width="155" height="85" rx="8"/>
+      <text class="cr-t" x="34" y="50">Clarifier</text>
+      <text class="cr-d" x="34" y="70">라이프스타일</text>
+      <text class="cr-d" x="34" y="86">5슬롯 질문</text>
+
+      <line x1="180" y1="65" x2="200" y2="65" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arc3)"/>
+
+      <rect class="cr" x="205" y="25" width="155" height="85" rx="8"/>
+      <text class="cr-t" x="219" y="50">Retriever</text>
+      <text class="cr-d" x="219" y="70">차량 스펙 DB</text>
+      <text class="cr-d" x="219" y="86">+ 리뷰 임베딩</text>
+
+      <line x1="365" y1="65" x2="385" y2="65" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arc3)"/>
+
+      <rect class="cr" x="390" y="25" width="155" height="85" rx="8"/>
+      <text class="cr-t" x="404" y="50">Ranker</text>
+      <text class="cr-d" x="404" y="70">가중치 모델</text>
+      <text class="cr-d" x="404" y="86">예산·유지비·상징성</text>
+
+      <line x1="550" y1="65" x2="570" y2="65" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#arc3)"/>
+
+      <rect class="cr" x="575" y="25" width="125" height="85" rx="8"/>
+      <text class="cr-t" x="589" y="50">Explainer</text>
+      <text class="cr-d" x="589" y="70">추천 이유 +</text>
+      <text class="cr-d" x="589" y="86">대안 2개</text>
+    </svg>
+  </div>
+
+  <h4>본책과의 매핑</h4>
+  <table>
+    <thead><tr><th>에이전트</th><th>본책 매핑</th><th>모델</th></tr></thead>
+    <tbody>
+      <tr><td>Clarifier</td><td>L3 Ch9.1 Intent Clarification</td><td>Haiku 4.5</td></tr>
+      <tr><td>Retriever</td><td>L2 Ch4 MCP + 사내 DB 커넥터</td><td>—</td></tr>
+      <tr><td>Ranker</td><td>L3 Ch6 티어 라우팅 · 결정형</td><td>Sonnet 4.6</td></tr>
+      <tr><td>Explainer</td><td>L3 Ch1 Agentic UX · 설명 UI</td><td>Opus 4.7 (중요 결정 시)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>설계 교훈</h4>
+  <div class="card">
+    <p><strong>① Clarifier의 "되묻기 예산"을 엄격히 ·</strong> 5슬롯 중 2개만 차면 다음 단계로. 3개 이상 비면 기본값으로 채우고 실행. 사용자 이탈 방지.</p>
+    <p><strong>② Ranker는 "투명한 점수표"로 ·</strong> LLM 자체 랭킹에 의존하지 않고 규칙 기반 가중치 + LLM 설명을 결합. 왜 1위인지 사람이 이해 가능.</p>
+    <p><strong>③ Explainer는 "대안을 함께" ·</strong> 1대만 추천하지 않고 항상 대안 2대 + 차이점을 병렬로. 의사결정 재료로 사용자가 느낌.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num good">×4.1</div><div class="label">상세 페이지 체류시간</div></div>
+    <div class="stat"><div class="num good">+38%</div><div class="label">비교/찜 등록률</div></div>
+    <div class="stat"><div class="num good">0.82</div><div class="label">추천 만족도 (5점)</div></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">비싼 의사결정일수록 설명이 중요</div>
+    차량은 평균 수천만 원의 구매 의사결정입니다. AI 추천을 블랙박스로 두면 사용자는 "AI가 시킨 대로 했다가 잘못 샀다"는 서사를 만들기 쉽습니다. Explainer의 이유가 강력해야 제품 신뢰가 유지됩니다.
+  </div>
+
+  <h2 id="common">2.4 세 사례의 공통 교훈</h2>
+  <p>서로 다른 세 에이전트지만, 설계 결정이 겹치는 지점이 뚜렷합니다. 이 교집합이 사내 다음 프로젝트의 출발선입니다.</p>
+
+  <div class="card">
+    <p>✓ <strong>"최종 결정은 사람"</strong> — 자동화의 범위와 수동 결정 지점을 UX에 명시했을 때 도입 저항이 낮아진다.</p>
+    <p>✓ <strong>Clarifier는 짧게, Explainer는 풍부하게</strong> — 입구는 가볍게·출구는 깊게.</p>
+    <p>✓ <strong>Skill·페르소나·프리셋은 파일로 관리</strong> — 모델을 바꾸지 않고도 조직 자산을 축적.</p>
+    <p>✓ <strong>Golden Set · 분기 리뷰</strong> — 설계 가정이 여전히 맞는지 분기마다 재검증.</p>
+    <p>✓ <strong>"재료를 만들고 결정은 사람"</strong> — 세 사례 모두 이 슬로건으로 UX가 정리됨.</p>
+  </div>
+
+  <h2>왜 지금 이 주제인가 · 팀에 주는 3가지 시사점</h2>
+  <div class="card">
+    <p><strong>① 복잡한 오케스트레이션 &lt; 단단한 루프 ·</strong> Ralph의 교훈은 "과도한 설계 금지". 우리 사내 에이전트도 설계 검토 시 "더 줄일 수 있나?"를 먼저 묻자.</p>
+    <p><strong>② 하네스는 비용이 아니라 자본이다 ·</strong> Trace·Eval·훅 투자는 초반 부담이 크지만, 세 달 뒤부터 같은 팀 인원으로 두 배의 에이전트를 운영할 수 있다.</p>
+    <p><strong>③ 도구 선택은 팀 성숙도와 묶인다 ·</strong> Claude Code 기본선, 오픈 하네스는 "우리 팀이 직접 관리할 수 있는 범위"에서만. 트렌드 뉴스에 끌려가지 말 것.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">한 줄 인용</div>
+    최신 모듈은 "알아두는 것"이 목적이 아니라 "우리 팀 하네스를 튼튼하게 만드는 재료"로 쓸 때 값어치가 있다.
+  </div>
+
+  <h2>이 세미나에서 소개한 도구</h2>
+  <p>아래 도구들은 위키의 <a href="../tools.html">도구 카탈로그</a>에 정리되어 있습니다. 다 깔지 마시고, 시니어 우선 5개부터 손에 익히세요: Superpowers · claude-context · gstack · LangGraph · Awesome Claude Code.</p>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="10-release-checklist.html">
+        <div class="label">← 이전</div>
+        <div class="title">3-10 릴리즈 체크리스트</div>
+      </a>
+      <a href="../tools.html">
+        <div class="label">다음 →</div>
+        <div class="title">도구 카탈로그</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2-3 서브에이전트와 훅 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="../level-1/index.html">L1 · 초급</a>
+      <a href="index.html">L2 · 중급</a>
+      <a href="../level-3/index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L2 챕터</span>
+      <a href="index.html#ch1">2-1 Claude Code 입문</a>
+      <a href="index.html#ch2">2-2 슬래시 커맨드</a>
+      <a href="03-subagents-hooks.html" class="active">2-3 서브에이전트와 훅</a>
+      <a href="index.html#ch4">2-4 MCP 커넥터 7종</a>
+      <a href="index.html#ch5">2-5 세션 관리·CLAUDE.md</a>
+      <a href="index.html#ch6">2-6 보안 실수 5선</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 2-3 · 55분</span>
+  <h1 class="page-title">서브에이전트와 훅</h1>
+  <p class="lede">
+    한 명의 Claude가 모든 일을 다 하면 컨텍스트가 빠르게 더러워집니다.
+    서브에이전트로 <strong>역할을 분담</strong>하고, 훅으로 <strong>트리거를 자동화</strong>하면 Claude Code의 실력이 두 배가 됩니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#patterns">서브에이전트 세 가지 패턴 (Plan · Explore · Test Runner)</a></li>
+      <li><a href="#context-split">컨텍스트 분리 도식</a></li>
+      <li><a href="#hooks">훅으로 트리거 자동화</a></li>
+      <li><a href="#pre-commit">pre-commit 훅 연동</a></li>
+      <li><a href="#cases">실전 케이스 4종</a></li>
+      <li><a href="#testing">훅 스크립트 테스트법</a></li>
+    </ol>
+  </div>
+
+  <h2 id="patterns">서브에이전트 세 가지 패턴</h2>
+  <p>다른 Claude를 별도로 호출해 격리된 컨텍스트에서 일을 시키는 방식입니다. 세 가지 패턴이 가장 자주 쓰입니다.</p>
+
+  <h3>01 Plan — 구현 전 설계</h3>
+  <p>큰 PR을 시작하기 전에 Plan 서브에이전트에게 먼저 설계를 맡깁니다. 메인 컨텍스트를 복잡하게 만들지 않고 여러 안을 검토할 수 있습니다.</p>
+
+  <h3>02 Explore — 넓은 탐색</h3>
+  <p>"이 기능이 어디서 다 쓰이지?" 같은 광범위한 grep·glob 결과는 토큰이 폭증합니다. 서브에이전트가 결과만 추려서 가져옵니다.</p>
+
+  <h3>03 Test Runner — 루프 자동화</h3>
+  <p>"테스트 통과할 때까지 고쳐줘"를 서브에이전트로 돌리면 메인이 시끄럽지 않게 끝까지 갑니다. 디프만 메인으로 보고됩니다.</p>
+
+  <div class="callout">
+    <div class="callout-label">팁 · 병렬 호출</div>
+    독립적인 일은 한 번에 여러 서브에이전트를 동시 호출하세요. parallel·isolated · agent·call을 함께 쓰면 체감 속도가 배가 됩니다.
+  </div>
+
+  <h2 id="context-split">컨텍스트 분리 도식</h2>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 2-3 · 메인 컨텍스트 vs 서브에이전트 컨텍스트</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f97316"/>
+        </marker>
+        <marker id="ar3b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#78716c"/>
+        </marker>
+      </defs>
+      <style>
+        .box { fill: #ffffff; stroke: #d6d3d1; stroke-width: 1.5; }
+        .main-box { fill: #fff7ed; stroke: #f97316; stroke-width: 2; }
+        .box-title { font-family: Pretendard, sans-serif; font-size: 13px; font-weight: 700; fill: #1c1917; }
+        .box-sub { font-family: Pretendard, sans-serif; font-size: 11px; fill: #57534e; }
+        .label { font-family: Pretendard, sans-serif; font-size: 11px; fill: #c2410c; font-weight: 600; text-anchor: middle; }
+        .quiet { font-family: Pretendard, sans-serif; font-size: 11px; fill: #78716c; text-anchor: middle; }
+      </style>
+
+      <!-- Main -->
+      <rect class="main-box" x="40" y="100" width="200" height="120" rx="10"/>
+      <text class="box-title" x="60" y="125">메인 컨텍스트</text>
+      <text class="box-sub" x="60" y="148">사용자와 직접 대화</text>
+      <text class="box-sub" x="60" y="168">대화 흐름 · 결정 누적</text>
+      <text class="box-sub" x="60" y="188">파일 편집 · 커밋 권한</text>
+      <text class="box-sub" x="60" y="208" style="font-style: italic; fill: #c2410c;">"가볍게 유지"</text>
+
+      <!-- Arrows out -->
+      <line x1="240" y1="130" x2="460" y2="60" stroke="#f97316" stroke-width="2" marker-end="url(#ar3)"/>
+      <text class="label" x="345" y="85">spawn (격리)</text>
+
+      <line x1="240" y1="160" x2="460" y2="160" stroke="#f97316" stroke-width="2" marker-end="url(#ar3)"/>
+      <line x1="240" y1="190" x2="460" y2="260" stroke="#f97316" stroke-width="2" marker-end="url(#ar3)"/>
+
+      <!-- Sub-agents -->
+      <rect class="box" x="460" y="30" width="220" height="70" rx="10"/>
+      <text class="box-title" x="480" y="55">Plan 서브에이전트</text>
+      <text class="box-sub" x="480" y="75">설계 안 3개 + 트레이드오프</text>
+      <text class="box-sub" x="480" y="92">→ 메인엔 결정과 근거만 보고</text>
+
+      <rect class="box" x="460" y="125" width="220" height="70" rx="10"/>
+      <text class="box-title" x="480" y="150">Explore 서브에이전트</text>
+      <text class="box-sub" x="480" y="170">grep·glob 결과 처리</text>
+      <text class="box-sub" x="480" y="187">→ 메인엔 추린 매치만 반환</text>
+
+      <rect class="box" x="460" y="220" width="220" height="70" rx="10"/>
+      <text class="box-title" x="480" y="245">Test Runner 서브에이전트</text>
+      <text class="box-sub" x="480" y="265">실패 → 수정 → 재실행 루프</text>
+      <text class="box-sub" x="480" y="282">→ 메인엔 diff만 결과로</text>
+
+      <!-- Return arrows -->
+      <line x1="460" y1="80" x2="240" y2="115" stroke="#78716c" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#ar3b)"/>
+      <text class="quiet" x="480" y="305">결과만 메인으로 (대시 화살표)</text>
+    </svg>
+    <p class="caption">서브에이전트는 격리된 컨텍스트에서 작업하고, 결과만 메인으로 돌려보냅니다. 메인의 토큰·집중도가 보존됩니다.</p>
+  </div>
+
+  <h2 id="hooks">훅으로 트리거 자동화</h2>
+  <p>훅은 특정 이벤트가 일어날 때 자동으로 실행되는 스크립트입니다. <code>.claude/hooks.json</code>에 등록하면 Claude가 도구를 호출할 때마다 검사·로깅이 됩니다.</p>
+
+<pre><code>{
+  "hooks": {
+    "pre-tool-use": [{
+      "matcher": { "tool_name": "Write" },
+      "command": "bash .claude/scripts/check-secrets.sh"
+    }],
+    "post-tool-use": [{
+      "matcher": { "tool_name": "Bash" },
+      "command": "bash .claude/scripts/log-bash.sh"
+    }]
+  }
+}</code></pre>
+
+  <h3>훅 이벤트 종류</h3>
+  <table>
+    <thead><tr><th>이벤트</th><th>발동 시점</th><th>활용</th></tr></thead>
+    <tbody>
+      <tr><td><code>session-start</code></td><td>세션 시작 시 1회</td><td>기본 컨텍스트 주입, 로그 시작</td></tr>
+      <tr><td><code>pre-tool-use</code></td><td>도구 실행 직전</td><td>시크릿·금지 명령 차단</td></tr>
+      <tr><td><code>post-tool-use</code></td><td>도구 실행 후</td><td>결과 감사, 텔레메트리</td></tr>
+      <tr><td><code>user-prompt-submit</code></td><td>사용자 프롬프트 입력 시</td><td>PII 마스킹</td></tr>
+      <tr><td><code>session-end</code></td><td>세션 종료 시</td><td>요약 생성 · HANDOFF.md 기록</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="pre-commit">pre-commit 훅 연동</h2>
+  <p>Git의 pre-commit과 Claude Code의 훅을 연결하면 커밋 직전 Claude가 자동으로 리뷰합니다. Husky를 쓰는 팀에서 가장 손쉽습니다.</p>
+
+<pre><code>#!/bin/sh
+# .husky/pre-commit
+claude review --staged --non-interactive --severity blocker
+exit_code=$?
+
+if [ $exit_code -ne 0 ]; then
+  echo "Claude 리뷰에서 blocker 발견. 수정 후 다시 커밋."
+  exit 1
+fi</code></pre>
+
+  <div class="callout warn">
+    <div class="callout-label">비용·속도 균형</div>
+    모든 커밋에 리뷰를 걸면 CI 비용이 큽니다. 사내 권장은 <strong>pre-push 시점 1회</strong>. 자잘한 커밋엔 안 걸고, 푸시 직전에만 한 번 검사.
+  </div>
+
+  <h2 id="cases">실전 케이스 4종</h2>
+
+  <div class="case">
+    <div class="case-label">CASE 1 · FE팀</div>
+    <h3>Playwright 테스트 깃발 뽑기</h3>
+    <dl>
+      <dt>상황</dt><dd>378개 테스트, 깜빡임(flaky) 8.2%. <code>test-stabilizer</code> 서브에이전트에게 "한 줄 보고서 20개씩 보내고, 단계별 수정"을 맡김.</dd>
+      <dt>결과</dt><dd>5주 후 단계별 적용 25 PR 머지, 90일 안정성 92→98%. 메인 컨텍스트는 깨끗하게 유지.</dd>
+    </dl>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 2 · 백엔드</div>
+    <h3>대규모 리팩터 — 커넥터 교체</h3>
+    <dl>
+      <dt>상황</dt><dd>120 라이브러리에서 legacy SDK 호출을 신규 SDK로 일괄 치환. <code>refactor-runner</code> 서브에이전트가 파일별 변환 + 라이브러리 테스트 검증.</dd>
+      <dt>결과</dt><dd>8일 동안 실패 박스 45개 → 0. 서브 컨텍스트가 diff만 메인에 보고.</dd>
+    </dl>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 3 · 데이터</div>
+    <h3>SQL 쿼리 성능 튜닝</h3>
+    <dl>
+      <dt>상황</dt><dd>느린 쿼리 TOP 10을 <code>sql-optimizer</code> 서브에이전트에 넘김. 쿼리별 인덱스·실행 계획 비교·재작성 자동 생성.</dd>
+      <dt>결과</dt><dd>평균 12,200ms → 1,400ms. 매 분기 8.7배 빨라진 시점.</dd>
+    </dl>
+  </div>
+
+  <div class="case">
+    <div class="case-label">CASE 4 · QA</div>
+    <h3>릴리스 노트 3개 국어 작성</h3>
+    <dl>
+      <dt>상황</dt><dd>Changelog 초안을 병렬로 3명 서브에이전트(KO·EN·JA)에 던짐.</dd>
+      <dt>결과</dt><dd>총 12분. 병렬 3건. 일관성은 메인 컨텍스트에서 검수.</dd>
+    </dl>
+  </div>
+
+  <h2 id="testing">훅 스크립트 테스트법</h2>
+  <p>훅은 실행되어야 의미가 있으므로, 검증 전 짧은 시뮬레이션 루틴이 필요합니다. 세 단계를 거치세요.</p>
+
+  <div class="diagram" style="text-align: left; padding: 24px;">
+    <div class="figure-label">FIGURE 2-3b · 훅 스크립트 검증 3단계</div>
+    <svg viewBox="0 0 720 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f97316"/>
+        </marker>
+      </defs>
+      <style>
+        .stage { fill: #fff7ed; stroke: #f97316; stroke-width: 1.5; }
+        .stage-num { font-family: Pretendard, sans-serif; font-size: 11px; font-weight: 700; fill: #c2410c; }
+        .stage-name { font-family: Pretendard, sans-serif; font-size: 14px; font-weight: 700; fill: #1c1917; }
+        .stage-desc { font-family: Pretendard, sans-serif; font-size: 11px; fill: #57534e; }
+      </style>
+      <rect class="stage" x="20" y="20" width="200" height="70" rx="8"/>
+      <text class="stage-num" x="35" y="38">STEP 1</text>
+      <text class="stage-name" x="35" y="58">로컬 실행</text>
+      <text class="stage-desc" x="35" y="78">훅 스크립트 직접 실행, exit code 확인</text>
+
+      <line x1="225" y1="55" x2="255" y2="55" stroke="#f97316" stroke-width="2" marker-end="url(#ar4)"/>
+
+      <rect class="stage" x="260" y="20" width="200" height="70" rx="8"/>
+      <text class="stage-num" x="275" y="38">STEP 2</text>
+      <text class="stage-name" x="275" y="58">시뮬레이션</text>
+      <text class="stage-desc" x="275" y="78">claude hooks test로 가상 이벤트 발생</text>
+
+      <line x1="465" y1="55" x2="495" y2="55" stroke="#f97316" stroke-width="2" marker-end="url(#ar4)"/>
+
+      <rect class="stage" x="500" y="20" width="200" height="70" rx="8"/>
+      <text class="stage-num" x="515" y="38">STEP 3</text>
+      <text class="stage-name" x="515" y="58">점진 도입</text>
+      <text class="stage-desc" x="515" y="78">팀 리포부터, 이후 전사로 확장</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">훅을 처음 도입할 때</div>
+    <code>exit 1</code> 대신 <code>echo 'WARN'</code>으로 시작하세요. 1주일간 로그만 모으고 패턴이 명확해지면 차단으로 전환합니다.
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ Plan · Explore · Test Runner 세 패턴 중 어떤 일에 무엇을 쓸지 30초 안에 결정한다.</p>
+    <p>✓ 사내 레포에 pre-commit 훅 하나는 직접 등록해 봤다.</p>
+    <p>✓ <code>.env</code>·credentials 같은 시크릿 파일이 커밋에 못 들어가도록 훅이 차단한다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="index.html#ch4">2-4 MCP 커넥터 7종</a>으로 사내 도구와 연결합니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="index.html">
+        <div class="label">← 이전</div>
+        <div class="title">L2 · 챕터 목록</div>
+      </a>
+      <a href="../level-3/index.html">
+        <div class="label">다음 →</div>
+        <div class="title">L3 · 고급으로 진입</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>

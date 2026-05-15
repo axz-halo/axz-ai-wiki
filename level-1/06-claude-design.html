@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1-6 Claude Design 첫 걸음 — AXZ AI 위키</title>
+<style>
+/* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
+
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f1f1f0;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-soft: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-soft: #f5f5ff;
+  --accent-strong: #3730a3;
+  --code-bg: #18181b;
+  --code-text: #fafaf9;
+  --good: #15803d;
+  --bad: #b91c1c;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: -0.011em;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { text-decoration: none; border-bottom-color: var(--accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+}
+
+.sidebar h1 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; }
+.sidebar h1 a { color: var(--text); letter-spacing: -0.018em; border: 0; }
+.sidebar .tagline { font-size: 12px; color: var(--text-soft); margin-bottom: 28px; }
+
+.sidebar nav { font-size: 13.5px; }
+.sidebar nav .group { margin-bottom: 22px; }
+.sidebar nav .group-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text-muted);
+  margin: 0 -8px;
+  border: 0;
+  transition: background .12s;
+}
+.sidebar nav a:hover { background: rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
+.sidebar nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+
+.main { padding: 64px 80px; max-width: 780px; }
+@media (max-width: 1100px) { .main { padding: 56px 48px; } }
+@media (max-width: 900px) { .main { padding: 40px 24px; } }
+
+/* Typography */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+h1.page-title {
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text);
+}
+.lede {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0 0 48px 0;
+  max-width: 60ch;
+}
+
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 64px 0 18px; color: var(--text); }
+h2:first-of-type { margin-top: 48px; }
+h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.012em; margin: 36px 0 12px; color: var(--text); }
+p { margin: 0 0 18px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* Cards & callouts */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+.card.compact { padding: 14px 18px; }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.card h3 { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.callout.warn { border-color: var(--warn); background: #fefce8; }
+.callout.bad { border-color: var(--bad); background: #fef2f2; }
+.callout .callout-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.callout.warn .callout-label { color: var(--warn); }
+.callout.bad .callout-label { color: var(--bad); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 28px;
+}
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th {
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* Code */
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+p code, li code, td code {
+  background: var(--surface-alt);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.88em;
+  border: 1px solid var(--border-soft);
+}
+pre code { background: transparent; padding: 0; color: inherit; border: 0; }
+
+/* Stat panels — 모든 수치에 자동 "예시" 라벨 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+  position: relative;
+}
+.stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+.stat::before {
+  content: 'EX';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  background: var(--border-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.stat .num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat .num.bad { color: var(--bad); }
+.stat .num.good { color: var(--good); }
+.stat .label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Level cards on home */
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 22px;
+  transition: border-color .15s, background .15s;
+  display: block;
+  color: inherit;
+}
+.level-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.level-card .lv {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-soft);
+}
+.level-card h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.level-card p { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.level-card .meta { font-size: 11.5px; color: var(--text-soft); }
+
+/* Chapter list (level index page) */
+.chapter-list { list-style: none; padding: 0; margin: 16px 0 28px; }
+.chapter-list li {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 13px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  transition: border-color .12s, background .12s;
+}
+.chapter-list li:hover { border-color: var(--border); background: var(--surface-alt); }
+.chapter-list .ch-no {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  font-size: 13px;
+}
+.chapter-list .ch-title { font-weight: 500; color: var(--text); font-size: 14.5px; }
+.chapter-list .ch-sub { color: var(--text-soft); font-size: 13px; margin-left: 6px; }
+.chapter-list .ch-status {
+  margin-left: auto;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 0;
+}
+.chapter-list .ch-status.ready { color: var(--accent); }
+.chapter-list .ch-status.draft { color: var(--text-soft); }
+.chapter-list a.ch-status { border: 0; }
+
+/* SVG diagram wrap */
+.diagram {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+}
+.diagram::after {
+  content: 'EXAMPLE';
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.diagram .figure-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 18px;
+}
+.diagram .caption {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.diagram svg { max-width: 100%; height: auto; }
+
+/* Before/After */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.compare > div {
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.compare .bad { border-left: 2px solid var(--bad); }
+.compare .good { border-left: 2px solid var(--good); }
+.compare h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.compare .bad h4 { color: var(--bad); }
+.compare .good h4 { color: var(--good); }
+.compare p:last-child { margin-bottom: 0; }
+
+/* Case study card — "예시 시나리오" 자동 라벨 */
+.case {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.case .case-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.case .case-label::after {
+  content: ' · 예시 시나리오';
+  font-weight: 400;
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+.case h3 { margin: 6px 0 14px; font-size: 16px; }
+.case .case-meta { font-size: 13px; color: var(--text-muted); }
+.case dl { margin: 12px 0 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; font-size: 13.5px; }
+.case dt { font-weight: 600; color: var(--text-muted); }
+.case dd { margin: 0; color: var(--text-muted); }
+
+/* Footer */
+.footer {
+  margin-top: 88px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.footer-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.footer-nav a {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: border-color .12s, background .12s;
+}
+.footer-nav a:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.footer-nav .label { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-nav .title { font-weight: 500; color: var(--text); margin-top: 4px; font-size: 14px; }
+
+/* TOC inline */
+.toc {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 40px 0;
+  font-size: 13.5px;
+}
+.toc .toc-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.toc ol { margin: 0; padding-left: 20px; line-height: 1.85; }
+.toc li { margin: 2px 0; }
+.toc a { color: var(--text-muted); border: 0; }
+.toc a:hover { color: var(--accent); }
+
+/* Disclaimer banner for index pages */
+.disclaimer {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 16px 0 32px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.disclaimer strong { color: var(--text); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <p class="tagline">AI를 도구에서 동료로</p>
+  <nav>
+    <div class="group">
+      <span class="group-label">시작</span>
+      <a href="../index.html">홈 · 학습 경로</a>
+      <a href="../level-0/index.html">L0 · 시작하기</a>
+    </div>
+    <div class="group">
+      <span class="group-label">레벨별 학습</span>
+      <a href="index.html">L1 · 초급</a>
+      <a href="../level-2/index.html">L2 · 중급</a>
+      <a href="../level-3/index.html">L3 · 고급</a>
+    </div>
+    <div class="group">
+      <span class="group-label">L1 챕터</span>
+      <a href="01-first-meeting.html">1-1 Claude 첫 만남</a>
+      <a href="02-prompt-5elements.html">1-2 프롬프트 5요소</a>
+      <a href="03-model-selection.html">1-3 모델 선택 결정 트리</a>
+      <a href="04-daily-work.html">1-4 오늘 업무에 적용</a>
+      <a href="05-role-packs.html">1-5 직무별 프롬프트 팩</a>
+      <a href="06-claude-design.html" class="active">1-6 Claude Design 첫 걸음</a>
+      <a href="07-cheatsheet.html">1-7 90초 워크플로우</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+  <span class="kicker">CHAPTER 1-6 · 30분</span>
+  <h1 class="page-title">Claude Design 첫 걸음</h1>
+  <p class="lede">
+    2026년 Q1 출시된 Claude Design은 디자이너·기획자를 위해 화면 시안과 플로우를 만들어 주는 도구입니다.
+    코드 한 줄 없이 자연어로 목업을 만들 수 있어, 개발 전 커뮤니케이션이 훨씬 빨라집니다.
+  </p>
+
+  <div class="toc">
+    <div class="toc-label">이 챕터의 목차</div>
+    <ol>
+      <li><a href="#what">무엇을 할 수 있는가</a></li>
+      <li><a href="#first">3분 첫 목업 만들기</a></li>
+      <li><a href="#patterns">자연어 프롬프트 패턴 5종</a></li>
+      <li><a href="#safety">주의 사항 · 디자이너 검수가 필요한 이유</a></li>
+    </ol>
+  </div>
+
+  <h2 id="what">무엇을 할 수 있는가</h2>
+  <div class="card">
+    <h3 style="margin-top:0">4가지 핵심 기능</h3>
+    <p><strong>① 자연어 목업 ·</strong> "로그인 화면에 구글 OAuth 버튼 추가" 한 줄로 화면 생성.</p>
+    <p><strong>② 컴포넌트 추천 ·</strong> 맥락에 맞는 UI 패턴(모달·스텝퍼·탭) 자동 제안.</p>
+    <p><strong>③ Figma 내보내기 ·</strong> 원클릭으로 팀 Figma 파일에 컴포넌트·토큰 추가.</p>
+    <p><strong>④ 플로우 가시화 ·</strong> 여러 화면을 연결한 사용자 흐름도 자동 생성.</p>
+  </div>
+
+  <h2 id="first">3분 첫 목업 만들기</h2>
+
+  <div class="diagram">
+    <div class="figure-label">FIGURE 1-6 · Claude Design 첫 사용 플로우</div>
+    <svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arcd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f97316"/>
+        </marker>
+      </defs>
+      <style>
+        .stage { fill: #fff7ed; stroke: #f97316; stroke-width: 1.5; }
+        .stnum { fill: #c2410c; font-family: Pretendard, sans-serif; font-size: 11px; font-weight: 700; }
+        .sttitle { fill: #1c1917; font-family: Pretendard, sans-serif; font-size: 14px; font-weight: 600; }
+        .stdesc { fill: #57534e; font-family: Pretendard, sans-serif; font-size: 11px; }
+      </style>
+      <rect class="stage" x="20" y="30" width="200" height="90" rx="8"/>
+      <text class="stnum" x="38" y="52">STEP 1</text>
+      <text class="sttitle" x="38" y="74">로그인</text>
+      <text class="stdesc" x="38" y="92">claude.ai/design</text>
+      <text class="stdesc" x="38" y="108">AXZ SSO</text>
+
+      <line x1="225" y1="75" x2="255" y2="75" stroke="#f97316" stroke-width="2" marker-end="url(#arcd)"/>
+
+      <rect class="stage" x="260" y="30" width="200" height="90" rx="8"/>
+      <text class="stnum" x="278" y="52">STEP 2</text>
+      <text class="sttitle" x="278" y="74">한 줄 입력</text>
+      <text class="stdesc" x="278" y="92">"로그인 + 회원가입 +</text>
+      <text class="stdesc" x="278" y="108">비밀번호 찾기 3개 화면"</text>
+
+      <line x1="465" y1="75" x2="495" y2="75" stroke="#f97316" stroke-width="2" marker-end="url(#arcd)"/>
+
+      <rect class="stage" x="500" y="30" width="200" height="90" rx="8"/>
+      <text class="stnum" x="518" y="52">STEP 3</text>
+      <text class="sttitle" x="518" y="74">팀 공유</text>
+      <text class="stdesc" x="518" y="92">미리보기 → Figma</text>
+      <text class="stdesc" x="518" y="108">내보내기 → 팀 공유</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">팁 · 입문자가 쉽게 만드는 법</div>
+    "~처럼 보이게 해줘"(예: "Toss 송금 화면처럼") 같은 표현이 가장 빠릅니다. 사내 디자인 시스템이 없다면 프롬프트에 "AXZ 기본 톤"을 추가하세요. 첫 목업은 완성도 60%로 받아서, 팀과 얘기하며 나머지 40%를 채우는 것이 시간 절약에 가장 좋습니다.
+  </div>
+
+  <h2 id="patterns">자연어 프롬프트 패턴 5종</h2>
+  <p>중급편 4장에서 다시 자세히 다루지만, 초급에서도 이 다섯 패턴은 익혀두면 좋습니다.</p>
+
+  <table>
+    <thead><tr><th>#</th><th>패턴</th><th>예시</th></tr></thead>
+    <tbody>
+      <tr><td>01</td><td>상태 나열형</td><td>"기본·호버·활성·비활성·에러 5상태를 화면에 함께 표시"</td></tr>
+      <tr><td>02</td><td>페르소나 기반</td><td>"신입 사용자 입장으로 보이게" → 친절·환영 톤 강조</td></tr>
+      <tr><td>03</td><td>디자인 시스템 강제</td><td>"사내 토큰만 사용" → 색·간격 자동 통일</td></tr>
+      <tr><td>04</td><td>이전 시안 참조</td><td>"design-v1 시안과 같은 레이아웃" → 일관성 유지</td></tr>
+      <tr><td>05</td><td>수정 요청 누적</td><td>"방금 만든 화면, 상단 헤더만 좀 더 진하게"</td></tr>
+    </tbody>
+  </table>
+
+  <h3>입문자용 한 줄 예시 3가지</h3>
+  <div class="card">
+    <p><strong>온보딩 화면 ·</strong> "신규 가입 직후 5단계 환영 플로우. 진행 표시 + 건너뛰기."</p>
+    <p><strong>대시보드 ·</strong> "KPI 4개·차트 1개·최근 활동 리스트. 임원용 한 화면 분량."</p>
+    <p><strong>설정 페이지 ·</strong> "프로필·알림·보안·결제 4 섹션. 좌측 탭, 우측 본문."</p>
+  </div>
+
+  <h2 id="safety">주의 사항 · 디자이너 검수가 필요한 이유</h2>
+
+  <div class="callout warn">
+    <div class="callout-label">아직 자동 배포 금지</div>
+    Claude Design이 만든 결과를 검토 없이 팀 Figma 메인 파일로 바로 내보내지 마세요. 반드시 별도 브랜치 파일에서 확인 후 머지합니다. 정식 핸드오프 파이프라인은 중급편 4장에서 다룹니다.
+  </div>
+
+  <div class="compare">
+    <div class="bad">
+      <h4>BAD</h4>
+      <p>"AI가 만들었으니 그대로 개발에 넘기자"</p>
+      <p style="font-size:14px; color:var(--text-muted)">접근성·실 사용 컨텍스트·디자인 시스템 위반을 디자이너만 잡을 수 있음. 후속 비용이 더 큼.</p>
+    </div>
+    <div class="good">
+      <h4>GOOD</h4>
+      <p>"AI가 60% 만들고, 디자이너가 40% 다듬어 함께 공유"</p>
+      <p style="font-size:14px; color:var(--text-muted)">초안 시간만 압축. 디자이너의 손길은 여전히 필수 검수 단계로 유지.</p>
+    </div>
+  </div>
+
+  <h2>이 챕터가 끝나면</h2>
+  <div class="card">
+    <p>✓ Claude Design으로 화면 1개를 만들어 Figma로 내보내 봤다.</p>
+    <p>✓ 다섯 가지 자연어 패턴 중 두 개는 직접 써봤다.</p>
+    <p>✓ "AI 결과 → 팀 메인 파일 직배포 금지" 원칙을 안다.</p>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="07-cheatsheet.html">1-7 90초 워크플로우 + 치트시트</a>입니다.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-nav">
+      <a href="05-role-packs.html">
+        <div class="label">← 이전</div>
+        <div class="title">1-5 직무별 프롬프트 팩</div>
+      </a>
+      <a href="07-cheatsheet.html">
+        <div class="label">다음 →</div>
+        <div class="title">1-7 90초 워크플로우</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+</div>
+</body>
+</html>
