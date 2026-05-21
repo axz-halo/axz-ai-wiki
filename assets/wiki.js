@@ -42,7 +42,6 @@
     {cat:'L3',    title:'3-10 릴리즈 체크리스트 30항', sub:'내용·코드·정책·관측',         url:'level-3/10-release-checklist.html', kw:'l3 릴리즈 체크리스트 30 release'},
     {cat:'L3실습',title:'L3 실습 트랙',              sub:'Ralph·하네스·사내 사례 3종',  url:'level-3/practice.html', kw:'l3 실습 ralph 하네스 사내 사례 페르소나 ut 차량 추천'},
     {cat:'부록',  title:'도구 카탈로그',              sub:'28+개 도구·6 딥다이브',       url:'tools.html', kw:'도구 카탈로그 tools skill superpowers task master spec kit context7 vanna langgraph'},
-    {cat:'부록',  title:'편찬자 노트',                sub:'헤일로 운영 노하우 7섹션',    url:'editorial-note.html', kw:'편찬자 노트 헤일로 운영 노하우 점진 확장 skill 화석화 72시간'}
   ];
 
   // === 빵부스러기 자동 생성 ===
