@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AXZ · AI 사용하기 — 사내 위키</title>
+<title>다크 시안 · AXZ AI 위키</title>
 <style>
 /* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
 
@@ -1136,41 +1136,202 @@ body.home-layout { background: var(--bg); }
 }
 
 
+/* =========================================================================
+   v0.6 — 다크모드 시안 (body.dark-theme로 토글)
+   ========================================================================= */
+body.dark-theme {
+  --bg: #0a0a0b;
+  --surface: #161618;
+  --surface-alt: #1c1c1f;
+  --border: #2a2a2e;
+  --border-soft: #1f1f23;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-soft: #71717a;
+  --accent: #818cf8;
+  --accent-soft: rgba(129, 140, 248, 0.12);
+  --accent-strong: #a5b4fc;
+  --code-bg: #050507;
+  --code-text: #e5e7eb;
+  --good: #4ade80;
+  --bad: #f87171;
+  --warn: #fbbf24;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body.dark-theme .site-header {
+  background: rgba(10, 10, 11, 0.78);
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+body.dark-theme .site-brand,
+body.dark-theme .hero-title,
+body.dark-theme h1.page-title,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme .home-content h2,
+body.dark-theme .level-card-big h3 {
+  color: var(--text);
+}
+body.dark-theme .brand-logo path,
+body.dark-theme .brand-logo polygon { fill: var(--text); }
+
+body.dark-theme .site-nav a:hover,
+body.dark-theme .btn-ghost:hover,
+body.dark-theme .sidebar nav a:hover {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+
+body.dark-theme .header-search-btn {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+body.dark-theme .header-search-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+body.dark-theme .header-search-btn .kbd {
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+body.dark-theme .btn-primary {
+  background: var(--text);
+  color: var(--bg) !important;
+}
+body.dark-theme .btn-primary:hover { background: #fff; box-shadow: 0 8px 32px -8px rgba(129,140,248,0.4); }
+body.dark-theme .btn-secondary {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--text) !important;
+}
+body.dark-theme .btn-secondary:hover { background: var(--surface); border-color: var(--text-soft); }
+
+body.dark-theme .hero-eyebrow {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+body.dark-theme .level-card-big {
+  background: var(--surface);
+  border-color: var(--border);
+}
+body.dark-theme .level-card-big:hover {
+  border-color: var(--accent);
+  background: var(--surface-alt);
+  box-shadow: 0 16px 48px -16px rgba(129,140,248,0.25);
+}
+body.dark-theme .level-card-big .lcb-num { color: var(--accent); }
+body.dark-theme .level-card-big .lcb-arrow { background: var(--surface-alt); }
+body.dark-theme .level-card-big:hover .lcb-arrow { background: var(--accent); color: var(--bg); }
+
+body.dark-theme .level-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+body.dark-theme .level-card:hover {
+  border-color: var(--accent);
+  background: var(--surface-alt);
+}
+body.dark-theme .level-card .lv { background: var(--accent-soft); color: var(--accent-strong); }
+
+body.dark-theme .card,
+body.dark-theme .callout,
+body.dark-theme .stat,
+body.dark-theme .toc,
+body.dark-theme .diagram,
+body.dark-theme .chapter-list li,
+body.dark-theme .case,
+body.dark-theme .step-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+body.dark-theme .chapter-list li:hover { border-color: var(--text-soft); }
+body.dark-theme .chapter-list .ch-status.ready { color: var(--accent-strong); }
+body.dark-theme .callout { background: var(--accent-soft); border-left-color: var(--accent); }
+body.dark-theme .callout.warn { background: rgba(251,191,36,0.08); border-left-color: var(--warn); }
+body.dark-theme .callout.bad { background: rgba(248,113,113,0.08); border-left-color: var(--bad); }
+
+body.dark-theme table th { color: var(--text-muted); border-bottom-color: var(--border); }
+body.dark-theme table td { border-bottom-color: var(--border-soft); }
+
+body.dark-theme p code, body.dark-theme li code, body.dark-theme td code {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--text);
+}
+body.dark-theme pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+}
+
+body.dark-theme .stat::before {
+  background: var(--surface-alt);
+  color: var(--text-soft);
+}
+body.dark-theme .stat .num { color: var(--text); }
+body.dark-theme .stat .num.good { color: var(--good); }
+body.dark-theme .stat .num.bad { color: var(--bad); }
+
+body.dark-theme .site-footer {
+  background: var(--surface);
+  border-top-color: var(--border);
+}
+body.dark-theme .site-footer .copy { border-top-color: var(--border); }
+
+/* 다크 토글 버튼 */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.theme-toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong); }
+
+
 </style>
 </head>
-<body class="home-layout">
+<body class="home-layout dark-theme">
 
 <header class="site-header">
   <div class="site-header-inner">
-    <a href="index.html" class="site-brand"><svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg><span>AI 위키</span></a>
+    <a href="../index.html" class="site-brand"><svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg><span>AI 위키</span></a>
     <nav class="site-nav">
-      <a href="level-0/index.html">시작하기</a>
-      <a href="level-1/index.html">L1 초급</a>
-      <a href="level-2/index.html">L2 중급</a>
-      <a href="level-3/index.html">L3 고급</a>
-      <a href="tools.html">도구</a>
-      <a href="editorial-note.html">편찬자 노트</a>
+      <a href="../level-0/index.html">시작하기</a>
+      <a href="../level-1/index.html">L1 초급</a>
+      <a href="../level-2/index.html">L2 중급</a>
+      <a href="../level-3/index.html">L3 고급</a>
+      <a href="../tools.html">도구</a>
+      <a href="../editorial-note.html">편찬자 노트</a>
     </nav>
     <div class="site-actions">
       <button class="header-search-btn" onclick="window.__wikiSearchOpen && window.__wikiSearchOpen()">
         <span>검색</span><span class="kbd">⌘K</span>
       </button>
-      <a href="preview/dark.html" class="btn-ghost" style="color: #6366f1;" title="다크 모드 시안 v0.6 PREVIEW">🌙 다크 시안</a>
       <a href="https://github.com/axz-halo/axz-ai-wiki" class="btn-ghost" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </header>
 
 <section class="hero">
-  <span class="hero-eyebrow">AXZ Internal Wiki · v0.5</span>
-  <h1 class="hero-title">AI를 도구에서<br>동료로 바꾸는 법</h1>
+  <span class="hero-eyebrow">다크 시안 · v0.6 PREVIEW</span>
+  <h1 class="hero-title"><span style="background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI를 도구에서</span><br>동료로 바꾸는 법</h1>
   <p class="hero-subtitle">
     Claude를 일상 업무에 쓰는 법부터 프로덕션 멀티 에이전트까지, AXZ 임직원이 단계적으로 학습할 수 있도록 설계된 사내 위키입니다.
     본책의 이론과 세미나 보조의 실습이 페어로 연결됩니다.
   </p>
   <div class="hero-cta">
-    <a href="level-1/index.html" class="btn btn-primary">L1부터 시작하기 →</a>
-    <a href="level-0/index.html" class="btn btn-secondary">학습 경로 진단 (3문항)</a>
+    <a href="../level-1/index.html" class="btn btn-primary">L1부터 시작하기 →</a>
+    <a href="../level-0/index.html" class="btn btn-secondary">학습 경로 진단 (3문항)</a>
   </div>
 </section>
 
@@ -1180,21 +1341,21 @@ body.home-layout { background: var(--bg); }
   <p class="section-lede">한 레벨씩 차례로 밟는 것이 가장 안전합니다. 두 단계를 한 번에 뛰면 실패율이 매우 높습니다.</p>
 
   <div class="level-cards-big">
-    <a class="level-card-big" href="level-1/index.html">
+    <a class="level-card-big" href="../level-1/index.html">
       <div class="lcb-num">LEVEL 1 · 초급</div>
       <h3>처음 만나는 Claude 업무 활용</h3>
       <p>채팅창에서 이메일·회의록·번역·간단 목업까지. 하루 업무 2시간 단축이 목표.</p>
       <div class="lcb-meta">7 챕터 + 실습 · 3.5h · 비개발 직군 포함 전 직군</div>
       <div class="lcb-arrow">→</div>
     </a>
-    <a class="level-card-big" href="level-2/index.html">
+    <a class="level-card-big" href="../level-2/index.html">
       <div class="lcb-num">LEVEL 2 · 중급</div>
       <h3>Claude Code · MCP 커넥터 실전</h3>
       <p>CLI에서 파일·Git·사내 도구를 직접 조작. 슬래시 커맨드로 팀 자동화 파이프라인.</p>
       <div class="lcb-meta">6 챕터 + 실습 · 6h · 개발자·PM·디자이너·플랫폼팀</div>
       <div class="lcb-arrow">→</div>
     </a>
-    <a class="level-card-big" href="level-3/index.html">
+    <a class="level-card-big" href="../level-3/index.html">
       <div class="lcb-num">LEVEL 3 · 고급</div>
       <h3>Agentic UX · 멀티 에이전트</h3>
       <p>Agent SDK, 멀티 에이전트, 하네스·관측·복구. 프로덕션 SLA 99% 운영.</p>
@@ -1211,18 +1372,18 @@ body.home-layout { background: var(--bg); }
     <tbody>
       <tr>
         <td><strong>L1 초급</strong></td>
-        <td><a href="level-1/index.html">처음 만나는 Claude 업무 활용</a> (7챕터)</td>
-        <td><a href="level-1/practice.html">오늘 30분, Claude로 와이어프레임까지</a></td>
+        <td><a href="../level-1/index.html">처음 만나는 Claude 업무 활용</a> (7챕터)</td>
+        <td><a href="../level-1/practice.html">오늘 30분, Claude로 와이어프레임까지</a></td>
       </tr>
       <tr>
         <td><strong>L2 중급</strong></td>
-        <td><a href="level-2/index.html">Claude Code와 MCP 커넥터 실전</a> (6챕터)</td>
-        <td><a href="level-2/practice.html">Cowork과 나만의 Skill로 프로토타입 띄우기</a></td>
+        <td><a href="../level-2/index.html">Claude Code와 MCP 커넥터 실전</a> (6챕터)</td>
+        <td><a href="../level-2/practice.html">Cowork과 나만의 Skill로 프로토타입 띄우기</a></td>
       </tr>
       <tr>
         <td><strong>L3 고급</strong></td>
-        <td><a href="level-3/index.html">Agentic UX와 멀티 에이전트</a> (10챕터)</td>
-        <td><a href="level-3/practice.html">에이전트 하네스 · 사내 구축 사례 3종</a></td>
+        <td><a href="../level-3/index.html">Agentic UX와 멀티 에이전트</a> (10챕터)</td>
+        <td><a href="../level-3/practice.html">에이전트 하네스 · 사내 구축 사례 3종</a></td>
       </tr>
     </tbody>
   </table>
@@ -1237,13 +1398,13 @@ body.home-layout { background: var(--bg); }
 
   <h2>부록 — 도구·편찬자 노트</h2>
   <div class="levels">
-    <a class="level-card" href="tools.html">
+    <a class="level-card" href="../tools.html">
       <span class="lv">REFERENCE</span>
       <h2>도구 카탈로그</h2>
       <p>Skill·하네스·DB·토큰 절감·오케스트레이션·큐레이션 6개 카테고리에 28+개 도구. 핵심 6개는 딥다이브.</p>
       <div class="meta">레벨별 우선 도구 + 사례별 추천 조합</div>
     </a>
-    <a class="level-card" href="editorial-note.html">
+    <a class="level-card" href="../editorial-note.html">
       <span class="lv">EDITORIAL</span>
       <h2>편찬자 노트</h2>
       <p>위키 시리즈를 만든 헤일로의 운영·자산 관점 노트. 점진 확장 · Skill 화석화 · 72시간 원칙.</p>
@@ -1256,45 +1417,45 @@ body.home-layout { background: var(--bg); }
 
   <h3>LEVEL 0 · 시작하기</h3>
   <ul class="chapter-list">
-    <li><span class="ch-no">0</span><span class="ch-title">시작하기 · 모델 라인업 · 보안 첫 원칙</span><span class="ch-sub">3문항 진단 · 결정 트리</span><a class="ch-status ready" href="level-0/index.html">읽기 →</a></li>
+    <li><span class="ch-no">0</span><span class="ch-title">시작하기 · 모델 라인업 · 보안 첫 원칙</span><span class="ch-sub">3문항 진단 · 결정 트리</span><a class="ch-status ready" href="../level-0/index.html">읽기 →</a></li>
   </ul>
 
   <h3>LEVEL 1 · 초급</h3>
   <ul class="chapter-list">
-    <li><span class="ch-no">1-1</span><span class="ch-title">Claude 첫 만남</span><span class="ch-sub">로그인 · UI · Projects</span><a class="ch-status ready" href="level-1/01-first-meeting.html">읽기 →</a></li>
-    <li><span class="ch-no">1-2</span><span class="ch-title">프롬프트 5요소</span><span class="ch-sub">역할 · 맥락 · 지시 · 제약 · 형식</span><a class="ch-status ready" href="level-1/02-prompt-5elements.html">읽기 →</a></li>
-    <li><span class="ch-no">1-3</span><span class="ch-title">모델 선택 결정 트리</span><span class="ch-sub">Opus/Sonnet/Haiku · 혼용 전략</span><a class="ch-status ready" href="level-1/03-model-selection.html">읽기 →</a></li>
-    <li><span class="ch-no">1-4</span><span class="ch-title">오늘 업무에 적용</span><span class="ch-sub">이메일·회의록·교정·번역·데이터</span><a class="ch-status ready" href="level-1/04-daily-work.html">읽기 →</a></li>
-    <li><span class="ch-no">1-5</span><span class="ch-title">직무별 프롬프트 팩</span><span class="ch-sub">기획·디자인·개발·마케팅·HR</span><a class="ch-status ready" href="level-1/05-role-packs.html">읽기 →</a></li>
-    <li><span class="ch-no">1-6</span><span class="ch-title">Claude Design 첫 걸음</span><span class="ch-sub">자연어 목업 → Figma</span><a class="ch-status ready" href="level-1/06-claude-design.html">읽기 →</a></li>
-    <li><span class="ch-no">1-7</span><span class="ch-title">90초 워크플로우 + 치트시트</span><span class="ch-sub">자주 틀리는 10가지</span><a class="ch-status ready" href="level-1/07-cheatsheet.html">읽기 →</a></li>
-    <li><span class="ch-no">L1</span><span class="ch-title">L1 실습 트랙</span><span class="ch-sub">오늘 30분, Claude로 와이어프레임까지</span><a class="ch-status ready" href="level-1/practice.html">읽기 →</a></li>
+    <li><span class="ch-no">1-1</span><span class="ch-title">Claude 첫 만남</span><span class="ch-sub">로그인 · UI · Projects</span><a class="ch-status ready" href="../level-1/01-first-meeting.html">읽기 →</a></li>
+    <li><span class="ch-no">1-2</span><span class="ch-title">프롬프트 5요소</span><span class="ch-sub">역할 · 맥락 · 지시 · 제약 · 형식</span><a class="ch-status ready" href="../level-1/02-prompt-5elements.html">읽기 →</a></li>
+    <li><span class="ch-no">1-3</span><span class="ch-title">모델 선택 결정 트리</span><span class="ch-sub">Opus/Sonnet/Haiku · 혼용 전략</span><a class="ch-status ready" href="../level-1/03-model-selection.html">읽기 →</a></li>
+    <li><span class="ch-no">1-4</span><span class="ch-title">오늘 업무에 적용</span><span class="ch-sub">이메일·회의록·교정·번역·데이터</span><a class="ch-status ready" href="../level-1/04-daily-work.html">읽기 →</a></li>
+    <li><span class="ch-no">1-5</span><span class="ch-title">직무별 프롬프트 팩</span><span class="ch-sub">기획·디자인·개발·마케팅·HR</span><a class="ch-status ready" href="../level-1/05-role-packs.html">읽기 →</a></li>
+    <li><span class="ch-no">1-6</span><span class="ch-title">Claude Design 첫 걸음</span><span class="ch-sub">자연어 목업 → Figma</span><a class="ch-status ready" href="../level-1/06-claude-design.html">읽기 →</a></li>
+    <li><span class="ch-no">1-7</span><span class="ch-title">90초 워크플로우 + 치트시트</span><span class="ch-sub">자주 틀리는 10가지</span><a class="ch-status ready" href="../level-1/07-cheatsheet.html">읽기 →</a></li>
+    <li><span class="ch-no">L1</span><span class="ch-title">L1 실습 트랙</span><span class="ch-sub">오늘 30분, Claude로 와이어프레임까지</span><a class="ch-status ready" href="../level-1/practice.html">읽기 →</a></li>
   </ul>
 
   <h3>LEVEL 2 · 중급</h3>
   <ul class="chapter-list">
-    <li><span class="ch-no">2-1</span><span class="ch-title">Claude Code 입문</span><span class="ch-sub">CLI · /init · CLAUDE.md · 첫 커밋</span><a class="ch-status ready" href="level-2/01-claude-code-intro.html">읽기 →</a></li>
-    <li><span class="ch-no">2-2</span><span class="ch-title">슬래시 커맨드</span><span class="ch-sub">/review · 사내 슬래시 만들기</span><a class="ch-status ready" href="level-2/02-slash-commands.html">읽기 →</a></li>
-    <li><span class="ch-no">2-3</span><span class="ch-title">서브에이전트와 훅</span><span class="ch-sub">반복 업무 자동화 · pre-commit</span><a class="ch-status ready" href="level-2/03-subagents-hooks.html">읽기 →</a></li>
-    <li><span class="ch-no">2-4</span><span class="ch-title">MCP 커넥터 7종</span><span class="ch-sub">Slack · Notion · Sheets · Figma · GitHub · Supabase · Vercel</span><a class="ch-status ready" href="level-2/04-mcp-connectors.html">읽기 →</a></li>
-    <li><span class="ch-no">2-5</span><span class="ch-title">세션 관리 · CLAUDE.md</span><span class="ch-sub">HANDOFF.md · 메모리 3계층</span><a class="ch-status ready" href="level-2/05-session-claudemd.html">읽기 →</a></li>
-    <li><span class="ch-no">2-6</span><span class="ch-title">보안 실수 5선과 훅 7종</span><span class="ch-sub">.env · API 토큰 · MCP 권한</span><a class="ch-status ready" href="level-2/06-security.html">읽기 →</a></li>
-    <li><span class="ch-no">L2</span><span class="ch-title">L2 실습 트랙</span><span class="ch-sub">Cowork과 나만의 Skill로 프로토타입 띄우기</span><a class="ch-status ready" href="level-2/practice.html">읽기 →</a></li>
+    <li><span class="ch-no">2-1</span><span class="ch-title">Claude Code 입문</span><span class="ch-sub">CLI · /init · CLAUDE.md · 첫 커밋</span><a class="ch-status ready" href="../level-2/01-claude-code-intro.html">읽기 →</a></li>
+    <li><span class="ch-no">2-2</span><span class="ch-title">슬래시 커맨드</span><span class="ch-sub">/review · 사내 슬래시 만들기</span><a class="ch-status ready" href="../level-2/02-slash-commands.html">읽기 →</a></li>
+    <li><span class="ch-no">2-3</span><span class="ch-title">서브에이전트와 훅</span><span class="ch-sub">반복 업무 자동화 · pre-commit</span><a class="ch-status ready" href="../level-2/03-subagents-hooks.html">읽기 →</a></li>
+    <li><span class="ch-no">2-4</span><span class="ch-title">MCP 커넥터 7종</span><span class="ch-sub">Slack · Notion · Sheets · Figma · GitHub · Supabase · Vercel</span><a class="ch-status ready" href="../level-2/04-mcp-connectors.html">읽기 →</a></li>
+    <li><span class="ch-no">2-5</span><span class="ch-title">세션 관리 · CLAUDE.md</span><span class="ch-sub">HANDOFF.md · 메모리 3계층</span><a class="ch-status ready" href="../level-2/05-session-claudemd.html">읽기 →</a></li>
+    <li><span class="ch-no">2-6</span><span class="ch-title">보안 실수 5선과 훅 7종</span><span class="ch-sub">.env · API 토큰 · MCP 권한</span><a class="ch-status ready" href="../level-2/06-security.html">읽기 →</a></li>
+    <li><span class="ch-no">L2</span><span class="ch-title">L2 실습 트랙</span><span class="ch-sub">Cowork과 나만의 Skill로 프로토타입 띄우기</span><a class="ch-status ready" href="../level-2/practice.html">읽기 →</a></li>
   </ul>
 
   <h3>LEVEL 3 · 고급</h3>
   <ul class="chapter-list">
-    <li><span class="ch-no">3-1</span><span class="ch-title">Agentic UX 6대 패턴</span><span class="ch-sub">패턴 맵 · 12주 로드맵</span><a class="ch-status ready" href="level-3/01-agentic-ux.html">읽기 →</a></li>
-    <li><span class="ch-no">3-2</span><span class="ch-title">점진적 자율성</span><span class="ch-sub">Lv.1/2/3 · 강등 규칙</span><a class="ch-status ready" href="level-3/02-progressive-autonomy.html">읽기 →</a></li>
-    <li><span class="ch-no">3-3</span><span class="ch-title">컨텍스트 보존</span><span class="ch-sub">HANDOFF.md · 메모리 3계층</span><a class="ch-status ready" href="level-3/03-context-preservation.html">읽기 →</a></li>
-    <li><span class="ch-no">3-4</span><span class="ch-title">적응형 인터페이스</span><span class="ch-sub">3단 밀도 · 적응형 온보딩</span><a class="ch-status ready" href="level-3/04-adaptive-ui.html">읽기 →</a></li>
-    <li><span class="ch-no">3-5</span><span class="ch-title">사용자 피드백 4단계 루프</span><span class="ch-sub">Golden Set · A/B 회귀</span><a class="ch-status ready" href="level-3/05-feedback-loop.html">읽기 →</a></li>
-    <li><span class="ch-no">3-6</span><span class="ch-title">멀티 에이전트 오케스트레이션</span><span class="ch-sub">Supervisor · Swarm · Pipeline</span><a class="ch-status ready" href="level-3/06-multi-agent.html">읽기 →</a></li>
-    <li><span class="ch-no">3-7</span><span class="ch-title">하네스 · 관측 · 복구</span><span class="ch-sub">3종 스택 · 8위젯 · 플레이북</span><a class="ch-status ready" href="level-3/07-harness.html">읽기 →</a></li>
-    <li><span class="ch-no">3-8</span><span class="ch-title">비개발자의 Claude Code</span><span class="ch-sub">5종 슬래시 · 4주 커리큘럼</span><a class="ch-status ready" href="level-3/08-non-dev-cc.html">읽기 →</a></li>
-    <li><span class="ch-no">3-9</span><span class="ch-title">패턴 1·3·5 + 4계층 Eval</span><span class="ch-sub">Intent · Observable · Graceful</span><a class="ch-status ready" href="level-3/09-patterns-eval.html">읽기 →</a></li>
-    <li><span class="ch-no">3-10</span><span class="ch-title">릴리즈 체크리스트 30항</span><span class="ch-sub">내용·코드·정책·관측 4영역</span><a class="ch-status ready" href="level-3/10-release-checklist.html">읽기 →</a></li>
-    <li><span class="ch-no">L3</span><span class="ch-title">L3 실습 트랙</span><span class="ch-sub">에이전트 하네스 · 사내 사례 3종</span><a class="ch-status ready" href="level-3/practice.html">읽기 →</a></li>
+    <li><span class="ch-no">3-1</span><span class="ch-title">Agentic UX 6대 패턴</span><span class="ch-sub">패턴 맵 · 12주 로드맵</span><a class="ch-status ready" href="../level-3/01-agentic-ux.html">읽기 →</a></li>
+    <li><span class="ch-no">3-2</span><span class="ch-title">점진적 자율성</span><span class="ch-sub">Lv.1/2/3 · 강등 규칙</span><a class="ch-status ready" href="../level-3/02-progressive-autonomy.html">읽기 →</a></li>
+    <li><span class="ch-no">3-3</span><span class="ch-title">컨텍스트 보존</span><span class="ch-sub">HANDOFF.md · 메모리 3계층</span><a class="ch-status ready" href="../level-3/03-context-preservation.html">읽기 →</a></li>
+    <li><span class="ch-no">3-4</span><span class="ch-title">적응형 인터페이스</span><span class="ch-sub">3단 밀도 · 적응형 온보딩</span><a class="ch-status ready" href="../level-3/04-adaptive-ui.html">읽기 →</a></li>
+    <li><span class="ch-no">3-5</span><span class="ch-title">사용자 피드백 4단계 루프</span><span class="ch-sub">Golden Set · A/B 회귀</span><a class="ch-status ready" href="../level-3/05-feedback-loop.html">읽기 →</a></li>
+    <li><span class="ch-no">3-6</span><span class="ch-title">멀티 에이전트 오케스트레이션</span><span class="ch-sub">Supervisor · Swarm · Pipeline</span><a class="ch-status ready" href="../level-3/06-multi-agent.html">읽기 →</a></li>
+    <li><span class="ch-no">3-7</span><span class="ch-title">하네스 · 관측 · 복구</span><span class="ch-sub">3종 스택 · 8위젯 · 플레이북</span><a class="ch-status ready" href="../level-3/07-harness.html">읽기 →</a></li>
+    <li><span class="ch-no">3-8</span><span class="ch-title">비개발자의 Claude Code</span><span class="ch-sub">5종 슬래시 · 4주 커리큘럼</span><a class="ch-status ready" href="../level-3/08-non-dev-cc.html">읽기 →</a></li>
+    <li><span class="ch-no">3-9</span><span class="ch-title">패턴 1·3·5 + 4계층 Eval</span><span class="ch-sub">Intent · Observable · Graceful</span><a class="ch-status ready" href="../level-3/09-patterns-eval.html">읽기 →</a></li>
+    <li><span class="ch-no">3-10</span><span class="ch-title">릴리즈 체크리스트 30항</span><span class="ch-sub">내용·코드·정책·관측 4영역</span><a class="ch-status ready" href="../level-3/10-release-checklist.html">읽기 →</a></li>
+    <li><span class="ch-no">L3</span><span class="ch-title">L3 실습 트랙</span><span class="ch-sub">에이전트 하네스 · 사내 사례 3종</span><a class="ch-status ready" href="../level-3/practice.html">읽기 →</a></li>
   </ul>
 
 </main>
@@ -1302,15 +1463,15 @@ body.home-layout { background: var(--bg); }
 <footer class="site-footer">
   <div class="site-footer-inner">
     <div>
-      <a href="index.html" class="site-brand"><svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg><span>AI 위키</span></a>
+      <a href="../index.html" class="site-brand"><svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg><span>AI 위키</span></a>
       <p style="margin-top: 12px;">AI를 도구에서 동료로 바꾸는 법.<br>AXZ 임직원 교육 목적의 내부 자료입니다.</p>
     </div>
     <div>
       <h4>레벨</h4>
-      <a href="level-0/index.html">L0 시작하기</a>
-      <a href="level-1/index.html">L1 초급</a>
-      <a href="level-2/index.html">L2 중급</a>
-      <a href="level-3/index.html">L3 고급</a>
+      <a href="../level-0/index.html">L0 시작하기</a>
+      <a href="../level-1/index.html">L1 초급</a>
+      <a href="../level-2/index.html">L2 중급</a>
+      <a href="../level-3/index.html">L3 고급</a>
     </div>
     <div>
       <h4>편찬</h4>
