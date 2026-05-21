@@ -1392,3 +1392,20 @@ body.standalone-layout .main {
   padding: 64px 32px 96px;
 }
 @media (max-width: 900px) { body.standalone-layout .main { padding: 32px 20px 56px; } }
+
+/* === v1.1: 헤더 네비 현재 위치 강조 === */
+.site-nav a.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+body.dark-theme .site-nav a.active {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+/* 사이드바 active 보강 (스크롤되어도 잘 보이게) */
+.sidebar nav a.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}

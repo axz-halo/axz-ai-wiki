@@ -177,15 +177,33 @@
     });
   }
 
-  // === 사이드바 현재 위치 점 표시 ===
+  // === 사이드바 현재 챕터 자동 강조 ===
   function markCurrentSidebar() {
-    var links = document.querySelectorAll('.sidebar nav a');
-    var here = location.pathname.split('/').pop();
-    links.forEach(function(a){
+    var here = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.sidebar nav a').forEach(function(a){
+      var href = (a.getAttribute('href') || '').split('/').pop().split('#')[0];
+      if (!href) return;
+      if (href === here) a.classList.add('active');
+    });
+  }
+
+  // === 헤더 카테고리 탭 자동 강조 ===
+  // path 기반으로 시작하기/L1/L2/L3/도구 중 어디에 속하는지 판단
+  function markCurrentHeader() {
+    var path = location.pathname;
+    var category = null;
+    if (/\/level-0(\/|$)/.test(path)) category = 'level-0';
+    else if (/\/level-1(\/|$)/.test(path)) category = 'level-1';
+    else if (/\/level-2(\/|$)/.test(path)) category = 'level-2';
+    else if (/\/level-3(\/|$)/.test(path)) category = 'level-3';
+    else if (/tools\.html$/.test(path)) category = 'tools';
+    // 메인 홈은 어떤 카테고리도 active 아님 (브랜드 로고가 홈 역할)
+
+    if (!category) return;
+    document.querySelectorAll('.site-nav a').forEach(function(a){
       var href = a.getAttribute('href') || '';
-      if (href.endsWith(here) && a.classList.contains('active')) {
-        // 이미 active 표시됨
-      }
+      if (category === 'tools' && /tools\.html$/.test(href)) a.classList.add('active');
+      else if (category && href.indexOf(category + '/') >= 0) a.classList.add('active');
     });
   }
 
@@ -220,6 +238,7 @@
     bindSidebarSearch();
     bindKeyboard();
     markCurrentSidebar();
+    markCurrentHeader();
     bindThemeToggle();
   }
 
