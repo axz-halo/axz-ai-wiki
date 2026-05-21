@@ -782,13 +782,76 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
   stroke-width: 2.5;
 }
 
+/* =========================================================================
+   v0.4 — 브랜드 로고 + 사이드바 크레딧 + 폰트 정련
+   ========================================================================= */
+
+/* Toss·Pleos 풍 폰트 스택 — Pretendard 우선, 시스템 폴백 */
+body {
+  font-family: 'Pretendard Variable', 'Pretendard',
+               -apple-system, BlinkMacSystemFont,
+               "Apple SD Gothic Neo", "맑은 고딕", "Malgun Gothic",
+               system-ui, sans-serif;
+  font-feature-settings: "ss01", "tnum";
+}
+
+/* === 사이드바 브랜드 (로고 + 텍스트) === */
+.sidebar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text);
+  border: 0;
+  text-decoration: none;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+.sidebar-brand:hover { text-decoration: none; }
+.brand-logo {
+  height: 14px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+}
+.brand-logo path, .brand-logo polygon { fill: var(--text); }
+.brand-suffix {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* === 사이드바 크레딧 === */
+.sidebar-credit {
+  margin: 28px -8px 0;
+  padding: 16px 12px 4px;
+  border-top: 1px solid var(--border);
+  font-size: 11.5px;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+.sidebar-credit .by-line {
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.sidebar-credit a {
+  color: var(--text-soft);
+  border: 0;
+  font-size: 10.5px;
+  word-break: break-all;
+  font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+.sidebar-credit a:hover { color: var(--accent); }
+
+
 </style>
 </head>
 <body>
 <div class="layout">
 
 <aside class="sidebar">
-  <h1><a href="../index.html">AXZ AI 위키</a></h1>
+  <a href="../index.html" class="sidebar-brand"><svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg><span class="brand-suffix">AI 위키</span></a>
   <p class="tagline">AI를 도구에서 동료로</p>
     <div class="search-box" id="wiki-sidebar-search">
     <input type="search" placeholder="검색…" aria-label="위키 검색" readonly>
@@ -824,6 +887,11 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
       <a href="../editorial-note.html">편찬자 노트</a>
     </div>
   </nav>
+    <div class="sidebar-credit">
+      <div class="by-line">by 커뮤니티 팀 · 헤일로</div>
+      <a href="mailto:halo.wave@axzcorp.com">halo.wave@axzcorp.com</a>
+    </div>
+
 </aside>
 
 <main class="main">
