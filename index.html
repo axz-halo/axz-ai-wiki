@@ -1321,6 +1321,30 @@ html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
 }
 .sidebar-top .theme-toggle:hover { background: var(--surface-alt); }
 
+/* =========================================================================
+   v0.8 — 챕터 페이지에 site-header 통합 + 사이드바 슬림화
+   ========================================================================= */
+
+/* 챕터 레이아웃: site-header가 sticky top:0, 사이드바는 그 아래로 */
+body.chapter-layout .sidebar {
+  top: 60px;
+  height: calc(100vh - 60px);
+  padding-top: 20px;
+}
+@media (max-width: 900px) {
+  body.chapter-layout .sidebar { height: auto; top: auto; }
+}
+
+/* 사이드바에서 brand·search-box가 빠졌으므로 첫 group 상단 여백 보정 */
+body.chapter-layout .sidebar nav { padding-top: 4px; }
+
+/* 챕터 페이지의 main 영역 — 헤더 60px 만큼 컨텐츠가 가려지지 않도록 padding-top 보정 */
+body.chapter-layout .main { padding-top: 48px; }
+
+/* sticky 푸터 nav가 헤더와 시각적으로 충돌하지 않게, breadcrumb 위 여백 약간 줄임 */
+body.chapter-layout .breadcrumb { margin-top: 4px; }
+
+
 </style>
 </head>
 <body class="home-layout">
