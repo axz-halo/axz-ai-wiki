@@ -190,12 +190,38 @@
     });
   }
 
+  // === 테마 토글 === (FOUC는 <head>의 inline script가 처리)
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (theme === 'dark') document.body.classList.add('dark-theme');
+    else document.body.classList.remove('dark-theme');
+    document.querySelectorAll('.theme-toggle .theme-icon').forEach(function(i){
+      i.textContent = theme === 'dark' ? '☀' : '🌙';
+    });
+    document.querySelectorAll('.theme-toggle').forEach(function(btn){
+      btn.setAttribute('aria-label', theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환');
+    });
+  }
+  function bindThemeToggle() {
+    var current = localStorage.getItem('axz-theme') === 'dark' ? 'dark' : 'light';
+    applyTheme(current);
+    document.addEventListener('click', function(e){
+      var btn = e.target.closest('.theme-toggle');
+      if (!btn) return;
+      e.preventDefault();
+      var now = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+      localStorage.setItem('axz-theme', now);
+      applyTheme(now);
+    });
+  }
+
   function init() {
     buildSearchModal();
     autoBreadcrumb();
     bindSidebarSearch();
     bindKeyboard();
     markCurrentSidebar();
+    bindThemeToggle();
   }
 
   if (document.readyState === 'loading') {

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2-2 슬래시 커맨드 — AXZ AI 위키</title>
+<script>(function(){try{var t=localStorage.getItem("axz-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");}}catch(e){}})();</script>
 <style>
 /* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
 
@@ -1136,6 +1137,190 @@ body.home-layout { background: var(--bg); }
 }
 
 
+/* =========================================================================
+   v0.6 — 다크모드 시안 (body.dark-theme로 토글)
+   ========================================================================= */
+body.dark-theme {
+  --bg: #0a0a0b;
+  --surface: #161618;
+  --surface-alt: #1c1c1f;
+  --border: #2a2a2e;
+  --border-soft: #1f1f23;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-soft: #71717a;
+  --accent: #818cf8;
+  --accent-soft: rgba(129, 140, 248, 0.12);
+  --accent-strong: #a5b4fc;
+  --code-bg: #050507;
+  --code-text: #e5e7eb;
+  --good: #4ade80;
+  --bad: #f87171;
+  --warn: #fbbf24;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body.dark-theme .site-header {
+  background: rgba(10, 10, 11, 0.78);
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+body.dark-theme .site-brand,
+body.dark-theme .hero-title,
+body.dark-theme h1.page-title,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme .home-content h2,
+body.dark-theme .level-card-big h3 {
+  color: var(--text);
+}
+body.dark-theme .brand-logo path,
+body.dark-theme .brand-logo polygon { fill: var(--text); }
+
+body.dark-theme .site-nav a:hover,
+body.dark-theme .btn-ghost:hover,
+body.dark-theme .sidebar nav a:hover {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+
+body.dark-theme .header-search-btn {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+body.dark-theme .header-search-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+body.dark-theme .header-search-btn .kbd {
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+body.dark-theme .btn-primary {
+  background: var(--text);
+  color: var(--bg) !important;
+}
+body.dark-theme .btn-primary:hover { background: #fff; box-shadow: 0 8px 32px -8px rgba(129,140,248,0.4); }
+body.dark-theme .btn-secondary {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--text) !important;
+}
+body.dark-theme .btn-secondary:hover { background: var(--surface); border-color: var(--text-soft); }
+
+body.dark-theme .hero-eyebrow {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+body.dark-theme .level-card-big {
+  background: var(--surface);
+  border-color: var(--border);
+}
+body.dark-theme .level-card-big:hover {
+  border-color: var(--accent);
+  background: var(--surface-alt);
+  box-shadow: 0 16px 48px -16px rgba(129,140,248,0.25);
+}
+body.dark-theme .level-card-big .lcb-num { color: var(--accent); }
+body.dark-theme .level-card-big .lcb-arrow { background: var(--surface-alt); }
+body.dark-theme .level-card-big:hover .lcb-arrow { background: var(--accent); color: var(--bg); }
+
+body.dark-theme .level-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+body.dark-theme .level-card:hover {
+  border-color: var(--accent);
+  background: var(--surface-alt);
+}
+body.dark-theme .level-card .lv { background: var(--accent-soft); color: var(--accent-strong); }
+
+body.dark-theme .card,
+body.dark-theme .callout,
+body.dark-theme .stat,
+body.dark-theme .toc,
+body.dark-theme .diagram,
+body.dark-theme .chapter-list li,
+body.dark-theme .case,
+body.dark-theme .step-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+body.dark-theme .chapter-list li:hover { border-color: var(--text-soft); }
+body.dark-theme .chapter-list .ch-status.ready { color: var(--accent-strong); }
+body.dark-theme .callout { background: var(--accent-soft); border-left-color: var(--accent); }
+body.dark-theme .callout.warn { background: rgba(251,191,36,0.08); border-left-color: var(--warn); }
+body.dark-theme .callout.bad { background: rgba(248,113,113,0.08); border-left-color: var(--bad); }
+
+body.dark-theme table th { color: var(--text-muted); border-bottom-color: var(--border); }
+body.dark-theme table td { border-bottom-color: var(--border-soft); }
+
+body.dark-theme p code, body.dark-theme li code, body.dark-theme td code {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--text);
+}
+body.dark-theme pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+}
+
+body.dark-theme .stat::before {
+  background: var(--surface-alt);
+  color: var(--text-soft);
+}
+body.dark-theme .stat .num { color: var(--text); }
+body.dark-theme .stat .num.good { color: var(--good); }
+body.dark-theme .stat .num.bad { color: var(--bad); }
+
+body.dark-theme .site-footer {
+  background: var(--surface);
+  border-top-color: var(--border);
+}
+body.dark-theme .site-footer .copy { border-top-color: var(--border); }
+
+/* 다크 토글 버튼 */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.theme-toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong); }
+
+
+/* === v0.7: 테마 토글 — FOUC 방지용 attribute selector === */
+/* body.dark-theme와 동일 — html[data-theme="dark"] 어느쪽이든 적용 */
+html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+
+/* 사이드바 헤더 영역 테마 토글 위치 */
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.sidebar-top .theme-toggle {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+.sidebar-top .theme-toggle:hover { background: var(--surface-alt); }
+
 </style>
 </head>
 <body>
@@ -1143,6 +1328,10 @@ body.home-layout { background: var(--bg); }
 
 <aside class="sidebar">
   <a href="../index.html" class="sidebar-brand"><svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg><span class="brand-suffix">AI 위키</span></a>
+    <button class="theme-toggle" type="button" title="라이트/다크 토글" style="margin: 4px 0 0 0; font-size: 13px;">
+    <span class="theme-icon">🌙</span>
+  </button>
+
   <p class="tagline">AI를 도구에서 동료로</p>
     <div class="search-box" id="wiki-sidebar-search">
     <input type="search" placeholder="검색…" aria-label="위키 검색" readonly>

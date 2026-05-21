@@ -1290,3 +1290,25 @@ body.dark-theme .site-footer .copy { border-top-color: var(--border); }
 }
 .theme-toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong); }
 
+
+/* === v0.7: 테마 토글 — FOUC 방지용 attribute selector === */
+/* body.dark-theme와 동일 — html[data-theme="dark"] 어느쪽이든 적용 */
+html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+
+/* 사이드바 헤더 영역 테마 토글 위치 */
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.sidebar-top .theme-toggle {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+.sidebar-top .theme-toggle:hover { background: var(--surface-alt); }
