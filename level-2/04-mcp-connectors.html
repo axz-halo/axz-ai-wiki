@@ -848,10 +848,10 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
     <thead><tr><th>커넥터</th><th>쓰임</th><th>권한 범위</th><th>승인</th></tr></thead>
     <tbody>
       <tr><td><strong>Slack</strong></td><td>채널 조회·DM 발신·검색</td><td>봇 자격</td><td>매니저 승인</td></tr>
-      <tr><td><strong>Notion</strong></td><td>문서 조회·갱신·검색</td><td>워크스페이스</td><td>리더 · 사이트 자율</td></tr>
-      <tr><td><strong>Google Sheets</strong></td><td>시트 조회·기록·기록</td><td>시트별 ACL</td><td>IT 승인</td></tr>
-      <tr><td><strong>Figma</strong></td><td>변경 감지·갱신</td><td>워크스페이스</td><td>자율</td></tr>
-      <tr><td><strong>GitHub</strong></td><td>Issues·PR·체크 운영</td><td>레포 단위</td><td>실 자율</td></tr>
+      <tr><td><strong>Notion</strong></td><td>문서 조회·갱신·검색</td><td>워크스페이스</td><td>리더 자율</td></tr>
+      <tr><td><strong>Google Sheets</strong></td><td>시트 조회·기록·검색</td><td>시트별 ACL</td><td>IT 승인</td></tr>
+      <tr><td><strong>Figma</strong></td><td>변경 감지·갱신</td><td>워크스페이스</td><td>팀 자율</td></tr>
+      <tr><td><strong>GitHub</strong></td><td>Issues·PR·체크 운영</td><td>레포 단위</td><td>팀 자율</td></tr>
       <tr><td><strong>Supabase</strong></td><td>DB 쿼리·마이그레이션</td><td>Dev 샌드박스</td><td>DBA 승인</td></tr>
       <tr><td><strong>Vercel</strong></td><td>배포 모니터·로그</td><td>프로젝트 단위</td><td>리더 자율</td></tr>
     </tbody>
@@ -912,42 +912,42 @@ claude mcp add notion
 # 운영 확인
 claude mcp list</code></pre>
 
-<pre><code>> #release-ko 채널의 어제 활동 메시지를 함께 읽고 Notion
-  "2026-04 Insider's URL" 페이지를 만들어줘.
+<pre><code>> #release-ko 채널의 어제 메시지를 읽고
+  Notion에 "2026-04 Release Notes" 페이지를 만들어줘.
 [Claude]
-1. Slack MCP로 채널 메시지 조회
-2. Claude가 어제 정리해 다듬어 3장 만들기
-3. Notion MCP로 페이지 자동 attach</code></pre>
+1. Slack MCP로 #release-ko 채널 어제 메시지 조회
+2. 핵심 변경 사항만 3섹션(New / Fix / Breaking)으로 정리
+3. Notion MCP로 페이지 생성 + 본문 첨부</code></pre>
 
   <h2 id="sheets-figma">Google Sheets · Figma 연결</h2>
   <p>지표 시트와 디자인 파일 동기화에 매번 쓰입니다. Sheets와 Figma 모두 워크스페이스 단위 인증이 필요합니다.</p>
 
-<pre><code>> "KPI-2026 Q2"의 4월 운영 지표 시트 매주 시트 데이터와 이전 데이터를 비교해 2번 만들어
-  자리표시 Slack #weekly-ops 에 던져.
-- Sheets MCP : 이번 시트 · 이전 시트 자동 로드
-- Computer : 운영 지표 12.4% · 14.1% (+1.7p)
-- Slack MCP : 채널 자동</code></pre>
+<pre><code>> "KPI-2026 Q2" 시트의 이번 주 데이터와 지난 주 데이터를 비교해
+  요약 카드를 만들고 Slack #weekly-ops 에 게시해줘.
+- Sheets MCP : 이번 주 시트 · 지난 주 시트 자동 로드
+- Claude : 운영 지표 12.4% → 14.1% (+1.7p) 계산
+- Slack MCP : 채널 자동 게시</code></pre>
 
-<pre><code>> Figma 프로젝트 "Design System v3"의 Properties 부 변경 자동 부여 인자 이용하고
-  변경되면 components/index.ts의 자동 토큰을 키만 갱신해줘.
-- Figma MCP : 변경 디프 · DesignToken `pad-08` 6 `border-650`
-- Edit Tool : components/index.ts 운영
-- Claude : 자동 자동 됨</code></pre>
+<pre><code>> Figma 프로젝트 "Design System v3"의 변경 사항을 가져와서
+  components/index.ts의 디자인 토큰만 키별로 갱신해줘.
+- Figma MCP : 변경 diff · DesignToken `pad-08` · `border-650`
+- Edit Tool : components/index.ts 수정
+- Claude : 변경 사항 자동 동기화 완료</code></pre>
 
   <div class="callout">
     <div class="callout-label">팁 · 토큰 싱크 케이스</div>
-    디자이너가 한 번에 많은 토큰을 갱신하면, 이 슬래시 자동 실행 시 자동 동기화로 자동 처리됩니다. 사내 25개 자동 운영 Figma 인자를 모니터링하면서 2주에 50개로 빠르게 차세요.
+    디자이너가 한 번에 많은 토큰을 갱신하면, 이 슬래시 한 번으로 자동 동기화가 됩니다. 사내에서 자주 쓰는 Figma 프로젝트를 모니터링 대상으로 두면 토큰 변경이 2주에 50건씩 흘러도 빠르게 따라잡습니다.
   </div>
 
   <h2 id="github-vercel">GitHub · Vercel 연결</h2>
-  <p>코드 리뷰와 배포 모니터링을 자동화합니다. PR 보호 라인 자동, 배포 보호으로 모이듣 자동 보호 운영 가능합니다.</p>
+  <p>코드 리뷰와 배포 모니터링을 자동화합니다. PR 리뷰 게이트와 Preview 배포 상태를 한 흐름에서 확인할 수 있어요.</p>
 
-<pre><code>> myapp/serverless 레포의 PR #542 를 봐 review 비교
-  통과되면 Vercel preview URL 도 한 줄 카드로 보고.
-- GitHub MCP : PR #542 디프 자동
-- /review : 작은 blocker 2개 · suggestion 4개
+<pre><code>> myapp/serverless 레포의 PR #542 를 /review로 점검하고
+  통과되면 Vercel Preview URL도 한 줄 카드로 보고해줘.
+- GitHub MCP : PR #542 diff 조회
+- /review : blocker 2개 · suggestion 4개 발견
 - Vercel MCP : preview URL · https://serverless-pr-542-myapp.vercel.app
-- Synthesizing : 한 줄 카드 자동 생성</code></pre>
+- Claude : 한 줄 요약 카드 생성</code></pre>
 
   <div class="callout">
     <div class="callout-label">팁 · MCP 캐시</div>
@@ -976,11 +976,11 @@ description: 이번 주 PR의 /review 결과를 Notion 대시보드에 누적
     <p><strong>GUARD 3 · 감사 로그 ·</strong> 모든 쿼리를 <code>post-tool-use</code> 훅으로 사내 로그 파이프에 기록.</p>
   </div>
 
-<pre><code>> Supabase 데이터베이스 "Quotes" 라이브 인자의 데이터
-  3일치 운영 시 데이터를 일자별로 끌어와줘.
+<pre><code>> Supabase 샌드박스의 "quotes" 테이블에서
+  최근 3일치 데이터를 일자별로 집계해줘.
 - Supabase MCP : SELECT DATE(created_at), COUNT(*) ... GROUP BY DATE
-- Claude : 일자별 산정 표 + 막대 차트
-- audit-log : 모든 쿼리 로그에 기록</code></pre>
+- Claude : 일자별 집계 표 + 막대 차트 생성
+- audit-log : 모든 쿼리를 사내 로그에 기록</code></pre>
 
   <div class="callout bad">
     <div class="callout-label">금지 사항</div>
@@ -1002,7 +1002,7 @@ description: 이번 주 PR의 /review 결과를 Notion 대시보드에 누적
     <thead><tr><th>증상</th><th>원인</th><th>복구 절차</th></tr></thead>
     <tbody>
       <tr><td><code>handshake_failed</code></td><td>만료 토큰</td><td><code>claude mcp refresh &lt;name&gt;</code></td></tr>
-      <tr><td><code>permission_denied</code></td><td>실 권한 변경</td><td><code>claude mcp remove</code> 후 재설치 + 자동 재인증</td></tr>
+      <tr><td><code>permission_denied</code></td><td>팀 권한 변경</td><td><code>claude mcp remove</code> 후 재설치 + 자동 재인증</td></tr>
       <tr><td><code>rate_limited</code></td><td>실행 폭주</td><td>잠시 5분 대기 + 서브에이전트로 분할</td></tr>
       <tr><td><code>tool not found</code></td><td>버전 미일치</td><td><code>npm i -g @anthropic-ai/claude-code</code> 재설치</td></tr>
     </tbody>

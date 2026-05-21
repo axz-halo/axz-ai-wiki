@@ -1045,7 +1045,7 @@ class Pipeline:
 
   <div class="case">
     <div class="case-label">CASE 3 · PIPELINE</div>
-    <h3>지출 영수증 OCR 자동화 — 5스테이지 패션 정리</h3>
+    <h3>지출 영수증 OCR 자동화 — 5스테이지 파이프라인</h3>
     <p><code>extract</code>(PDF→text) → <code>normalize</code>(단위/통화) → <code>enrich</code>(카테고리) → <code>validate</code>(스키마+중복) → <code>write</code>(DB). 5스테이지 각각 독립 테스트, 실패 시 이전 스테이지로 자동 롤백.</p>
     <p style="margin-top: 8px; color: var(--text-muted);">주 3만건 처리, 실패율 0.7%.</p>
   </div>

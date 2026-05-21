@@ -825,7 +825,8 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
 <main class="main">
     <nav class="breadcrumb" id="wiki-breadcrumb" aria-label="빵부스러기"></nav>
 <span class="kicker">CHAPTER 3-8 · 45분</span>
-  <h1 class="page-title">기획자·디자이너의 Claude Code 자율 사용</h1>
+  <h1 class="page-title">비개발자의 Claude Code 활용</h1>
+  <p style="font-size: 13.5px; color: var(--text-soft); margin: -10px 0 22px;">기획자·디자이너가 터미널로 직접 작업하는 자율 사용 트랙</p>
   <p class="lede">
     플랫폼팀이 사전 세팅·슬래시·MCP·안전 가드를 잘 깔아두면, 기획자와 디자이너가 터미널을 열어 코드를 모르고도 Claude Code를 자유자재로 쓸 수 있습니다.
     이 장은 "비개발 직군이 Claude Code를 쓰게 만드는" 플랫폼 책임자를 위한 챕터입니다.
@@ -968,7 +969,7 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
     <p><strong>2. 허용 경로 화이트리스트 ·</strong> 비개발자 세션은 허용 경로 외 쓰기 자동 차단. <code>.claude/allowed-paths.json</code>에 선언.</p>
     <p><strong>3. 의존성 잠금 ·</strong> <code>package.json</code>, <code>pyproject.toml</code> 등 의존성 파일 변경은 엔지니어 승인 필요.</p>
     <p><strong>4. 비용 한도 ·</strong> 비개발자 세션당 Opus 4.7 호출 8회·Sonnet 200회 초과 시 자동 종료. 하루 누적 한도도 별도.</p>
-    <p><strong>5. 실 로그 보관 ·</strong> 모든 tool_use·파일 수정·PR 생성이 6개월 OpenTelemetry에 저장. 분기별 감사 리뷰 필수.</p>
+    <p><strong>5. 실행 로그 보관 ·</strong> 모든 tool_use·파일 수정·PR 생성을 6개월 OpenTelemetry에 저장. 분기별 감사 리뷰 필수.</p>
   </div>
 
 <pre><code>// .claude/allowed-paths.json

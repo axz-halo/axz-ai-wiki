@@ -933,7 +933,7 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
   EN: 번역
   NOTE: 뉘앙스 코멘트(1~2줄)</code></pre>
 
-  <h2 id="data">데이터 정리 — 엑셀 소프트 보조</h2>
+  <h2 id="data">데이터 정리 — 엑셀 보조</h2>
   <p>엑셀 한 컬럼을 복사해 Claude에 주면, 정규화·표준화·카테고리화를 대신 해 줍니다. 소규모(행 500개 이하) 데이터에 특히 강력합니다.</p>
 
   <div class="card">
@@ -954,8 +954,8 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
   환불요청 → 환불 | 명시적 요청</code></pre>
 
   <div class="callout warn">
-    <div class="callout-label">1,000행 이상이면</div>
-    채팅창은 수천 행도 처리하지만 응답이 느려집니다. 500행 이상이면 중급편의 Claude Code + 파이썬 스크립트 패턴이 훨씬 효율적입니다.
+    <div class="callout-label">500행을 넘으면</div>
+    채팅창은 수천 행도 처리하지만 응답이 느려지고 정확도가 떨어집니다. 500행을 넘으면 중급편의 Claude Code + 파이썬 스크립트 패턴이 훨씬 효율적입니다.
   </div>
 
   <h2 id="workflow">오늘 바로 쓰는 90초 워크플로우</h2>
@@ -997,7 +997,7 @@ pre code { background: transparent; padding: 0; color: inherit; border: 0; }
   <div class="card">
     <p>✓ 다섯 가지 업무(이메일·회의·교정·번역·데이터) 각각에 쓸 프롬프트 골격이 있다.</p>
     <p>✓ 90초 워크플로우를 한 번 실행해 봤다.</p>
-    <p>✓ 1,000행 이상 데이터는 중급편 도구로 넘긴다는 한계를 인지한다.</p>
+    <p>✓ 500행이 넘는 데이터는 중급편 도구로 넘긴다는 한계를 인지한다.</p>
     <p style="margin-top: 12px; font-size: 14px; color: var(--text-muted)">다음은 <a href="05-role-packs.html">1-5 직무별 프롬프트 팩</a>입니다.</p>
   </div>
 

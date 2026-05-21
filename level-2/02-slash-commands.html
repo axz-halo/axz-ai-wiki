@@ -904,13 +904,13 @@ description: 배포 직전 운영 PR을 점검·검증·요약
 
 <pre><code># .claude/commands/ticket.md
 ---
-description: Linear 인자 요청 템플릿
+description: Linear 티켓 요약 템플릿
 ---
 
-Linear 인자 $ARGUMENTS 를 읽어 다음 형식으로 정리해.
+Linear 티켓 $ARGUMENTS 를 읽어 다음 형식으로 정리해.
 - 영향 범위:
 - 우선 순위:
-- 의존성 인자:
+- 의존성 티켓:
 - AC (수락 기준):
 - 액션 아이템:</code></pre>
 
@@ -939,12 +939,12 @@ description: Changelog 자동 작성 (버전 $1과 $2)
 description: 배포 직전 리뷰·보안·체크 라이프사이클 자동화
 ---
 
-다음 작업을 순서로 해줘.
-1. /review를 먼저 → blocker가 0이면 다음
-2. /security-review를 먼저 → high가 0이면 다음
-3. /deploy-check를 먼저 → 9개 미통과 없음
-4. 통과되면 "SHIP READY · 9개" 출력
-   하나라도 미통과면 미통과 인자만 표시</code></pre>
+다음 작업을 순서대로 실행해줘.
+1. /review 실행 → blocker가 0이면 다음
+2. /security-review 실행 → high가 0이면 다음
+3. /deploy-check 실행 → 9개 체크 모두 통과 확인
+4. 통과되면 "SHIP READY · 9/9" 출력
+   하나라도 미통과면 미통과 항목만 표시</code></pre>
 
   <div class="callout">
     <div class="callout-label">한 줄</div>
@@ -965,7 +965,7 @@ description: 배포 직전 리뷰·보안·체크 라이프사이클 자동화
 
   <div class="card">
     <p><strong><code>/deploy-check</code></strong> · 배포 직전 9개 체크. 플랫폼팀.</p>
-    <p><strong><code>/ticket</code></strong> · Linear 인자 자동 요약 + 정리. PMO.</p>
+    <p><strong><code>/ticket</code></strong> · Linear 티켓 자동 요약 + 정리. PMO.</p>
     <p><strong><code>/a11y</code></strong> · 접근성 체크. 디자인시스템팀.</p>
     <p><strong><code>/sql-review</code></strong> · SQL 쿼리 리뷰·튜닝. DBA.</p>
   </div>
