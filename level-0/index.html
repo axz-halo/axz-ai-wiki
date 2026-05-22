@@ -1490,6 +1490,49 @@ body.dark-theme .dt-branch.dt-yes { background: rgba(74, 222, 128, 0.08); border
   margin-left: 4px;
 }
 
+/* === v1.5: 모델 추천 표 + 모델 배지 === */
+.pick-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 20px 0 28px;
+}
+.pick-table th {
+  text-align: left;
+  padding: 12px 14px;
+  background: var(--surface-alt);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.pick-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: middle;
+}
+.pick-table tr:last-child td { border-bottom: 0; }
+.pick-table .col-model { width: 140px; white-space: nowrap; }
+.pick-table .col-why   { color: var(--text-muted); font-size: 13.5px; }
+
+.model-badge {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+}
+.m-haiku  { background: rgba(21,128,61,0.10);  color: #15803d; }
+.m-sonnet { background: var(--accent-soft);    color: var(--accent); }
+.m-opus   { background: rgba(126,34,206,0.10); color: #7e22ce; }
+body.dark-theme .m-haiku  { background: rgba(74,222,128,0.15);  color: #4ade80; }
+body.dark-theme .m-sonnet { background: var(--accent-soft);     color: var(--accent-strong); }
+body.dark-theme .m-opus   { background: rgba(192,132,252,0.15); color: #c084fc; }
+
 </style>
 </head>
 <body class="standalone-layout">
@@ -1670,53 +1713,56 @@ body.dark-theme .dt-branch.dt-yes { background: rgba(74, 222, 128, 0.08); border
   </table>
 
   <div class="diagram">
-    <div class="figure-label">FIGURE 0-1 · 결정 트리 3분 컷</div>
+    <div class="figure-label">FIGURE 0-1 · 상황별 모델 추천</div>
 
-    <div class="decision-tree">
-      <div class="dt-step">
-        <div class="dt-q"><span class="dt-q-num">Q1</span> 실패 시 업무가 크게 지연되는가?</div>
-        <div class="dt-branches">
-          <div class="dt-branch dt-no">
-            <span class="dt-label">NO</span>
-            <div class="dt-result">Haiku 4.5 <span class="dt-result-sub">속도 우선</span></div>
-          </div>
-          <div class="dt-branch dt-yes">
-            <span class="dt-label">YES</span>
-            <div class="dt-result">↓ Q2로</div>
-          </div>
-        </div>
-      </div>
+    <table class="pick-table">
+      <thead>
+        <tr><th>이런 상황이면</th><th class="col-model">추천 모델</th><th class="col-why">이유</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>짧은 분류·요약·반복 변환 (수십~수백 건)</td>
+          <td class="col-model"><span class="model-badge m-haiku">Haiku 4.5</span></td>
+          <td class="col-why">가장 빠르고 저렴. 실패해도 비용 부담이 적어 대량 처리에 부담 없음.</td>
+        </tr>
+        <tr>
+          <td>이메일·회의록·번역·교정 등 일상 업무</td>
+          <td class="col-model"><span class="model-badge m-sonnet">Sonnet 4.6</span></td>
+          <td class="col-why">사내 사용량의 72%. 정확도·속도·비용 균형이 가장 좋음. <strong>기본값</strong>.</td>
+        </tr>
+        <tr>
+          <td>긴 문서 분석·요약 (2,000단어 이상)</td>
+          <td class="col-model"><span class="model-badge m-opus">Opus 4.7</span></td>
+          <td class="col-why">긴 컨텍스트에서 누락·일관성 손실이 가장 적음.</td>
+        </tr>
+        <tr>
+          <td>다단계 추론 (요약 → 평가 → 대안)</td>
+          <td class="col-model"><span class="model-badge m-opus">Opus 4.7</span></td>
+          <td class="col-why">논리 비약이 적고 단계 사이 맥락을 잘 유지함.</td>
+        </tr>
+        <tr>
+          <td>중요 의사결정 — 재작성이 어려운 1회성 산출</td>
+          <td class="col-model"><span class="model-badge m-opus">Opus 4.7</span></td>
+          <td class="col-why">"이 답이 틀리면 회의를 다시 해야 하는가?" → YES면 Opus.</td>
+        </tr>
+        <tr>
+          <td>탐색은 빨리, 마감만 깊이 (혼용)</td>
+          <td class="col-model">
+            <span class="model-badge m-sonnet">Sonnet 4.6</span>
+            <span style="color: var(--text-soft);">→</span>
+            <span class="model-badge m-opus">Opus 4.7</span>
+          </td>
+          <td class="col-why">Sonnet으로 여러 안 탐색 → Opus로 마감. 단일 Opus 대비 비용 43% 절감.</td>
+        </tr>
+        <tr>
+          <td>잘 모르겠음</td>
+          <td class="col-model"><span class="model-badge m-sonnet">Sonnet 4.6</span></td>
+          <td class="col-why">애매하면 기본값. 결정에 30초 이상 쓰지 말 것.</td>
+        </tr>
+      </tbody>
+    </table>
 
-      <div class="dt-step">
-        <div class="dt-q"><span class="dt-q-num">Q2</span> 문서가 2,000단어를 넘는가?</div>
-        <div class="dt-branches">
-          <div class="dt-branch dt-no">
-            <span class="dt-label">NO</span>
-            <div class="dt-result">Sonnet 4.6 <span class="dt-result-sub">기본값</span></div>
-          </div>
-          <div class="dt-branch dt-yes">
-            <span class="dt-label">YES</span>
-            <div class="dt-result">↓ Q3로</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dt-step">
-        <div class="dt-q"><span class="dt-q-num">Q3</span> 다단계 추론(요약→평가→대안)이 필요한가?</div>
-        <div class="dt-branches">
-          <div class="dt-branch dt-no">
-            <span class="dt-label">NO</span>
-            <div class="dt-result">Sonnet 4.6</div>
-          </div>
-          <div class="dt-branch dt-yes">
-            <span class="dt-label">YES</span>
-            <div class="dt-result">Opus 4.7 <span class="dt-result-sub">깊은 추론</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p class="caption">결정 트리를 거쳐도 결론이 애매하면 Sonnet 4.6이 정답. 사내 사용량의 72%가 Sonnet입니다.</p>
+    <p class="caption">한 번에 외우지 마세요 — "기본은 Sonnet, 짧은 반복은 Haiku, 중요한 마감은 Opus" 세 줄만 기억해도 90%는 맞습니다.</p>
   </div>
 
   <div class="callout">
