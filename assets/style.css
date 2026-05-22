@@ -1409,3 +1409,75 @@ body.dark-theme .site-nav a.active {
   color: var(--accent);
   font-weight: 600;
 }
+
+/* === v1.4: 결정 트리 (SVG 대체 HTML) === */
+.decision-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+.dt-step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 22px;
+}
+.dt-q {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.dt-q-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.dt-branches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 600px) { .dt-branches { grid-template-columns: 1fr; } }
+.dt-branch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+.dt-branch.dt-no  { background: rgba(220, 38, 38, 0.06); border-color: rgba(220, 38, 38, 0.15); }
+.dt-branch.dt-yes { background: rgba(21, 128, 61, 0.06); border-color: rgba(21, 128, 61, 0.15); }
+body.dark-theme .dt-branch.dt-no  { background: rgba(248, 113, 113, 0.08); border-color: rgba(248, 113, 113, 0.18); }
+body.dark-theme .dt-branch.dt-yes { background: rgba(74, 222, 128, 0.08); border-color: rgba(74, 222, 128, 0.18); }
+.dt-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--bg);
+  flex-shrink: 0;
+}
+.dt-branch.dt-no  .dt-label { color: var(--bad); }
+.dt-branch.dt-yes .dt-label { color: var(--good); }
+.dt-result {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--text);
+}
+.dt-result-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
