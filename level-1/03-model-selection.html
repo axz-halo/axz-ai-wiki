@@ -1484,7 +1484,7 @@ body.dark-theme .site-nav a.active {
   </div>
 
   <h2 id="lineup">2026-04 라인업</h2>
-  <p>Opus 4.7은 복잡한 추론·긴 문서 분석, Sonnet 4.6은 일상 업무와 코드 리뷰, Haiku 4.5는 빠른 답변과 반복 작업에 적합합니다. 세 모델 모두 200K 토큰의 컨텍스트 창을 공유합니다 (한글 기준 약 120,000자 = 단행본 1권).</p>
+  <p>Opus 4.7은 복잡한 추론·긴 문서 분석, Sonnet 4.6은 일상 업무와 코드 리뷰, Haiku 4.5는 빠른 답변과 반복 작업에 적합합니다. 컨텍스트 창 크기와 정확한 토큰·요금 정보는 Anthropic 공식 문서 또는 사내 모델 라인업 표를 기준으로 확인하세요 — 모델별·버전별로 다르고 분기마다 갱신됩니다.</p>
 
   <table>
     <thead><tr><th>모델</th><th>강점</th><th>권장 사용처</th><th>응답 속도</th><th>상대 비용</th></tr></thead>
@@ -1502,7 +1502,7 @@ body.dark-theme .site-nav a.active {
     <thead><tr><th>항목</th><th>Opus 4.6</th><th>Opus 4.7 (신규)</th></tr></thead>
     <tbody>
       <tr><td>코드 에이전트 벤치마크</td><td>기준선</td><td>+28%</td></tr>
-      <tr><td>장문 추론 (200K 컨텍스트)</td><td>양호</td><td>체감 우수</td></tr>
+      <tr><td>장문 추론 (긴 컨텍스트)</td><td>양호</td><td>체감 우수</td></tr>
       <tr><td>Tool use 정확도</td><td>91%</td><td>96%</td></tr>
       <tr><td>응답 시작 지연</td><td>1.6초</td><td>1.8초</td></tr>
       <tr><td>상대 비용</td><td>5×</td><td>동일 (5×)</td></tr>
@@ -1654,6 +1654,7 @@ body.dark-theme .site-nav a.active {
   var INDEX = [
     {cat:'시작',  title:'홈 · 학습 경로',         sub:'레벨 진단·전체 챕터 그리드', url:'index.html', kw:'home main 메인 홈 학습 경로 진단'},
     {cat:'시작',  title:'L0 시작하기',            sub:'모델 라인업·보안 3초 룰',     url:'level-0/index.html', kw:'l0 level0 시작 모델 보안 진단'},
+    {cat:'시작',  title:'LLM 기본 가이드',          sub:'토큰·컨텍스트·환각·도구·멀티모달', url:'level-0/llm-basics.html', kw:'llm 기본 가이드 토큰 컨텍스트 환각 hallucination karpathy multimodal 멀티모달'},
     {cat:'L1',    title:'1-1 Claude 첫 만남',      sub:'로그인·UI·Projects',         url:'level-1/01-first-meeting.html', kw:'l1 처음 첫 만남 로그인 sso projects ui'},
     {cat:'L1',    title:'1-2 프롬프트 5요소',       sub:'역할·맥락·지시·제약·형식',    url:'level-1/02-prompt-5elements.html', kw:'l1 프롬프트 5요소 역할 맥락 지시 제약 형식 role context prompt'},
     {cat:'L1',    title:'1-3 모델 선택 결정 트리',  sub:'Opus·Sonnet·Haiku·혼용',     url:'level-1/03-model-selection.html', kw:'l1 모델 선택 결정 트리 opus sonnet haiku 혼용'},

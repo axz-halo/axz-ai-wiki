@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LEVEL 3 · 고급 — AXZ AI 위키</title>
+<title>LLM 기본 가이드 — AXZ AI 위키</title>
 <script>(function(){try{var t=localStorage.getItem("axz-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");}}catch(e){}})();</script>
 <style>
 /* AXZ AI Wiki — Notion·Linear 풍 톤다운 (v0.2) */
@@ -1420,13 +1420,16 @@ body.dark-theme .site-nav a.active {
 
 </style>
 </head>
-<body class="chapter-layout">
+<body class="standalone-layout">
 
 <header class="site-header">
   <div class="site-header-inner">
-    <a href="../index.html" class="site-brand"><svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg><span>AI 위키</span></a>
+    <a href="../index.html" class="site-brand">
+      <svg class="brand-logo" viewBox="0 0 1924.83 623.59" xmlns="http://www.w3.org/2000/svg" aria-label="AXZ"><path d="M1163.18,311.75l112.92-112.92c45.43-45.43,45.43-119.36,0-164.79-45.43-45.42-119.35-45.42-164.79,0l-112.92,112.92-112.92-112.92c-45.44-45.42-119.36-45.42-164.79,0-45.43,45.43-45.43,119.36,0,164.79l112.92,112.92-112.92,112.92c-45.43,45.43-45.43,119.36,0,164.79,22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.4-34.13l112.92-112.92,112.92,112.92c22.01,22.01,51.27,34.13,82.39,34.13s60.38-12.12,82.39-34.13c45.43-45.43,45.43-119.36,0-164.79l-112.92-112.92Z"/><polygon points="1924.83 11.96 1355.17 11.96 1355.17 206.84 1616.42 206.84 1355.17 435.07 1355.17 611.6 1924.83 611.6 1924.83 416.72 1663.58 416.72 1924.83 188.49 1924.83 11.96"/><path d="M446.73,11.96v26.56l-4.41-2.12c-42.01-20.19-87.15-30.44-134.15-30.44C138.24,5.97,0,143.16,0,311.78s138.24,305.81,308.17,305.81c47,0,92.14-10.24,134.15-30.43l4.41-2.12v26.56h194.88V11.96h-194.88ZM327.8,437.7c-69.44,0-125.92-56.49-125.92-125.92s56.49-125.92,125.92-125.92,125.92,56.49,125.92,125.92-56.49,125.92-125.92,125.92Z"/></svg>
+      <span>AI 위키</span>
+    </a>
     <nav class="site-nav">
-      <a href="../level-0/index.html">시작하기</a>
+      <a href="index.html">시작하기</a>
       <a href="../level-1/index.html">L1 초급</a>
       <a href="../level-2/index.html">L2 중급</a>
       <a href="../level-3/index.html">L3 고급</a>
@@ -1442,438 +1445,238 @@ body.dark-theme .site-nav a.active {
 </header>
 
 <div class="layout">
+  <aside class="sidebar"></aside>
 
-<aside class="sidebar">
-<nav>
-<div class="group">
-      <span class="group-label">L3 챕터</span>
-      <a href="01-agentic-ux.html">3-1 Agentic UX 6대 패턴</a>
-      <a href="02-progressive-autonomy.html">3-2 점진적 자율성</a>
-      <a href="03-context-preservation.html">3-3 컨텍스트 보존</a>
-      <a href="04-adaptive-ui.html">3-4 적응형 인터페이스</a>
-      <a href="05-feedback-loop.html">3-5 사용자 피드백 루프</a>
-      <a href="06-multi-agent.html">3-6 멀티 에이전트 오케스트레이션</a>
-      <a href="07-harness.html">3-7 하네스·관측·복구</a>
-      <a href="08-non-dev-cc.html">3-8 비개발자의 Claude Code</a>
-      <a href="09-patterns-eval.html">3-9 패턴 1·3·5 + Eval</a>
-      <a href="10-release-checklist.html">3-10 릴리즈 체크리스트 30항</a>
-    </div>
-</nav>
-    <div class="sidebar-credit">
-      <div class="by-line">by 커뮤니티 팀 · 헤일로</div>
-      <a href="mailto:halo.wave@axzcorp.com">halo.wave@axzcorp.com</a>
-    </div>
-
-</aside>
-
-<main class="main">
+  <main class="main">
     <nav class="breadcrumb" id="wiki-breadcrumb" aria-label="빵부스러기"></nav>
-<span class="kicker">LEVEL 3 · 고급 · 프로덕션</span>
-  <h1 class="page-title">Agentic UX와 멀티 에이전트</h1>
-  <p class="lede">
-    Claude가 사용자에게 묻는 모델에서, Claude가 사용자에게 제안하는 모델로. 점진적 자율성·컨텍스트 보존·적응형 인터페이스 등 Agentic UX 6대 패턴과 멀티 에이전트 오케스트레이션, 그리고 프로덕션 관측·복구까지 다룹니다.
-  </p>
-  <div class="disclaimer">
-    <strong>참고 ·</strong> 본 위키의 수치·사례·실측 효과는 학습용으로 구성된 <strong>예시 시나리오</strong>입니다.
-    실제 사내 운영 데이터가 아니며, 패턴 학습을 돕기 위한 가상 케이스로 봐 주세요. 카드의 <code>EX</code> 라벨과
-    "예시 시나리오" 표기를 기준으로 구분됩니다.
-  </div>
 
+    <span class="kicker">LEVEL 0 · 15분</span>
+    <h1 class="page-title">LLM 기본 가이드</h1>
+    <p class="lede">
+      Claude·ChatGPT 같은 도구가 어떻게 답을 만드는지, 왜 가끔 이상한 답을 하는지,
+      어떻게 하면 잘 쓸 수 있는지를 비개발 직군도 한 번에 이해할 수 있게 정리했습니다.
+      Andrej Karpathy의 LLM 사용 가이드를 사내 맥락으로 다시 쓴 버전입니다.
+    </p>
 
-  <div class="callout">
-    <div class="callout-label">전제 · 완주 시간</div>
-    중급편 완주 + 프로덕션 서비스 운영 경험 3~6개월. 총 6시간 (이론 3h · 실습 2h · 케이스 1h). 완주 기준은 <strong>SLA 99% · 자가 복구 루틴 · 월 비용 리포트 자동화</strong>.
-  </div>
-
-  <h2>이 레벨의 학습 트랙 두 갈래</h2>
-  <div class="levels">
-    <div class="level-card" style="cursor:default">
-      <span class="lv">이론 (자율 학습)</span>
-      <h2>Agentic UX와 멀티 에이전트</h2>
-      <p>6대 패턴 · 자율성 게이트 · HANDOFF.md · 4계층 Eval · 릴리즈 체크리스트 30항.</p>
-      <div class="meta">10 챕터 · 본문 3h</div>
+    <div class="toc">
+      <div class="toc-label">이 페이지의 흐름</div>
+      <ol>
+        <li><a href="#what">1. LLM은 결국 "다음 단어 맞히기 기계"</a></li>
+        <li><a href="#tokens">2. 토큰 · 컨텍스트 윈도우 · 기억의 한계</a></li>
+        <li><a href="#training">3. 모델은 어떻게 만들어지나 (사전 학습 + 사람의 피드백)</a></li>
+        <li><a href="#hallucination">4. 환각 — 자신 있게 틀린 답이 나오는 이유</a></li>
+        <li><a href="#knowledge-cutoff">5. 지식 컷오프 — 어제 일은 모른다</a></li>
+        <li><a href="#tools">6. 도구 사용 — 검색·계산·코드 실행</a></li>
+        <li><a href="#multimodal">7. 멀티모달 — 이미지·음성·문서</a></li>
+        <li><a href="#models">8. 모델 종류 — 작은·중간·큰 모델 차이</a></li>
+        <li><a href="#prompting">9. 좋은 프롬프트의 5가지 원칙</a></li>
+        <li><a href="#limits">10. 한계와 안전 사용</a></li>
+      </ol>
     </div>
-    <div class="level-card" style="cursor:default">
-      <span class="lv">실습 (세미나 보조)</span>
-      <h2>에이전트 하네스 · 사내 구축 사례 3종</h2>
-      <p>별책 38p. Ralph 자가 루프 · 하네스 3세대 · 페르소나 UT · Skills 와이어프레임 · 차량 추천 AI.</p>
-      <div class="meta">60분 라이브 세션</div>
+
+    <h2 id="what">1. LLM은 결국 "다음 단어 맞히기 기계"</h2>
+    <p>
+      LLM(Large Language Model)의 핵심은 단순합니다 — <strong>지금까지의 문장이 주어졌을 때 다음에 올 단어를 확률로 추측하는 기계</strong>입니다.
+      "오늘 날씨가 ___" 다음에 "맑다 / 흐리다 / 좋다" 같은 단어가 올 확률을 계산하고 그중 하나를 골라 이어 붙입니다. 이걸 수천 번 반복하면 문장·문단·페이지가 만들어집니다.
+    </p>
+
+    <div class="callout">
+      <div class="callout-label">한 줄 요약</div>
+      "이해해서 답하는 것"이 아니라 "다음에 어떤 단어가 자연스러울지 추측해서 이어 붙이는 것"입니다. 그래서 자신 있게 틀리기도, 사람보다 더 일관되게 잘 쓰기도 합니다.
     </div>
-  </div>
 
-  <h2>Agentic UX 6대 패턴 — 한 장 요약</h2>
+    <h2 id="tokens">2. 토큰 · 컨텍스트 윈도우 · 기억의 한계</h2>
 
-  <div class="diagram">
-    <div class="figure-label">FIGURE 3-0 · 기초 3 + 적응 3</div>
-    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .pat-base { fill: #ffffff; stroke: #78716c; stroke-width: 1.5; }
-        .pat-adapt { fill: #fff7ed; stroke: #f97316; stroke-width: 2; }
-        .pat-num { font-family: Pretendard, sans-serif; font-size: 13px; font-weight: 700; }
-        .pat-name { font-family: Pretendard, sans-serif; font-size: 16px; font-weight: 700; fill: #1c1917; text-anchor: middle; }
-        .pat-desc { font-family: Pretendard, sans-serif; font-size: 13px; fill: #57534e; text-anchor: middle; }
-        .tier-label { font-family: Pretendard, sans-serif; font-size: 14px; font-weight: 700; }
-      </style>
+    <h3>토큰이란?</h3>
+    <p>모델은 단어 통째로가 아니라 <strong>토큰</strong>이라는 작은 조각 단위로 텍스트를 처리합니다. 영어는 대체로 단어 ≒ 토큰이지만 한국어는 글자 단위에 더 가깝습니다. 거칠게는:</p>
+    <ul>
+      <li>영어 1단어 ≒ 약 1.3 토큰</li>
+      <li>한국어 1글자 ≒ 약 1.5~2 토큰 (조사·어미 때문)</li>
+      <li>코드 · 숫자 · 특수문자는 토큰 더 많이 차지</li>
+    </ul>
 
-      <!-- Tier label - 적응 -->
-      <text class="tier-label" x="40" y="55" fill="#c2410c">적응 레이어 (2·4·6) — 자율성 · 기억 · UI 밀도</text>
-
-      <!-- Pattern 2 -->
-      <rect class="pat-adapt" x="40" y="70" width="200" height="70" rx="10"/>
-      <text class="pat-num" x="55" y="90" fill="#c2410c">2</text>
-      <text class="pat-name" x="140" y="105">자율성 확장</text>
-      <text class="pat-desc" x="140" y="125">Lv.1 → Lv.2 → Lv.3</text>
-
-      <!-- Pattern 4 -->
-      <rect class="pat-adapt" x="260" y="70" width="200" height="70" rx="10"/>
-      <text class="pat-num" x="275" y="90" fill="#c2410c">4</text>
-      <text class="pat-name" x="360" y="105">맥락 이어쓰기</text>
-      <text class="pat-desc" x="360" y="125">HANDOFF.md · 세션 훅</text>
-
-      <!-- Pattern 6 -->
-      <rect class="pat-adapt" x="480" y="70" width="200" height="70" rx="10"/>
-      <text class="pat-num" x="495" y="90" fill="#c2410c">6</text>
-      <text class="pat-name" x="580" y="105">숙련도 대응</text>
-      <text class="pat-desc" x="580" y="125">3단 밀도 · 적응형 온보딩</text>
-
-      <!-- Tier label - 기초 -->
-      <text class="tier-label" x="40" y="180" fill="#78716c">기초 레이어 (1·3·5) — 이 세 가지 없이는 위 3개도 무너진다</text>
-
-      <!-- Pattern 1 -->
-      <rect class="pat-base" x="40" y="195" width="200" height="60" rx="10"/>
-      <text class="pat-num" x="55" y="215" fill="#78716c">1</text>
-      <text class="pat-name" x="140" y="228">의도 정제</text>
-      <text class="pat-desc" x="140" y="246">애매한 요청을 재질문</text>
-
-      <!-- Pattern 3 -->
-      <rect class="pat-base" x="260" y="195" width="200" height="60" rx="10"/>
-      <text class="pat-num" x="275" y="215" fill="#78716c">3</text>
-      <text class="pat-name" x="360" y="228">실시간 가시화</text>
-      <text class="pat-desc" x="360" y="246">에이전트 진행 보이기</text>
-
-      <!-- Pattern 5 -->
-      <rect class="pat-base" x="480" y="195" width="200" height="60" rx="10"/>
-      <text class="pat-num" x="495" y="215" fill="#78716c">5</text>
-      <text class="pat-name" x="580" y="228">실패 회복</text>
-      <text class="pat-desc" x="580" y="246">숨기지 않고 경로 제시</text>
-    </svg>
-    <p class="caption">기초 3 패턴이 없는 채 2·4·6을 먼저 구현하면 "똑똑하지만 통제 안 되는" 에이전트가 됩니다.</p>
-  </div>
-
-  <h2>챕터 목록</h2>
-  <ul class="chapter-list">
-    <li id="ch1"><span class="ch-no">3-1</span><span class="ch-title">Agentic UX 6대 패턴 개요</span><span class="ch-sub">패턴 맵 · 성숙도 4레벨 매트릭스 · 12주 로드맵</span><a class="ch-status ready" href="01-agentic-ux.html">읽기 →</a></li>
-    <li id="ch2"><span class="ch-no">3-2</span><span class="ch-title">점진적 자율성</span><span class="ch-sub">Lv.1/2/3 · 강등 규칙 · A/B 결과</span><a class="ch-status ready" href="02-progressive-autonomy.html">읽기 →</a></li>
-    <li id="ch3"><span class="ch-no">3-3</span><span class="ch-title">컨텍스트 보존</span><span class="ch-sub">세션 종료 훅 · HANDOFF.md · 장기 메모리</span><a class="ch-status ready" href="03-context-preservation.html">읽기 →</a></li>
-    <li id="ch4"><span class="ch-no">3-4</span><span class="ch-title">적응형 인터페이스</span><span class="ch-sub">숙련도 추정 · 3단 밀도 · 안티패턴</span><a class="ch-status ready" href="04-adaptive-ui.html">읽기 →</a></li>
-    <li id="ch5"><span class="ch-no">3-5</span><span class="ch-title">사용자 피드백 4단계 루프</span><span class="ch-sub">수집 · 라벨링 · Golden Set · KPI</span><a class="ch-status ready" href="05-feedback-loop.html">읽기 →</a></li>
-    <li id="ch6"><span class="ch-no">3-6</span><span class="ch-title">멀티 에이전트 오케스트레이션</span><span class="ch-sub">Supervisor · Swarm · Pipeline 3패턴</span><a class="ch-status ready" href="06-multi-agent.html">읽기 →</a></li>
-    <li id="ch7"><span class="ch-no">3-7</span><span class="ch-title">하네스 · 관측 · 복구</span><span class="ch-sub">3종 관측 스택 · 대시보드 8위젯 · 플레이북</span><a class="ch-status ready" href="07-harness.html">읽기 →</a></li>
-    <li id="ch8"><span class="ch-no">3-8</span><span class="ch-title">비개발자의 Claude Code 활용</span><span class="ch-sub">플랫폼 사전 세팅 · 4주 커리큘럼</span><a class="ch-status ready" href="08-non-dev-cc.html">읽기 →</a></li>
-    <li id="ch9"><span class="ch-no">3-9</span><span class="ch-title">패턴 1·3·5 구현 + 4계층 Eval</span><span class="ch-sub">Intent · Observable · Graceful</span><a class="ch-status ready" href="09-patterns-eval.html">읽기 →</a></li>
-    <li id="ch10"><span class="ch-no">3-10</span><span class="ch-title">릴리즈 체크리스트 30항</span><span class="ch-sub">내용 · 코드 · 정책 · 관측 4영역 최종 확인</span><a class="ch-status ready" href="10-release-checklist.html">읽기 →</a></li>
-      <li id="practice">
-      <span class="ch-no">L3</span>
-      <span class="ch-title">실습 트랙</span>
-      <span class="ch-sub">에이전트 하네스와 사내 구축 사례 3종</span>
-      <a class="ch-status ready" href="practice.html">읽기 →</a>
-    </li>
-  </ul>
-
-  <h2>여기에 등장하는 실제 사례</h2>
-  <div class="stats">
-    <div class="stat"><div class="num">9일 → 1일</div><div class="label">페르소나 UT 피드백 에이전트</div></div>
-    <div class="stat"><div class="num">−78%</div><div class="label">Skills 와이어프레임 생성기</div></div>
-    <div class="stat"><div class="num">×4.1</div><div class="label">차량 추천 AI · 상세 페이지 체류</div></div>
-    <div class="stat"><div class="num">−38%</div><div class="label">코드리뷰 봇 Lv.2 자동화 (PR 머지)</div></div>
-  </div>
-
-  <h2>사내 도입 12주 로드맵</h2>
-  <table>
-    <thead><tr><th>주차</th><th>목표</th></tr></thead>
-    <tbody>
-      <tr><td>W1–2</td><td>현재 L0/L1 기준선 측정. 피드백 수집률·에러율 일간 저장.</td></tr>
-      <tr><td>W3–4</td><td>패턴 3·5 먼저 (실행 가시화 UI + 실패 회복 경로). 2·4·6 투자 전 선결.</td></tr>
-      <tr><td>W5–6</td><td>패턴 2 자율성 Lv.1 (제안형)부터 시작. 승인률 지표 누적.</td></tr>
-      <tr><td>W7–8</td><td>패턴 4 HANDOFF.md 표준 운용. 재개 카드 A/B.</td></tr>
-      <tr><td>W9–10</td><td>패턴 6 3단 밀도. Expert 자동 승급 금지, 옵트인만.</td></tr>
-      <tr><td>W11–12</td><td>Golden Set 주 +40건. 월간 리뷰 첫 실시.</td></tr>
-    </tbody>
-  </table>
-
-  <div class="callout">
-    <div class="callout-label">한 줄 인용</div>
-    "Agentic UX는 디자인이 아니라 신뢰 할당의 설계다. 얼마만큼 맡길지 결정하는 순간, 그 순간이 전부다." — AXZ 플랫폼팀 내부 리트로, 2026-02
-  </div>
-
-  <div class="footer">
-    <div class="footer-nav">
-      <a href="../level-2/index.html">
-        <div class="label">← 이전</div>
-        <div class="title">L2 · 중급</div>
-      </a>
-      <a href="01-agentic-ux.html">
-        <div class="label">다음 →</div>
-        <div class="title">3-1 Agentic UX 6대 패턴</div>
-      </a>
+    <h3>컨텍스트 윈도우</h3>
+    <p>
+      모델이 한 번에 "보고 기억할 수 있는" 토큰의 최대치를 <strong>컨텍스트 윈도우</strong>라고 합니다.
+      이 안에 들어간 글만 모델이 알고 있고, 윈도우를 넘어가면 모델의 기억에서 사라집니다 — 사람과 다르게 어제 대화는 기본적으로 기억하지 못합니다.
+    </p>
+    <div class="callout warn">
+      <div class="callout-label">중요</div>
+      모델·버전마다 컨텍스트 크기가 다르고 분기마다 갱신됩니다. 정확한 사양은 Anthropic 공식 문서나 사내 라인업 표를 보세요. "긴 PDF를 통째로 넣어도 되는가?"는 모델 선택 시점에 확인해야 할 첫 질문입니다.
     </div>
-  </div>
-</main>
 
+    <h2 id="training">3. 모델은 어떻게 만들어지나</h2>
+    <p>훌륭한 LLM이 만들어지는 과정은 보통 3단계입니다.</p>
+
+    <div class="steps-grid" style="grid-template-columns: repeat(3, 1fr); gap: 14px;">
+      <div class="step-card">
+        <span class="num-badge">1</span>
+        <h4>사전 학습 (Pretraining)</h4>
+        <p>인터넷·책·논문의 방대한 텍스트를 보면서 "다음 단어 맞히기"를 끝없이 연습. 가장 비싸고 오래 걸리는 단계.</p>
+      </div>
+      <div class="step-card">
+        <span class="num-badge">2</span>
+        <h4>지시 따르기 학습 (SFT)</h4>
+        <p>"질문 → 좋은 답" 예시 수만 건을 사람이 만들어 모델에게 보여줌. "이런 부탁엔 이렇게 답해"를 익힘.</p>
+      </div>
+      <div class="step-card">
+        <span class="num-badge">3</span>
+        <h4>사람 피드백 강화 (RLHF)</h4>
+        <p>여러 답 중 사람이 어느 게 더 좋다고 표시. 그 신호로 정중함·정확성·도움 정도를 미세 조정.</p>
+      </div>
+    </div>
+
+    <p>Claude는 여기에 더해 Anthropic의 <strong>Constitutional AI</strong>로 안전 원칙을 학습합니다 — "위험한 답은 거절, 정직하게 모른다고 말하기" 같은 행동 양식이 모델 자체에 박혀 있습니다.</p>
+
+    <h2 id="hallucination">4. 환각 — 자신 있게 틀린 답이 나오는 이유</h2>
+    <p>LLM은 "다음에 자연스러운 단어"를 만드는 것이지 "사실인 단어"를 만드는 것이 아닙니다. 그래서 모르는 사실을 그럴듯하게 지어내는 일이 가끔 일어납니다. 이걸 <strong>환각(hallucination)</strong>이라고 합니다.</p>
+
+    <div class="compare">
+      <div class="bad">
+        <h4>환각이 잘 일어나는 상황</h4>
+        <p>최신 뉴스 · 사내 비공개 자료 · 구체적인 수치·날짜·이름 · "이거 맞아?"라고만 묻기</p>
+      </div>
+      <div class="good">
+        <h4>환각을 줄이는 방법</h4>
+        <p>원문을 함께 붙여 넣기 · "모르면 모른다고 답해" 명시 · 출처 요청 · 사실 검증(웹 검색 도구) 활성화</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">실전 팁</div>
+      "추측 금지 · 불확실한 부분은 '확인 필요'로 표기" 한 줄을 프롬프트 제약에 넣으면 환각이 절반 이하로 줄어듭니다. <a href="../level-1/02-prompt-5elements.html">프롬프트 5요소</a>의 "제약" 슬롯이 이걸 다룹니다.
+    </div>
+
+    <h2 id="knowledge-cutoff">5. 지식 컷오프 — 어제 일은 모른다</h2>
+    <p>
+      모델은 학습이 끝난 시점 이후의 일을 알지 못합니다. 학습이 끝난 시점을 <strong>지식 컷오프</strong>라고 합니다.
+      "어제 출시된 새 제품"이나 "오늘 환율" 같은 건 모델 자체로는 답할 수 없습니다. 답을 받았다면 환각일 가능성이 큽니다.
+    </p>
+    <p>이 한계를 보완하는 방법은 두 가지입니다:</p>
+    <ul>
+      <li><strong>최신 정보를 직접 붙여 넣기</strong> — 사용자가 본문에 첨부</li>
+      <li><strong>도구 사용</strong> — 모델이 직접 웹 검색·DB 조회·계산기를 호출 (다음 섹션)</li>
+    </ul>
+
+    <h2 id="tools">6. 도구 사용 — 검색·계산·코드 실행</h2>
+    <p>
+      현대 LLM은 더 이상 "텍스트만 생성"하지 않습니다. 필요할 때 외부 도구를 호출해 사실을 확인하고, 코드를 돌려 결과를 보고, 파일을 읽고 씁니다.
+      이게 Claude Code · MCP 커넥터 · 에이전트의 출발점입니다.
+    </p>
+
+    <table>
+      <thead><tr><th>도구</th><th>언제 쓰는가</th><th>대표 사례</th></tr></thead>
+      <tbody>
+        <tr><td>웹 검색</td><td>최신 동향·시세·경쟁사 확인</td><td>"이번 주 USD/KRW 환율?"</td></tr>
+        <tr><td>코드 실행</td><td>표·계산·차트·CSV 분석</td><td>"이 CSV에서 채널별 CTR을 계산해줘"</td></tr>
+        <tr><td>파일 읽기</td><td>PDF·이미지·문서 본문 파싱</td><td>"이 200쪽 PDF 핵심 5가지"</td></tr>
+        <tr><td>외부 시스템 연결 (MCP)</td><td>Slack·Notion·Figma·DB</td><td>"#release 채널 어제 메시지 요약"</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="multimodal">7. 멀티모달 — 이미지·음성·문서</h2>
+    <p>
+      "텍스트만 받는 모델"은 점점 옛것이 됩니다. 최신 LLM은 사진을 보고 설명하고, 음성을 듣고 답하고, PDF에서 표를 추출합니다.
+      <strong>멀티모달(multimodal)</strong>이란 단어가 가리키는 게 이것입니다.
+    </p>
+    <ul>
+      <li>📷 사진을 보고 — UI 스크린샷에서 컴포넌트 추출, 회의 화이트보드 사진 정리</li>
+      <li>🔊 음성을 듣고 — 회의 녹음 파일 요약</li>
+      <li>📄 문서를 보고 — PDF 표·이미지·다국어 본문 동시 처리</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">실전 시나리오</div>
+      회의 화이트보드 사진 + 녹취 텍스트를 함께 던지면, 모델이 시각 정보와 음성 정보를 합쳐 "결정 사항 · 액션 아이템" 표를 만들어 줍니다.
+    </div>
+
+    <h2 id="models">8. 모델 종류 — 작은·중간·큰 모델 차이</h2>
+    <p>같은 회사 모델이라도 "작은·빠른" 것과 "크고 똑똑한" 것이 따로 있습니다. 비유하자면:</p>
+
+    <div class="steps-grid" style="grid-template-columns: repeat(3, 1fr); gap: 14px;">
+      <div class="step-card">
+        <span class="num-badge">S</span>
+        <h4>작은 모델 (Haiku 등)</h4>
+        <p>인턴급 속도·가격. 분류·요약·반복 작업·간단 답변에 강함. 무한정 부려도 비용 부담 적음.</p>
+      </div>
+      <div class="step-card">
+        <span class="num-badge">M</span>
+        <h4>중간 모델 (Sonnet 등)</h4>
+        <p>주니어~중급 동료. 일상 업무·코드 리뷰·이메일·회의록의 거의 모두를 커버. 가성비가 가장 좋음.</p>
+      </div>
+      <div class="step-card">
+        <span class="num-badge">L</span>
+        <h4>큰 모델 (Opus 등)</h4>
+        <p>시니어·전문가. 다단계 추론·중요 의사결정·긴 문서 분석. 비싸고 느려서 마감 단계에만 호출.</p>
+      </div>
+    </div>
+
+    <p>같은 일을 모든 모델에게 시키지 마세요 — 90%의 작업은 중간 모델, 10%는 큰 모델, 단순 변환은 작은 모델로 보내면 시간과 비용이 동시에 줄어듭니다. 구체적인 결정 트리는 <a href="../level-1/03-model-selection.html">1-3 모델 선택 결정 트리</a>를 보세요.</p>
+
+    <h2 id="prompting">9. 좋은 프롬프트의 5가지 원칙</h2>
+    <p>학계와 현업에서 검증된 좋은 프롬프트 패턴은 다섯 가지로 정리됩니다. 자세한 골격은 <a href="../level-1/02-prompt-5elements.html">1-2 프롬프트 5요소</a>를 참고하세요.</p>
+
+    <ol>
+      <li><strong>역할 지정</strong> — "너는 ___ 이다" 한 줄로 톤과 깊이를 고정</li>
+      <li><strong>맥락 제공</strong> — 누구를 위한, 어떤 배경의 답인지</li>
+      <li><strong>구체적 지시</strong> — "잘" 보다 "3문단으로", "표로", "150자 내로"</li>
+      <li><strong>제약 명시</strong> — "추측 금지", "전문 용어 금지", "원문에 없으면 (확인 필요)"</li>
+      <li><strong>예시 제공</strong> — 좋은 답 1~2개를 먼저 보여주면 모델이 그 패턴을 따라옴</li>
+    </ol>
+
+    <div class="callout">
+      <div class="callout-label">실험해보기</div>
+      똑같은 부탁을 두 번 — 한 번은 "요약해줘"로, 한 번은 5요소를 다 채워서. 결과 차이를 직접 보면 5요소를 외우게 됩니다.
+    </div>
+
+    <h2 id="limits">10. 한계와 안전 사용</h2>
+
+    <h3>LLM이 잘 못하는 것</h3>
+    <ul>
+      <li><strong>정확한 계산</strong> — 작은 수는 맞지만 큰 수의 곱셈·나눗셈은 자주 틀림. 코드 실행 도구를 쓰게 하세요.</li>
+      <li><strong>최신 정보</strong> — 학습 컷오프 이후는 모름. 웹 검색 도구나 직접 붙여넣기로 보완.</li>
+      <li><strong>실시간 외부 상태</strong> — 누가 지금 채팅 중인지, 오늘 주가 등은 알 수 없음.</li>
+      <li><strong>긴 추론의 일관성</strong> — 10단계가 넘는 추론에서 중간에 가정이 흔들리기도. 단계별로 끊어서 검증.</li>
+    </ul>
+
+    <h3>안전하게 쓰는 3가지 규칙</h3>
+    <div class="card">
+      <p><strong>1. 민감 정보는 마스킹 ·</strong> 실명·주민번호·계약 금액 같은 건 원문이 아니라 추상화해서 입력. 사내 규정 §4.2 참조.</p>
+      <p><strong>2. 결과 그대로 보내지 않기 ·</strong> 이름·날짜·숫자 3가지는 사람이 눈으로 검토 후 사용. 환각 가능성 차단.</p>
+      <p><strong>3. 의사결정의 마지막은 사람 ·</strong> AI는 재료를 만드는 단계까지. 채용·해고·법무 같은 결정은 사람이 책임집니다.</p>
+    </div>
+
+    <h2>다음 단계</h2>
+    <div class="card">
+      <p>LLM의 기본을 잡았다면 다음은 실제 사용입니다. 아래 순서로 학습하세요.</p>
+      <p style="margin-top: 12px;">
+        ✓ <a href="index.html">L0 시작하기</a> — 모델 라인업 + 보안 첫 원칙<br>
+        ✓ <a href="../level-1/01-first-meeting.html">L1-1 Claude 첫 만남</a> — 로그인부터 첫 프롬프트까지<br>
+        ✓ <a href="../level-1/02-prompt-5elements.html">L1-2 프롬프트 5요소</a> — 좋은 프롬프트 골격
+      </p>
+    </div>
+
+    <h2>참고 자료</h2>
+    <ul>
+      <li><a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">Andrej Karpathy · How I Use LLMs (gist)</a> — 본 가이드의 영감</li>
+      <li><a href="https://docs.anthropic.com/" target="_blank" rel="noopener">Anthropic 공식 문서</a> — 모델 사양 · API · Best Practices</li>
+      <li><a href="https://www.anthropic.com/news" target="_blank" rel="noopener">Anthropic 블로그</a> — 모델 출시 · 안전 연구</li>
+    </ul>
+
+    <div class="footer">
+      <div class="footer-nav">
+        <a href="index.html">
+          <div class="label">← L0 시작하기</div>
+          <div class="title">학습 경로 진단</div>
+        </a>
+        <a href="../level-1/index.html">
+          <div class="label">다음 →</div>
+          <div class="title">L1 초급으로</div>
+        </a>
+      </div>
+    </div>
+  </main>
 </div>
-<script>
-/* AXZ AI Wiki — 검색·키보드·빵부스러기 (v0.3)
-   인라인 주입되므로 IIFE로 전역 오염 방지 */
-(function(){
-  'use strict';
 
-  // === 페이지 인덱스 (검색용) ===
-  // 경로는 ROOT 기준. 각 페이지에 인라인될 때 ROOT는 자동으로 계산.
-  var ROOT = (function(){
-    // 현재 페이지에서 사이트 루트까지의 상대 경로 계산
-    var path = location.pathname.replace(/[^/]+$/, '');
-    if (path.indexOf('/level-') >= 0) return '../';
-    return '';
-  })();
-
-  var INDEX = [
-    {cat:'시작',  title:'홈 · 학습 경로',         sub:'레벨 진단·전체 챕터 그리드', url:'index.html', kw:'home main 메인 홈 학습 경로 진단'},
-    {cat:'시작',  title:'L0 시작하기',            sub:'모델 라인업·보안 3초 룰',     url:'level-0/index.html', kw:'l0 level0 시작 모델 보안 진단'},
-    {cat:'시작',  title:'LLM 기본 가이드',          sub:'토큰·컨텍스트·환각·도구·멀티모달', url:'level-0/llm-basics.html', kw:'llm 기본 가이드 토큰 컨텍스트 환각 hallucination karpathy multimodal 멀티모달'},
-    {cat:'L1',    title:'1-1 Claude 첫 만남',      sub:'로그인·UI·Projects',         url:'level-1/01-first-meeting.html', kw:'l1 처음 첫 만남 로그인 sso projects ui'},
-    {cat:'L1',    title:'1-2 프롬프트 5요소',       sub:'역할·맥락·지시·제약·형식',    url:'level-1/02-prompt-5elements.html', kw:'l1 프롬프트 5요소 역할 맥락 지시 제약 형식 role context prompt'},
-    {cat:'L1',    title:'1-3 모델 선택 결정 트리',  sub:'Opus·Sonnet·Haiku·혼용',     url:'level-1/03-model-selection.html', kw:'l1 모델 선택 결정 트리 opus sonnet haiku 혼용'},
-    {cat:'L1',    title:'1-4 오늘 업무에 적용',     sub:'이메일·회의록·교정·번역',    url:'level-1/04-daily-work.html', kw:'l1 이메일 회의록 교정 번역 데이터 90초'},
-    {cat:'L1',    title:'1-5 직무별 프롬프트 팩',   sub:'PM·디자인·개발·마케팅·HR',   url:'level-1/05-role-packs.html', kw:'l1 직무 pm 디자이너 개발 마케팅 hr 프롬프트 팩'},
-    {cat:'L1',    title:'1-6 Claude Design 첫 걸음',sub:'자연어 목업→Figma',          url:'level-1/06-claude-design.html', kw:'l1 claude design 디자인 와이어 figma 목업'},
-    {cat:'L1',    title:'1-7 90초 워크플로우',      sub:'치트시트·자주 틀리는 10가지', url:'level-1/07-cheatsheet.html', kw:'l1 치트시트 90초 워크플로우 단축키'},
-    {cat:'L1실습',title:'L1 실습 트랙',            sub:'와이어프레임 30분',           url:'level-1/practice.html', kw:'l1 실습 와이어프레임 30분 세미나'},
-    {cat:'L2',    title:'2-1 Claude Code 입문',     sub:'CLI 설치·init·CLAUDE.md',    url:'level-2/01-claude-code-intro.html', kw:'l2 claude code cli init 설치 sso'},
-    {cat:'L2',    title:'2-2 슬래시 커맨드',         sub:'review·security·사내 슬래시',url:'level-2/02-slash-commands.html', kw:'l2 슬래시 커맨드 review security 명령'},
-    {cat:'L2',    title:'2-3 서브에이전트와 훅',     sub:'Plan·Explore·pre-commit',    url:'level-2/03-subagents-hooks.html', kw:'l2 서브에이전트 훅 plan explore hook pre-commit'},
-    {cat:'L2',    title:'2-4 MCP 커넥터 7종',        sub:'Slack·Notion·Sheets·Figma',  url:'level-2/04-mcp-connectors.html', kw:'l2 mcp 커넥터 slack notion sheets figma github supabase vercel'},
-    {cat:'L2',    title:'2-5 세션 관리 · CLAUDE.md', sub:'HANDOFF.md·메모리 3계층',    url:'level-2/05-session-claudemd.html', kw:'l2 세션 claude.md handoff 메모리 opus 4.7 라우팅'},
-    {cat:'L2',    title:'2-6 보안 실수 5선',         sub:'.env·API 토큰·MCP 권한',     url:'level-2/06-security.html', kw:'l2 보안 env 토큰 mcp 권한 시크릿'},
-    {cat:'L2실습',title:'L2 실습 트랙',             sub:'Cowork CMS 프로토타입 25분', url:'level-2/practice.html', kw:'l2 실습 cowork cms 프로토타입 sql skill'},
-    {cat:'L3',    title:'3-1 Agentic UX 6대 패턴',   sub:'패턴 맵·12주 로드맵',         url:'level-3/01-agentic-ux.html', kw:'l3 agentic ux 패턴 6대 design loop'},
-    {cat:'L3',    title:'3-2 점진적 자율성',          sub:'Lv.1/2/3·강등 규칙·A/B',     url:'level-3/02-progressive-autonomy.html', kw:'l3 자율성 progressive autonomy 강등 lv1 lv2 lv3'},
-    {cat:'L3',    title:'3-3 컨텍스트 보존',          sub:'HANDOFF.md·메모리 3계층',    url:'level-3/03-context-preservation.html', kw:'l3 컨텍스트 보존 context preservation handoff 메모리'},
-    {cat:'L3',    title:'3-4 적응형 인터페이스',       sub:'숙련도 추정·3단 밀도',        url:'level-3/04-adaptive-ui.html', kw:'l3 적응형 adaptive ui beginner intermediate expert'},
-    {cat:'L3',    title:'3-5 사용자 피드백 4단계 루프',sub:'Golden Set·A/B 회귀',        url:'level-3/05-feedback-loop.html', kw:'l3 피드백 feedback loop golden set ab 회귀 nsat'},
-    {cat:'L3',    title:'3-6 멀티 에이전트 오케스트레이션',sub:'Supervisor·Swarm·Pipeline',url:'level-3/06-multi-agent.html', kw:'l3 멀티 에이전트 multi agent supervisor swarm pipeline tier'},
-    {cat:'L3',    title:'3-7 하네스 · 관측 · 복구',    sub:'3종 스택·8위젯·플레이북',     url:'level-3/07-harness.html', kw:'l3 하네스 관측 복구 trace metric log otel chaos'},
-    {cat:'L3',    title:'3-8 비개발자의 Claude Code', sub:'5종 슬래시·4주 커리큘럼',     url:'level-3/08-non-dev-cc.html', kw:'l3 비개발자 pm 디자이너 claude code 슬래시 4주'},
-    {cat:'L3',    title:'3-9 패턴 1·3·5 + Eval',     sub:'Intent·Observable·Graceful', url:'level-3/09-patterns-eval.html', kw:'l3 패턴 135 intent observable graceful eval 4계층'},
-    {cat:'L3',    title:'3-10 릴리즈 체크리스트 30항', sub:'내용·코드·정책·관측',         url:'level-3/10-release-checklist.html', kw:'l3 릴리즈 체크리스트 30 release'},
-    {cat:'L3실습',title:'L3 실습 트랙',              sub:'Ralph·하네스·사내 사례 3종',  url:'level-3/practice.html', kw:'l3 실습 ralph 하네스 사내 사례 페르소나 ut 차량 추천'},
-    {cat:'부록',  title:'도구 카탈로그',              sub:'28+개 도구·6 딥다이브',       url:'tools.html', kw:'도구 카탈로그 tools skill superpowers task master spec kit context7 vanna langgraph'},
-  ];
-
-  // === 빵부스러기 자동 생성 ===
-  function autoBreadcrumb() {
-    var el = document.getElementById('wiki-breadcrumb');
-    if (!el) return;
-    var page = (location.pathname.split('/').pop() || 'index.html');
-    var inLevel = location.pathname.match(/level-([0-3])/);
-    var crumbs = [];
-    crumbs.push('<a href="' + ROOT + 'index.html">홈</a>');
-    if (inLevel) {
-      var lvl = inLevel[1];
-      crumbs.push('<a href="' + ROOT + 'level-' + lvl + '/index.html">L' + lvl + (lvl==='0'?' 시작하기':lvl==='1'?' 초급':lvl==='2'?' 중급':' 고급') + '</a>');
-    }
-    // 현재 페이지
-    var meta = INDEX.find(function(it){ return it.url.endsWith(page) && location.pathname.indexOf(it.url) >= 0 || it.url === (inLevel ? 'level-'+inLevel[1]+'/'+page : page); });
-    if (!meta) meta = INDEX.find(function(it){ return location.pathname.indexOf(it.url) >= 0; });
-    if (meta && !(meta.url.endsWith('index.html') && inLevel)) {
-      crumbs.push('<span class="current">' + meta.title + '</span>');
-    }
-    el.innerHTML = crumbs.join('<span class="sep">›</span>');
-  }
-
-  // === Cmd+K 검색 모달 ===
-  function buildSearchModal() {
-    if (document.getElementById('wiki-search-modal')) return;
-    var modal = document.createElement('div');
-    modal.id = 'wiki-search-modal';
-    modal.className = 'search-modal';
-    modal.innerHTML = ''
-      + '<div class="search-modal-inner" role="dialog" aria-label="위키 검색">'
-      + '  <input class="search-modal-input" type="search" placeholder="챕터·도구·키워드 검색 (예: 5요소, mcp, 자율성)" autocomplete="off">'
-      + '  <div class="search-modal-results" id="wiki-search-results"></div>'
-      + '  <div class="search-modal-footer">'
-      + '    <span><span class="kbd">↑↓</span> 이동 · <span class="kbd">Enter</span> 열기 · <span class="kbd">Esc</span> 닫기</span>'
-      + '    <span>' + INDEX.length + ' 페이지</span>'
-      + '  </div>'
-      + '</div>';
-    document.body.appendChild(modal);
-
-    var input = modal.querySelector('.search-modal-input');
-    var results = modal.querySelector('.search-modal-results');
-    var focused = 0;
-
-    function render(q) {
-      q = (q || '').trim().toLowerCase();
-      var items = !q ? INDEX.slice(0, 12) : INDEX.filter(function(it){
-        var hay = (it.title + ' ' + it.sub + ' ' + (it.kw||'') + ' ' + it.cat).toLowerCase();
-        return q.split(/\s+/).every(function(part){ return hay.indexOf(part) >= 0; });
-      });
-      focused = 0;
-      if (!items.length) {
-        results.innerHTML = '<div class="empty">결과 없음. 다른 키워드로 시도해보세요.</div>';
-        return;
-      }
-      results.innerHTML = items.map(function(it, i){
-        return '<a href="' + ROOT + it.url + '" class="' + (i===0?'focused':'') + '">'
-          + '<span><span class="res-cat">' + it.cat + '</span><span class="res-title">' + it.title + '</span></span>'
-          + '<span class="res-sub">' + it.sub + '</span>'
-          + '</a>';
-      }).join('');
-    }
-
-    function moveFocus(d) {
-      var list = results.querySelectorAll('a');
-      if (!list.length) return;
-      list[focused] && list[focused].classList.remove('focused');
-      focused = (focused + d + list.length) % list.length;
-      list[focused].classList.add('focused');
-      list[focused].scrollIntoView({block:'nearest'});
-    }
-
-    input.addEventListener('input', function(){ render(input.value); });
-    input.addEventListener('keydown', function(e){
-      if (e.key === 'ArrowDown') { e.preventDefault(); moveFocus(1); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); moveFocus(-1); }
-      else if (e.key === 'Enter') {
-        e.preventDefault();
-        var a = results.querySelector('a.focused') || results.querySelector('a');
-        if (a) location.href = a.getAttribute('href');
-      } else if (e.key === 'Escape') {
-        closeModal();
-      }
-    });
-    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
-
-    function openModal() {
-      modal.classList.add('open');
-      input.value = '';
-      render('');
-      setTimeout(function(){ input.focus(); }, 10);
-    }
-    function closeModal() { modal.classList.remove('open'); }
-
-    window.__wikiSearchOpen = openModal;
-    window.__wikiSearchClose = closeModal;
-  }
-
-  // === 사이드바 검색 박스 인라인 필터 ===
-  function bindSidebarSearch() {
-    var box = document.getElementById('wiki-sidebar-search');
-    if (!box) return;
-    var inp = box.querySelector('input');
-    inp.addEventListener('focus', function(){ window.__wikiSearchOpen && window.__wikiSearchOpen(); inp.blur(); });
-    inp.addEventListener('input', function(){ window.__wikiSearchOpen && window.__wikiSearchOpen(); inp.blur(); });
-  }
-
-  // === 키보드 단축키 ===
-  function bindKeyboard() {
-    document.addEventListener('keydown', function(e){
-      var inField = /input|textarea|select/i.test(e.target.tagName);
-      if (inField && e.target.type !== 'search') return;
-      // Cmd+K / Ctrl+K
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        window.__wikiSearchOpen && window.__wikiSearchOpen();
-        return;
-      }
-      // / 키로 검색 (필드 밖에서만)
-      if (!inField && e.key === '/' && !e.metaKey && !e.ctrlKey) {
-        e.preventDefault();
-        window.__wikiSearchOpen && window.__wikiSearchOpen();
-        return;
-      }
-      // ← → 로 이전/다음 챕터
-      if (!inField && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
-        var navs = document.querySelectorAll('.footer-nav a');
-        if (navs.length >= 2) {
-          var target = e.key === 'ArrowLeft' ? navs[0] : navs[1];
-          if (target && target.href) location.href = target.href;
-        }
-      }
-    });
-  }
-
-  // === 사이드바 현재 챕터 자동 강조 ===
-  function markCurrentSidebar() {
-    var here = location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.sidebar nav a').forEach(function(a){
-      var href = (a.getAttribute('href') || '').split('/').pop().split('#')[0];
-      if (!href) return;
-      if (href === here) a.classList.add('active');
-    });
-  }
-
-  // === 헤더 카테고리 탭 자동 강조 ===
-  // path 기반으로 시작하기/L1/L2/L3/도구 중 어디에 속하는지 판단
-  function markCurrentHeader() {
-    var path = location.pathname;
-    var category = null;
-    if (/\/level-0(\/|$)/.test(path)) category = 'level-0';
-    else if (/\/level-1(\/|$)/.test(path)) category = 'level-1';
-    else if (/\/level-2(\/|$)/.test(path)) category = 'level-2';
-    else if (/\/level-3(\/|$)/.test(path)) category = 'level-3';
-    else if (/tools\.html$/.test(path)) category = 'tools';
-    // 메인 홈은 어떤 카테고리도 active 아님 (브랜드 로고가 홈 역할)
-
-    if (!category) return;
-    document.querySelectorAll('.site-nav a').forEach(function(a){
-      var href = a.getAttribute('href') || '';
-      if (category === 'tools' && /tools\.html$/.test(href)) a.classList.add('active');
-      else if (category && href.indexOf(category + '/') >= 0) a.classList.add('active');
-    });
-  }
-
-  // === 테마 토글 === (FOUC는 <head>의 inline script가 처리)
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    if (theme === 'dark') document.body.classList.add('dark-theme');
-    else document.body.classList.remove('dark-theme');
-    document.querySelectorAll('.theme-toggle .theme-icon').forEach(function(i){
-      i.textContent = theme === 'dark' ? '☀' : '🌙';
-    });
-    document.querySelectorAll('.theme-toggle').forEach(function(btn){
-      btn.setAttribute('aria-label', theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환');
-    });
-  }
-  function bindThemeToggle() {
-    var current = localStorage.getItem('axz-theme') === 'dark' ? 'dark' : 'light';
-    applyTheme(current);
-    document.addEventListener('click', function(e){
-      var btn = e.target.closest('.theme-toggle');
-      if (!btn) return;
-      e.preventDefault();
-      var now = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
-      localStorage.setItem('axz-theme', now);
-      applyTheme(now);
-    });
-  }
-
-  function init() {
-    buildSearchModal();
-    autoBreadcrumb();
-    bindSidebarSearch();
-    bindKeyboard();
-    markCurrentSidebar();
-    markCurrentHeader();
-    bindThemeToggle();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-
-</script>
 </body>
 </html>
